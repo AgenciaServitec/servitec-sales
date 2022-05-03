@@ -1,0 +1,49 @@
+{
+  "common": {
+    "node-mailer": {
+      "port": 465,
+      "host": "smtp.gmail.com",
+      "from": "Email de contacto",
+      "user": "nmoriano26@gmail.com",
+      "pass": "pelbyznuruygasfo"
+    }
+  },
+  "development": {
+    "firebase": {
+      "": ""
+    },
+    "mailer": {
+      "markoCreativos": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "markocreativo@gmail.com"
+        }
+      },
+      "servitec": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      }
+    }
+  },
+  "production": {
+    "firebase": {
+      "": ""
+    },
+    "mailer": {
+      "markoCreativos": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "markocreativo@gmail.com"
+        }
+      },
+      "servitec": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      }
+    }
+  }
+}

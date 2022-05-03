@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "sendingemails-348505",
+    "dev": "sendingemails-dev"
+  }
+}
