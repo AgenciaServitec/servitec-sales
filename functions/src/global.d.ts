@@ -1,14 +1,22 @@
 interface ContactCommon {
+  clientCode: string;
   firstName: string;
   lastName: string;
   email: string;
-  phoneNumber: string;
+  phone: Phone;
+  hostname: string;
+  status: string;
   message?: string;
+}
+
+interface Phone{
+  number: number;
+  countryCode: string;
+  operator?: string
 }
 
 interface ContactMarkoCreativos extends ContactCommon {
   company?: string;
-  phone: string;
   service?: string;
   contactPreference?: "call" | "email" | "wsp";
 }

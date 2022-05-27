@@ -1,0 +1,30 @@
+{
+  "development": {
+    "version": "0.0.1",
+    "firebaseApp": {
+      "apiKey": "AIzaSyC7Lga1OZpNAvRX-gIk2-ZJH2hG_EBFTHo",
+      "authDomain": "sendingemails-348505.firebaseapp.com",
+      "projectId": "sendingemails-348505",
+      "storageBucket": "sendingemails-348505.appspot.com",
+      "messagingSenderId": "528330562982",
+      "appId": "1:528330562982:web:bce7ad727e137f3a6f4367"
+    },
+    "buckets": {},
+    "apiUrl": "https://us-central1-sendingemails-348505.cloudfunctions.net/api",
+    "ipInfoApi": "https://ipinfo.io/json?token=09c720dcbb804f"
+  },
+  "production": {
+    "version": "0.0.1",
+    "firebaseApp": {
+      "apiKey": "AIzaSyC7Lga1OZpNAvRX-gIk2-ZJH2hG_EBFTHo",
+      "authDomain": "sendingemails-348505.firebaseapp.com",
+      "projectId": "sendingemails-348505",
+      "storageBucket": "sendingemails-348505.appspot.com",
+      "messagingSenderId": "528330562982",
+      "appId": "1:528330562982:web:bce7ad727e137f3a6f4367"
+    },
+    "buckets": {},
+    "apiUrl": "https://us-central1-sendingemails-348505.cloudfunctions.net/api",
+    "ipInfoApi": "https://ipinfo.io/json?token=09c720dcbb804f"
+  }
+}
