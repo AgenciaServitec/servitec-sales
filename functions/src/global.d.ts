@@ -21,7 +21,10 @@ interface ContactMarkoCreativos extends ContactCommon {
   contactPreference?: "call" | "email" | "wsp";
 }
 
-interface ContactAlvillantas extends ContactCommon {}
+interface ContactGamontLlantas extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
 
 interface ContactServitec extends ContactCommon {
   address: string;

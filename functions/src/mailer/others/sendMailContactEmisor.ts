@@ -22,7 +22,7 @@ const mapMail = (contact: ContactOther): Mail => ({
     firstName: toUpper(contact.firstName),
     lastName: contact.lastName,
     email: contact.email,
-    phoneNumber: contact.phoneNumber,
+    phone: contact.phone,
     ...(contact.message && {
       message: contact.message,
     }),

@@ -22,7 +22,7 @@ const mapMail = (contact: ContactServitec): Mail => ({
     firstName: contact.firstName,
     lastName: contact.lastName,
     email: contact.email,
-    phoneNumber: contact.phoneNumber,
+    phone: contact.phone,
     ...(contact.address && {
       address: contact.address,
     }),
