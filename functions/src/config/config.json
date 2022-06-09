@@ -15,19 +15,19 @@
     "mailer": {
       "markoCreativos": {
         "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
-          "to": "markocreativo@gmail.com"
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
         }
       },
       "gamontLlantas": {
         "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
         }
       },
       "servitec": {
         "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
         }
       }
@@ -52,7 +52,7 @@
       },
       "servitec": {
         "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
         }
       }
