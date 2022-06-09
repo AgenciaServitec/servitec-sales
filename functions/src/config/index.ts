@@ -1,9 +1,12 @@
 import config from "./config.json";
+import { logger } from "../utils";
 
 const projectId = process.env.GCLOUD_PROJECT;
 
 const currentEnvironment =
-  projectId === "sending-emails-c80ff" ? "production" : "development";
+  projectId === "sendingemails-348505" ? "production" : "development";
+
+logger.log("CurrentEnvironment->",currentEnvironment);
 
 const isProduction = currentEnvironment === "production";
 
