@@ -26,6 +26,11 @@ interface ContactGamontLlantas extends ContactCommon {
   nationality?: string;
 }
 
+interface ContactPublicidadDigital extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
 interface ContactServitec extends ContactCommon {
   address: string;
 }

@@ -4,13 +4,13 @@ import { assign, capitalize } from "lodash";
 import { environmentConfig } from "../../config";
 
 interface Mail {
-  contact: ContactPublicidadDigital;
+  contact: ContactGamontLlantas;
 }
 
 const { mailer } = environmentConfig;
 
 export const sendMailContactReceptor = async (
-  contact: ContactPublicidadDigital,
+  contact: ContactGamontLlantas,
   to?: string,
   bcc?: string
 ): Promise<void> =>
@@ -19,11 +19,11 @@ export const sendMailContactReceptor = async (
     bcc: mailer.gamontLlantas.contact.bcc,
     subject: contact.issue
       ? capitalize(contact.issue)
-      : "Publicidad digital - Web contácto",
+      : "Gamont llantas Web contácto",
     html: html(template.contactEmailReceptor, mapMail(contact)),
   });
 
-const mapMail = (contact: ContactPublicidadDigital): Mail => ({
+const mapMail = (contact: ContactGamontLlantas): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
     lastName: contact.lastName,

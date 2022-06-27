@@ -4,8 +4,9 @@ import { validateRequest, errorHandler } from "./_middlewares";
 import { body } from "express-validator";
 import { PostContact as PostContactMarkoCreativo } from "./markoCreativos";
 import { PostContact as PostContactServitec } from "./servitec";
-import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
 import { PostContact as PostContactOthers } from "./others";
+import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
+import { PostContact as PostContactPublicidadDigital } from "./publicidad-digital";
 
 const app: express.Application = express();
 
@@ -37,6 +38,18 @@ app.post(
   ],
   validateRequest,
   PostContactGamontLlantas
+);
+
+app.post(
+  "/publicidad-digital/contact",
+  [
+    body("contact.firstName").exists(),
+    body("contact.lastName").exists(),
+    body("contact.email").exists(),
+    body("contact.phone").exists(),
+  ],
+  validateRequest,
+  PostContactPublicidadDigital
 );
 
 app.post(
