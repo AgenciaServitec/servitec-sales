@@ -56,7 +56,7 @@ const mapContact = (contactId: string, contact: ContactPublicidadGoogle) => {
     { ...contact },
     {
       id: contactId,
-      clientCode: "publicidadgoogle",
+      clientCode: "publicidad-google",
       firstName: contact.firstName.toLowerCase(),
       lastName: contact.lastName.toLowerCase(),
       email: contact.email.toLowerCase(),
