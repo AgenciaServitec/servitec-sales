@@ -6,7 +6,7 @@ import {
 } from "../../mailer/marko-creativos";
 import { firestore } from "../../_firebase";
 import moment, { Moment } from "moment";
-import { assign} from "lodash";
+import { assign } from "lodash";
 import { searchData } from "../_utils";
 
 interface Body {
@@ -32,7 +32,7 @@ export const PostContact = async (
     const p1 = sendMailContactReceptor(formData.contact);
     const p2 = sendMailContactEmisor(formData.contact);
 
-    await Promise.all([p0,p1,p2]);
+    await Promise.all([p0, p1, p2]);
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -40,7 +40,6 @@ export const PostContact = async (
     next(error);
   }
 };
-
 
 const fetchContacts = async (contact: ContactMarkoCreativos) => {
   const contactId = firestore.collection("contacts").doc().id;
@@ -57,32 +56,36 @@ const mapContact = (contactId: string, contact: ContactMarkoCreativos) => {
     { ...contact },
     {
       id: contactId,
-      clientCode: "markoCreativos",
+      clientCode: "marko-creativos",
       firstName: contact.firstName.toLowerCase(),
       lastName: contact.lastName.toLowerCase(),
       email: contact.email.toLowerCase(),
       hostname: contact.hostname.toLowerCase(),
-      searchData: searchData(mapSearchData(contactId,createAt,contact)),
+      searchData: searchData(mapSearchData(contactId, createAt, contact)),
       status: "pending",
       createAt: createAt,
     }
   );
 };
 
-interface SearchData extends ContactCommon{
-  contactId:string;
+interface SearchData extends ContactCommon {
+  contactId: string;
   createAt: string;
 }
 
-const mapSearchData = (contactId:string,createAt:Moment,contact:ContactCommon):SearchData => ({
+const mapSearchData = (
+  contactId: string,
+  createAt: Moment,
+  contact: ContactCommon
+): SearchData => ({
   contactId: contactId,
-  clientCode: "markoCreativos",
+  clientCode: contact.clientCode,
   firstName: contact.firstName,
   lastName: contact.lastName,
   email: contact.email,
-  phone:contact.phone,
+  phone: contact.phone,
   hostname: contact.hostname,
   status: contact.status,
   message: contact.message,
-  createAt: moment(createAt).format("DD/MM/YYYY")
-})
+  createAt: moment(createAt).format("DD/MM/YYYY"),
+});
