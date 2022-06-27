@@ -13,6 +13,12 @@
       "": ""
     },
     "mailer": {
+      "servitec": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      },
       "markoCreativos": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
@@ -25,7 +31,7 @@
           "to": "nmoriano26@gmail.com"
         }
       },
-      "servitec": {
+      "publicidadGoogle": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
@@ -38,6 +44,12 @@
       "": ""
     },
     "mailer": {
+      "servitec": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      },
       "markoCreativos": {
         "contact": {
           "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
@@ -50,10 +62,10 @@
           "to": "ventas@gamontllantas.com"
         }
       },
-      "servitec": {
+      "publicidadGoogle": {
         "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "contactos@servitec-peru.com"
         }
       }
     }

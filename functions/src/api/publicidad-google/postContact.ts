@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   sendMailContactEmisor,
   sendMailContactReceptor,
-} from "../../mailer/publicidad-digital";
+} from "../../mailer/publicidad-google";
 import { firestore } from "../../_firebase";
 import moment, { Moment } from "moment";
 import { assign } from "lodash";
@@ -21,7 +21,7 @@ export const PostContact = async (
   try {
     const { body: formData } = req;
 
-    logger.log("Contact publicidadgoogle.site:Initialize", {
+    logger.log("Contact PublicidadGoogle.site:Initialize", {
       body: req.body,
     });
 
