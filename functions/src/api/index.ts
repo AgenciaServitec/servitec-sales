@@ -6,7 +6,7 @@ import { PostContact as PostContactMarkoCreativo } from "./markoCreativos";
 import { PostContact as PostContactServitec } from "./servitec";
 import { PostContact as PostContactOthers } from "./others";
 import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
-import { PostContact as PostContactPublicidadDigital } from "./publicidad-digital";
+import { PostContact as PostContactPublicidadGoole } from "./publicidad-google";
 
 const app: express.Application = express();
 
@@ -41,7 +41,7 @@ app.post(
 );
 
 app.post(
-  "/publicidad-digital/contact",
+  "/publicidad-google/contact",
   [
     body("contact.firstName").exists(),
     body("contact.lastName").exists(),
@@ -49,7 +49,7 @@ app.post(
     body("contact.phone").exists(),
   ],
   validateRequest,
-  PostContactPublicidadDigital
+  PostContactPublicidadGoole
 );
 
 app.post(

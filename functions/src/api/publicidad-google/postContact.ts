@@ -6,11 +6,11 @@ import {
 } from "../../mailer/publicidad-digital";
 import { firestore } from "../../_firebase";
 import moment, { Moment } from "moment";
-import { assign} from "lodash";
+import { assign } from "lodash";
 import { searchData } from "../_utils";
 
 interface Body {
-  contact: ContactPublicidadDigital;
+  contact: ContactPublicidadGoogle;
 }
 
 export const PostContact = async (
@@ -21,7 +21,7 @@ export const PostContact = async (
   try {
     const { body: formData } = req;
 
-    logger.log("Contact publicidad digital:Initialize", {
+    logger.log("Contact publicidadgoogle.site:Initialize", {
       body: req.body,
     });
 
@@ -32,7 +32,7 @@ export const PostContact = async (
     const p1 = sendMailContactReceptor(formData.contact);
     const p2 = sendMailContactEmisor(formData.contact);
 
-    await Promise.all([p0,p1,p2]);
+    await Promise.all([p0, p1, p2]);
 
     res.sendStatus(200).end();
   } catch (error) {
@@ -41,8 +41,7 @@ export const PostContact = async (
   }
 };
 
-
-const fetchContacts = async (contact: ContactPublicidadDigital) => {
+const fetchContacts = async (contact: ContactPublicidadGoogle) => {
   const contactId = firestore.collection("contacts").doc().id;
   await firestore
     .collection("contacts")
@@ -50,39 +49,43 @@ const fetchContacts = async (contact: ContactPublicidadDigital) => {
     .set(mapContact(contactId, contact));
 };
 
-const mapContact = (contactId: string, contact: ContactPublicidadDigital) => {
+const mapContact = (contactId: string, contact: ContactPublicidadGoogle) => {
   const createAt = moment();
   return assign(
     {},
     { ...contact },
     {
       id: contactId,
-      clientCode: "publicidad-digital",
+      clientCode: "publicidadgoogle",
       firstName: contact.firstName.toLowerCase(),
       lastName: contact.lastName.toLowerCase(),
       email: contact.email.toLowerCase(),
       hostname: contact.hostname.toLowerCase(),
-      searchData: searchData(mapSearchData(contactId,createAt,contact)),
+      searchData: searchData(mapSearchData(contactId, createAt, contact)),
       status: "pending",
       createAt: createAt,
     }
   );
 };
 
-interface SearchData extends ContactCommon{
-  contactId:string;
+interface SearchData extends ContactCommon {
+  contactId: string;
   createAt: string;
 }
 
-const mapSearchData = (contactId:string,createAt:Moment,contact:ContactCommon):SearchData => ({
+const mapSearchData = (
+  contactId: string,
+  createAt: Moment,
+  contact: ContactCommon
+): SearchData => ({
   contactId: contactId,
-  clientCode: "publicidad-digital",
+  clientCode: contact.clientCode,
   firstName: contact.firstName,
   lastName: contact.lastName,
   email: contact.email,
-  phone:contact.phone,
+  phone: contact.phone,
   hostname: contact.hostname,
   status: contact.status,
   message: contact.message,
-  createAt: moment(createAt).format("DD/MM/YYYY")
-})
+  createAt: moment(createAt).format("DD/MM/YYYY"),
+});

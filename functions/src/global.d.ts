@@ -9,10 +9,10 @@ interface ContactCommon {
   message?: string;
 }
 
-interface Phone{
+interface Phone {
   number: number;
   countryCode: string;
-  operator?: string
+  operator?: string;
 }
 
 interface ContactMarkoCreativos extends ContactCommon {
@@ -26,7 +26,7 @@ interface ContactGamontLlantas extends ContactCommon {
   nationality?: string;
 }
 
-interface ContactPublicidadDigital extends ContactCommon {
+interface ContactPublicidadGoogle extends ContactCommon {
   issue?: string;
   nationality?: string;
 }
