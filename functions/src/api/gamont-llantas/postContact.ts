@@ -58,7 +58,7 @@ const mapContact = (contactId: string, contact: ContactGamontLlantas) => {
       id: contactId,
       clientCode: "gamont-llantas",
       firstName: contact.firstName.toLowerCase(),
-      lastName: contact.lastName.toLowerCase() || "",
+      lastName: (contact.lastName || "").toLowerCase(),
       email: contact.email.toLowerCase(),
       hostname: contact.hostname.toLowerCase(),
       searchData: searchData(mapSearchData(contactId, createAt, contact)),
