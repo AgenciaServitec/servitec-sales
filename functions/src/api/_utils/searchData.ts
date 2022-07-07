@@ -1,15 +1,12 @@
 import { logger, uniq } from "../../utils";
 import moment from "moment";
 
-interface Props extends ContactCommon{
-  contactId:string;
-  createAt:string;
+interface Props extends ContactCommon {
+  contactId: string;
+  createAt: string;
 }
 
-export const searchData = (
-  contact:Props
-): string[] => {
-
+export const searchData = (contact: Props): string[] => {
   const strings = [
     contact.contactId,
     contact.clientCode,
@@ -22,8 +19,9 @@ export const searchData = (
     contact?.hostname || "",
     contact.status || "pending",
     moment(contact.createAt).format("DD/MM/YYYY"),
-  ].filter((string) => string)
-    .map((string)=> string.toString());
+  ]
+    .filter((string) => string)
+    .map((string) => string.toString());
 
   logger.log("[SEARCH-DATA]", strings);
 

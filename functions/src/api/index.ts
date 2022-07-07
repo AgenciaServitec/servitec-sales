@@ -32,7 +32,6 @@ app.post(
   "/gamont-llantas/contact",
   [
     body("contact.firstName").exists(),
-    body("contact.lastName").exists(),
     body("contact.email").exists(),
     body("contact.phone").exists(),
   ],
