@@ -34,5 +34,3 @@ interface ContactPublicidadGoogle extends ContactCommon {
 interface ContactServitec extends ContactCommon {
   address: string;
 }
-
-interface ContactOther extends ContactCommon {}

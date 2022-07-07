@@ -6,7 +6,7 @@ const projectId = process.env.GCLOUD_PROJECT;
 const currentEnvironment =
   projectId === "sendingemails-348505" ? "production" : "development";
 
-logger.log("CurrentEnvironment->",currentEnvironment);
+logger.log("CurrentEnvironment->", currentEnvironment);
 
 const isProduction = currentEnvironment === "production";
 
