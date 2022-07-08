@@ -1,6 +1,6 @@
 import { template } from "./templates";
 import { html, sendMail } from "../sendMail";
-import { assign, capitalize } from "lodash";
+import { assign, capitalize, isEmpty } from "lodash";
 import { environmentConfig } from "../../config";
 
 interface Mail {
@@ -26,7 +26,7 @@ export const sendMailContactReceptor = async (
 const mapMail = (contact: ContactGamontLlantas): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
-    lastName: contact.lastName || "",
+    lastName: !isEmpty(contact.lastName) ? contact.lastName : null,
     email: contact.email,
     phone: contact.phone,
     ...(contact.issue && {
