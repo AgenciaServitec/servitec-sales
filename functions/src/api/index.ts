@@ -7,6 +7,7 @@ import { PostContact as PostContactServitec } from "./servitec";
 import { PostContact as PostContactOthers } from "./others";
 import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
 import { PostContact as PostContactPublicidadGoole } from "./publicidad-google";
+import { PostContact as PostCobiene } from "./cobiene";
 
 const app: express.Application = express();
 
@@ -74,6 +75,18 @@ app.post(
   ],
   validateRequest,
   PostContactOthers
+);
+
+app.post(
+  "/cobiene/contact",
+  [
+    body("contact.firstName").exists(),
+    body("contact.lastName").exists(),
+    body("contact.phone").exists(),
+    body("contact.email").exists(),
+  ],
+  validateRequest,
+  PostCobiene
 );
 
 app.use(errorHandler);

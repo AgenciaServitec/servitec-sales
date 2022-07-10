@@ -35,6 +35,11 @@ interface ContactServitec extends ContactCommon {
   address: string;
 }
 
+interface ContactCobiene extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
 interface ContactOther extends ContactCommon {
   provider?: string;
 }
