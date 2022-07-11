@@ -13,6 +13,12 @@
       "": ""
     },
     "mailer": {
+      "others": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      },
       "servitec": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
@@ -50,6 +56,12 @@
       "": ""
     },
     "mailer": {
+      "others": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      },
       "servitec": {
         "contact": {
           "bcc": "beto1perk@gmail.com",

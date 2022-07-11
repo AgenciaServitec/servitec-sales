@@ -41,5 +41,6 @@ interface ContactCobiene extends ContactCommon {
 }
 
 interface ContactOther extends ContactCommon {
-  provider?: string;
+  issue?: string;
+  nationality?: string;
 }

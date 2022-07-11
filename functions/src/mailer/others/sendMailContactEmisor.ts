@@ -1,6 +1,6 @@
 import { template } from "./templates";
 import { html, sendMail } from "../sendMail";
-import { assign, toUpper } from "lodash";
+import { assign, capitalize } from "lodash";
 
 interface Mail {
   contact: ContactOther;
@@ -19,12 +19,6 @@ export const sendMailContactEmisor = async (
 
 const mapMail = (contact: ContactOther): Mail => ({
   contact: assign({}, contact, {
-    firstName: toUpper(contact.firstName),
-    lastName: contact.lastName,
-    email: contact.email,
-    phone: contact.phone,
-    ...(contact.message && {
-      message: contact.message,
-    }),
+    firstName: capitalize(contact.firstName),
   }),
 });

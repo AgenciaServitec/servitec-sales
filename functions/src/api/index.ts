@@ -18,6 +18,18 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 
 app.post(
+  "/others/contact",
+  [
+    body("contact.firstName").exists(),
+    body("contact.lastName").exists(),
+    body("contact.phone").exists(),
+    body("contact.email").exists(),
+  ],
+  validateRequest,
+  PostContactOthers
+);
+
+app.post(
   "/marko-creativos/contact",
   [
     body("contact.firstName").exists(),
@@ -63,18 +75,6 @@ app.post(
   ],
   validateRequest,
   PostContactServitec
-);
-
-app.post(
-  "/others/contact",
-  [
-    body("contact.firstName").exists(),
-    body("contact.lastName").exists(),
-    body("contact.phone").exists(),
-    body("contact.email").exists(),
-  ],
-  validateRequest,
-  PostContactOthers
 );
 
 app.post(
