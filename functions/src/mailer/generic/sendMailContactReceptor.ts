@@ -5,24 +5,24 @@ import { environmentConfig } from "../../config";
 import { capitalize } from "lodash";
 
 interface Mail {
-  contact: ContactOther;
+  contact: GenericContact;
 }
 
 const { mailer } = environmentConfig;
 
 export const sendMailContactReceptor = async (
-  contact: ContactOther,
+  contact: GenericContact,
   to?: string,
   bcc?: string
 ): Promise<void> =>
   await sendMail({
-    to: mailer.others.contact.to,
-    bcc: mailer.others.contact.bcc,
+    to: contact.receptorEmail || mailer.generic.contact.to,
+    bcc: `${mailer.generic.contact.bcc},${contact.receptorEmailsCopy}`,
     subject: "Email web contacto",
     html: html(template.contactEmailReceptor, mapMail(contact)),
   });
 
-const mapMail = (contact: ContactOther): Mail => ({
+const mapMail = (contact: GenericContact): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
     lastName: !isEmpty(contact.lastName) ? contact.lastName : null,

@@ -40,7 +40,10 @@ interface ContactCobiene extends ContactCommon {
   nationality?: string;
 }
 
-interface ContactOther extends ContactCommon {
-  issue?: string;
+interface GenericContact extends ContactCommon {
+  issue: string;
   nationality?: string;
+  urlCompanyImage: string;
+  receptorEmail: string;
+  receptorEmailsCopy: string;
 }

@@ -18,12 +18,15 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 
 app.post(
-  "/others/contact",
+  "/generic/contact",
   [
     body("contact.firstName").exists(),
     body("contact.lastName").exists(),
     body("contact.phone").exists(),
     body("contact.email").exists(),
+    body("contact.clientCode").exists(),
+    body("contact.hostname").exists(),
+    body("contact.urlCompanyImage").exists(),
   ],
   validateRequest,
   PostContactOthers

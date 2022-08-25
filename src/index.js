@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/fonts/index.css";
+/*import "./styles/fonts/index.css";*/
 import "antd/dist/antd.css";
 import reportWebVitals from "./reportWebVitals";
 import CheckVersion from "./versions/CheckVersion";
