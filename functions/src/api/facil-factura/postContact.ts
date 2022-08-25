@@ -6,7 +6,7 @@ import {
 } from "../../mailer/facil-factura";
 import { firestore } from "../../_firebase";
 import moment, { Moment } from "moment";
-import { assign } from "lodash";
+import { assign, toLower } from "lodash";
 import { searchData } from "../_utils";
 
 interface Body {
@@ -57,10 +57,10 @@ const mapContact = (contactId: string, contact: ContactFacilFactura) => {
     {
       id: contactId,
       clientCode: "facil-factura",
-      firstName: contact.firstName.toLowerCase(),
-      lastName: contact.lastName.toLowerCase(),
-      email: contact.email.toLowerCase(),
-      hostname: contact.hostname.toLowerCase(),
+      firstName: toLower(contact.firstName),
+      lastName: toLower(contact.lastName),
+      email: toLower(contact.email),
+      hostname: toLower(contact.hostname),
       searchData: searchData(mapSearchData(contactId, createAt, contact)),
       status: "pending",
       createAt: createAt,
