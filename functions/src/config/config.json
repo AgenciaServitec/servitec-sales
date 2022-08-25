@@ -54,6 +54,12 @@
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
         }
+      },
+      "avcLlantas": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
       }
     }
   },
@@ -99,6 +105,12 @@
         }
       },
       "facilFactura": {
+        "contact": {
+          "bcc": "beto1perk@gmail.com",
+          "to": "nmoriano26@gmail.com"
+        }
+      },
+      "avcLlantas": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
