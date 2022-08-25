@@ -40,6 +40,11 @@ interface ContactCobiene extends ContactCommon {
   nationality?: string;
 }
 
+interface ContactFacilFactura extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
 interface GenericContact extends ContactCommon {
   issue: string;
   nationality?: string;
