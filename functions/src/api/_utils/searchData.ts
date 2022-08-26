@@ -1,12 +1,15 @@
 import { logger, uniq } from "../../utils";
 import moment from "moment";
+import { FirestoreTimestamp } from "../../_firebase";
 
 interface Props extends ContactCommon {
   contactId: string;
-  createAt: string;
+  createAt: FirestoreTimestamp;
 }
 
 export const searchData = (contact: Props): string[] => {
+  logger.log("contact->", contact);
+
   const strings = [
     contact.contactId,
     contact.clientCode,
@@ -18,7 +21,7 @@ export const searchData = (contact: Props): string[] => {
     contact.email,
     contact?.hostname || "",
     contact.status || "pending",
-    moment(contact.createAt).format("DD/MM/YYYY"),
+    moment(contact.createAt, "DD/MM/YYYY").format("DD/MM/YYYY"),
   ]
     .filter((string) => string)
     .map((string) => string.toString());

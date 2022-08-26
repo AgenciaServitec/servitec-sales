@@ -154,13 +154,14 @@
                                     <img
                                       src="{{contact.urlCompanyImage}}"
                                       style="
-                                                                            display: block;
-                                                                            height: auto;
-                                                                            border: 0;
-                                                                            width: 250px;
-                                                                            max-width: 100%;
-                                                                          "
+                                        display: block;
+                                        height: auto;
+                                        border: 0;
+                                        width: 250px;
+                                        max-width: 100%;
+                                      "
                                       width="222"
+                                      alt="compnay logo"
                                     />
                                   </div>
                                 </td>
@@ -511,9 +512,7 @@
                                         </div>
                                         <div>{{contact.issue}}</div>
                                       </div>
-                                      {{/contact.issue}}
-
-                                      {{#contact.message}}
+                                      {{/contact.issue}} {{#contact.message}}
                                       <div
                                         style="margin-bottom: 6px; width: 100%"
                                       >

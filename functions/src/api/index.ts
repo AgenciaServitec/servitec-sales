@@ -4,7 +4,7 @@ import { validateRequest, errorHandler } from "./_middlewares";
 import { body } from "express-validator";
 import { PostContact as PostContactMarkoCreativo } from "./markoCreativos";
 import { PostContact as PostContactServitec } from "./servitec";
-import { PostContact as PostContactOthers } from "./others";
+import { PostContact as PostContactGeneric } from "./generic";
 import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
 import { PostContact as PostContactPublicidadGoole } from "./publicidad-google";
 import { PostContact as PostCobiene } from "./cobiene";
@@ -29,7 +29,7 @@ app.post(
     body("contact.urlCompanyImage").exists(),
   ],
   validateRequest,
-  PostContactOthers
+  PostContactGeneric
 );
 
 app.post(

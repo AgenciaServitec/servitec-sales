@@ -4,8 +4,7 @@ import {
   sendMailContactEmisor,
   sendMailContactReceptor,
 } from "../../mailer/generic";
-import { firestore } from "../../_firebase";
-import moment, { Moment } from "moment";
+import { firestore, FirestoreTimestamp, now } from "../../_firebase";
 import { assign } from "lodash";
 import { searchData } from "../_utils";
 
@@ -50,7 +49,7 @@ const fetchContacts = async (contact: GenericContact) => {
 };
 
 const mapContact = (contactId: string, contact: GenericContact) => {
-  const createAt = moment();
+  const createAt = now();
   return assign(
     {},
     { ...contact },
@@ -73,12 +72,12 @@ const mapContact = (contactId: string, contact: GenericContact) => {
 
 interface SearchData extends ContactCommon {
   contactId: string;
-  createAt: string;
+  createAt: FirestoreTimestamp;
 }
 
 const mapSearchData = (
   contactId: string,
-  createAt: Moment,
+  createAt: FirestoreTimestamp,
   contact: ContactCommon
 ): SearchData => ({
   contactId: contactId,
@@ -90,5 +89,5 @@ const mapSearchData = (
   hostname: contact.hostname,
   status: contact.status,
   message: contact.message,
-  createAt: moment(createAt).format("DD/MM/YYYY"),
+  createAt: createAt,
 });
