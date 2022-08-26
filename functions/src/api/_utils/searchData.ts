@@ -21,7 +21,7 @@ export const searchData = (contact: Props): string[] => {
     contact.email,
     contact?.hostname || "",
     contact.status || "pending",
-    moment(contact.createAt, "DD/MM/YYYY").format("DD/MM/YYYY"),
+    moment(contact.createAt).format("DD/MM/YYYY"),
   ]
     .filter((string) => string)
     .map((string) => string.toString());
