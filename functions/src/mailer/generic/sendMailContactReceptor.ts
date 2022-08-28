@@ -1,32 +1,36 @@
 import { template } from "./templates";
 import { html, sendMail } from "../sendMail";
-import { assign, isEmpty } from "lodash";
-import { environmentConfig } from "../../config";
-import { capitalize } from "lodash";
+import { assign, capitalize, isEmpty, toLower } from "lodash";
 
 interface Mail {
   contact: GenericContact;
 }
 
-const { mailer } = environmentConfig;
+interface Props {
+  contact: GenericContact;
+  to: string;
+  bcc: string;
+  subject: string;
+}
 
-export const sendMailContactReceptor = async (
-  contact: GenericContact,
-  to?: string,
-  bcc?: string
-): Promise<void> =>
+export const sendMailContactReceptor = async ({
+  contact,
+  to,
+  bcc,
+  subject = "Email contacto",
+}: Props): Promise<void> =>
   await sendMail({
-    to: contact.receptorEmail || mailer.generic.contact.to,
-    bcc: `${mailer.generic.contact.bcc},${contact.receptorEmailsCopy}`,
-    subject: "Email web contacto",
+    to: to,
+    bcc: bcc,
+    subject: subject,
     html: html(template.contactEmailReceptor, mapMail(contact)),
   });
 
 const mapMail = (contact: GenericContact): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
-    lastName: !isEmpty(contact.lastName) ? contact.lastName : null,
-    email: contact.email,
+    lastName: !isEmpty(contact.lastName) ? capitalize(contact.lastName) : null,
+    email: toLower(contact.email),
     phone: contact.phone,
     ...(contact.issue && {
       issue: capitalize(contact.issue),

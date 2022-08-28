@@ -6,16 +6,22 @@ interface Mail {
   contact: GenericContact;
 }
 
-export const sendMailContactEmisor = async (
-  contact: GenericContact,
-  to?: string,
-  bcc?: string
-): Promise<void> =>
+interface Props {
+  contact: GenericContact;
+  to: string;
+  bcc?: string;
+  subject: string;
+}
+
+export const sendMailContactEmisor = async ({
+  contact,
+  to,
+  bcc,
+  subject = "Gracias por contáctarnos",
+}: Props): Promise<void> =>
   await sendMail({
-    to: contact.email,
-    subject: `Gracias por contáctarnos ${
-      contact.firstName && capitalize(contact.firstName)
-    }`,
+    to: to,
+    subject: subject,
     html: html(template.contactEmailEmisor, mapMail(contact)),
   });
 

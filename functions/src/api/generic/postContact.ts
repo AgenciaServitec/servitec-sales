@@ -5,8 +5,9 @@ import {
   sendMailContactReceptor,
 } from "../../mailer/generic";
 import { firestore, FirestoreTimestamp, now } from "../../_firebase";
-import { assign } from "lodash";
+import { assign, capitalize, defaultTo, toLower } from "lodash";
 import { searchData } from "../_utils";
+import { environmentConfig, isProduction } from "../../config";
 
 interface Body {
   contact: GenericContact;
@@ -18,18 +19,39 @@ export const PostContact = async (
   next: NextFunction
 ): Promise<void> => {
   try {
+    const { mailer } = environmentConfig;
+
     const { body: formData } = req;
 
-    logger.log("「Contact generic」Initialize", {
+    logger.log("「Contact generic Initialize」", {
       body: req.body,
     });
 
     if (!formData) res.status(412).send("error_no_found_contact_data").end();
 
-    const p0 = fetchContacts(formData.contact);
+    const { contact } = formData;
 
-    const p1 = sendMailContactReceptor(formData.contact);
-    const p2 = sendMailContactEmisor(formData.contact);
+    const p0 = fetchContacts(contact);
+
+    const p1 = sendMailContactReceptor({
+      contact: contact,
+      to: emailAddressesToSend(
+        contact.receptorEmail,
+        mailer.generic.contact.to
+      ),
+      bcc: `${toLower(mailer.generic.contact.bcc)},${toLower(
+        contact.receptorEmailsCopy
+      )}`,
+      subject: capitalize(contact.issue),
+    });
+
+    const p2 = sendMailContactEmisor({
+      contact: contact,
+      to: toLower(contact.email),
+      subject: `Gracias por contáctarnos ${
+        contact.firstName && capitalize(contact.firstName)
+      }`,
+    });
 
     await Promise.all([p0, p1, p2]);
 
@@ -40,7 +62,17 @@ export const PostContact = async (
   }
 };
 
-const fetchContacts = async (contact: GenericContact) => {
+const emailAddressesToSend = (
+  emailAddress: string,
+  emailAddressDefault: string
+): string => {
+  if (isProduction)
+    return defaultTo(toLower(emailAddress), toLower(emailAddressDefault));
+
+  return toLower(emailAddressDefault);
+};
+
+const fetchContacts = async (contact: GenericContact): Promise<void> => {
   const contactId = firestore.collection("contacts").doc().id;
   await firestore
     .collection("contacts")
@@ -50,6 +82,7 @@ const fetchContacts = async (contact: GenericContact) => {
 
 const mapContact = (contactId: string, contact: GenericContact) => {
   const createAt = now();
+
   return assign(
     {},
     { ...contact },

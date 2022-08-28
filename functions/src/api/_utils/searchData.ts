@@ -8,8 +8,6 @@ interface Props extends ContactCommon {
 }
 
 export const searchData = (contact: Props): string[] => {
-  logger.log("contact->", contact);
-
   const strings = [
     contact.contactId,
     contact.clientCode,
@@ -21,12 +19,12 @@ export const searchData = (contact: Props): string[] => {
     contact.email,
     contact?.hostname || "",
     contact.status || "pending",
-    moment(contact.createAt).format("DD/MM/YYYY"),
+    moment(contact.createAt).day(-1).format("DD/MM/YYYY"),
   ]
     .filter((string) => string)
     .map((string) => string.toString());
 
-  logger.log("[SEARCH-DATA]", strings);
+  logger.log("[search data]", strings);
 
   return uniq(strings);
 };
