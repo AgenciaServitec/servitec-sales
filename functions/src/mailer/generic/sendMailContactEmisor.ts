@@ -13,7 +13,9 @@ export const sendMailContactEmisor = async (
 ): Promise<void> =>
   await sendMail({
     to: contact.email,
-    subject: "Contacto sitio web",
+    subject: `Gracias por contáctarnos ${
+      contact.firstName && capitalize(contact.firstName)
+    }`,
     html: html(template.contactEmailEmisor, mapMail(contact)),
   });
 
