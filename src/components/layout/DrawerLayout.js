@@ -15,7 +15,7 @@ export const DrawerLayout = ({
       title={
         <div>
           <Title level={3} style={{ margin: 0 }}>
-              Customer contacts
+            Customer contacts
           </Title>
           <h5>version: {version}</h5>
         </div>
