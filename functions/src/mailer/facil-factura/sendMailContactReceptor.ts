@@ -15,8 +15,8 @@ export const sendMailContactReceptor = async (
   bcc?: string
 ): Promise<void> =>
   await sendMail({
-    to: mailer.gamontLlantas.contact.to,
-    bcc: mailer.gamontLlantas.contact.bcc,
+    to: mailer.facilFactura.contact.to,
+    bcc: mailer.facilFactura.contact.bcc,
     subject: contact.issue
       ? capitalize(contact.issue)
       : "Facil factura - Web contácto",
