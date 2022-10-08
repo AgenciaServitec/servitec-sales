@@ -8,6 +8,8 @@ import { PostContact as PostContactGeneric } from "./generic";
 import { PostContact as PostContactGamontLlantas } from "./gamont-llantas";
 import { PostContact as PostContactPublicidadGoole } from "./publicidad-google";
 import { PostContact as PostCobiene } from "./cobiene";
+import { PostContact as PostFacilFactura } from "./facil-factura";
+import { PostContact as PostAvcLlantas } from "./avcLlantas";
 
 const app: express.Application = express();
 
@@ -91,6 +93,30 @@ app.post(
   ],
   validateRequest,
   PostCobiene
+);
+
+app.post(
+  "/facil-factura/contact",
+  [
+    body("contact.firstName").exists(),
+    body("contact.lastName").exists(),
+    body("contact.phone").exists(),
+    body("contact.email").exists(),
+  ],
+  validateRequest,
+  PostFacilFactura
+);
+
+app.post(
+  "/avc-llantas/contact",
+  [
+    body("contact.firstName").exists(),
+    body("contact.lastName").exists(),
+    body("contact.phone").exists(),
+    body("contact.email").exists(),
+  ],
+  validateRequest,
+  PostAvcLlantas
 );
 
 app.use(errorHandler);

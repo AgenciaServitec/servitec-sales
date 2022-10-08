@@ -15,6 +15,11 @@ interface Phone {
   operator?: string;
 }
 
+interface ContactOther extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
 interface ContactMarkoCreativos extends ContactCommon {
   company?: string;
   service?: string;
@@ -36,6 +41,16 @@ interface ContactServitec extends ContactCommon {
 }
 
 interface ContactCobiene extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
+interface ContactFacilFactura extends ContactCommon {
+  issue?: string;
+  nationality?: string;
+}
+
+interface AvcLlantas extends ContactCommon {
   issue?: string;
   nationality?: string;
 }
