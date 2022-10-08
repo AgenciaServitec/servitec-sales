@@ -13,7 +13,7 @@
       "": ""
     },
     "mailer": {
-      "others": {
+      "generic": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
@@ -68,7 +68,7 @@
       "": ""
     },
     "mailer": {
-      "others": {
+      "generic": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"

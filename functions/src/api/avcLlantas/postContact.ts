@@ -4,8 +4,7 @@ import {
   sendMailContactEmisor,
   sendMailContactReceptor,
 } from "../../mailer/avc-llantas";
-import { firestore } from "../../_firebase";
-import moment, { Moment } from "moment";
+import { firestore, FirestoreTimestamp, now } from "../../_firebase";
 import { assign, toLower } from "lodash";
 import { searchData } from "../_utils";
 
@@ -50,7 +49,7 @@ const fetchContacts = async (contact: AvcLlantas) => {
 };
 
 const mapContact = (contactId: string, contact: AvcLlantas) => {
-  const createAt = moment();
+  const createAt = now();
   return assign(
     {},
     { ...contact },
@@ -70,12 +69,12 @@ const mapContact = (contactId: string, contact: AvcLlantas) => {
 
 interface SearchData extends ContactCommon {
   contactId: string;
-  createAt: string;
+  createAt: FirestoreTimestamp;
 }
 
 const mapSearchData = (
   contactId: string,
-  createAt: Moment,
+  createAt: FirestoreTimestamp,
   contact: ContactCommon
 ): SearchData => ({
   contactId: contactId,
@@ -87,5 +86,5 @@ const mapSearchData = (
   hostname: contact.hostname,
   status: contact.status,
   message: contact.message,
-  createAt: moment(createAt).format("DD/MM/YYYY"),
+  createAt: createAt,
 });

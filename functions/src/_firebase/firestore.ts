@@ -8,6 +8,22 @@ export type FirestoreQuerySnapshot =
 export type FirestoreDocumentReference =
   admin.firestore.DocumentReference<admin.firestore.DocumentData>;
 
+export type FirestoreTimestamp = admin.firestore.Timestamp;
+
+export const now = (): admin.firestore.Timestamp =>
+  admin.firestore.Timestamp.now();
+
+interface ToTimestamp {
+  seconds: number;
+  nanoseconds: number;
+}
+
+export const toTimestamp = ({
+  seconds,
+  nanoseconds,
+}: ToTimestamp): admin.firestore.Timestamp =>
+  new admin.firestore.Timestamp(seconds, nanoseconds);
+
 type Document<T> = { id: string } & T;
 
 export const querySnapshotToArray = <T>(

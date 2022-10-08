@@ -54,3 +54,11 @@ interface AvcLlantas extends ContactCommon {
   issue?: string;
   nationality?: string;
 }
+
+interface GenericContact extends ContactCommon {
+  issue: string;
+  nationality?: string;
+  urlCompanyImage: string;
+  receptorEmail: string;
+  receptorEmailsCopy: string;
+}

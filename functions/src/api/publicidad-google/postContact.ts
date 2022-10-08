@@ -4,8 +4,7 @@ import {
   sendMailContactEmisor,
   sendMailContactReceptor,
 } from "../../mailer/publicidad-google";
-import { firestore } from "../../_firebase";
-import moment, { Moment } from "moment";
+import { firestore, FirestoreTimestamp, now } from "../../_firebase";
 import { assign } from "lodash";
 import { searchData } from "../_utils";
 
@@ -50,7 +49,7 @@ const fetchContacts = async (contact: ContactPublicidadGoogle) => {
 };
 
 const mapContact = (contactId: string, contact: ContactPublicidadGoogle) => {
-  const createAt = moment();
+  const createAt = now();
   return assign(
     {},
     { ...contact },
@@ -70,12 +69,12 @@ const mapContact = (contactId: string, contact: ContactPublicidadGoogle) => {
 
 interface SearchData extends ContactCommon {
   contactId: string;
-  createAt: string;
+  createAt: FirestoreTimestamp;
 }
 
 const mapSearchData = (
   contactId: string,
-  createAt: Moment,
+  createAt: FirestoreTimestamp,
   contact: ContactCommon
 ): SearchData => ({
   contactId: contactId,
@@ -87,5 +86,5 @@ const mapSearchData = (
   hostname: contact.hostname,
   status: contact.status,
   message: contact.message,
-  createAt: moment(createAt).format("DD/MM/YYYY"),
+  createAt: createAt,
 });
