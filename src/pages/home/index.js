@@ -21,7 +21,7 @@ export const Home = () => {
     await firestore
       .collection("contacts")
       .orderBy("createAt", "desc")
-      .limit(10)
+      .limit(5)
       .onSnapshot((snapshot) => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
@@ -74,7 +74,7 @@ export const Home = () => {
 
 const WrapperButtons = styled.div`
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 4rem;
 `;
