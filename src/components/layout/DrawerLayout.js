@@ -51,7 +51,7 @@ export const DrawerLayout = ({
           Clientes
         </Menu.Item>
         <Menu.Item
-          key="2"
+          key="3"
           icon={<WindowsOutlined />}
           onClick={() => {
             navigateTo("/contacts");

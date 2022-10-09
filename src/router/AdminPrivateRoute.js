@@ -1,21 +1,8 @@
-import React, { useGlobal } from "reactn";
-import { Redirect, Route } from "react-router-dom";
-import { get } from "lodash";
+import { useAuthentication } from "../providers";
+import { Navigate } from "react-router-dom";
 
-export const AdminPrivateRoute = (props) => {
-  const [globalAuthUser] = useGlobal("authUser");
+export const PrivateRoute = ({ path = "/", children }) => {
+  const { authUser } = useAuthentication();
 
-  return (
-    <Route
-      exact
-      path={props.path}
-      render={() =>
-        get(globalAuthUser, "isAdmin", false) ? (
-          props.children
-        ) : (
-          <Redirect to="/contacts" />
-        )
-      }
-    />
-  );
+  return !!authUser ? children : Navigate({ to: path });
 };
