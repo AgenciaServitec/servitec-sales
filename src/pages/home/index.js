@@ -9,9 +9,7 @@ export const Home = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}></Col>
-      <Col span={24}>
-        <FloatingBubble />
-      </Col>
+      <Col span={24}></Col>
     </Row>
   );
 };
