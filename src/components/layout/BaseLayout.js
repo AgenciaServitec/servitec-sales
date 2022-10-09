@@ -4,15 +4,15 @@ import { Breadcrumb, Layout } from "antd";
 import { DrawerLayout } from "./DrawerLayout";
 import { HeaderLayout } from "./HeaderLayout";
 import { FooterLayout } from "./FooterLayout";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 const { Content } = Layout;
 
 export const BaseLayout = ({ children }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
 
-  const navigateTo = (url) => history.push(url);
+  const navigateTo = (url) => navigate(url);
 
   return (
     <LayoutContainer>

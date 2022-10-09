@@ -1,10 +1,10 @@
 import React from "react";
 import { Result, Button } from "antd";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 
 export const Page404 = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -13,7 +13,7 @@ export const Page404 = () => {
         title="404"
         subTitle="Sorry, the page you visited does not exist."
         extra={
-          <Button type="primary" onClick={() => history.goBack()}>
+          <Button type="primary" onClick={() => navigate(-1)}>
             Go Back
           </Button>
         }

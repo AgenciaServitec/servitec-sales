@@ -1,14 +1,13 @@
 import React from "react";
-import { withAuthentication } from "./hoc";
-import { BrowserRouter } from "react-router-dom";
-import { Routes } from "./routes";
+import { Router } from "./router";
+import { AuthenticationProvider, VersionProvider } from "./providers";
 
-export const App = () => {
-  return (
-    <BrowserRouter>
-      <Routes />
-    </BrowserRouter>
-  );
-};
+const App = () => (
+  <VersionProvider>
+    <AuthenticationProvider>
+      <Router />
+    </AuthenticationProvider>
+  </VersionProvider>
+);
 
-export default withAuthentication(App);
+export default App;

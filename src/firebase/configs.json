@@ -1,4 +1,30 @@
 {
+  "common": {
+    "app-data": {
+      "name": "Cobiene",
+      "emails": {
+        "contact": "contacto@cobiene.mil.pe"
+      },
+      "numbers": {
+        "phone": ["- - -", "- - -"],
+        "wsp": ["- - -", "- - -"]
+      },
+      "socialLinks": {
+        "facebook": "https://www.facebook.com/cobiene-app",
+        "instagram": "https://www.instagram.com/cobiene-app/",
+        "whatsapp": "https://api.whatsapp.com/send/?phone=+51950425945&text=Estoy+interesado+en+su+producto+%2F+servicio&app_absent=0",
+        "messenger": "https://m.me/GamontLlantas"
+      },
+      "directions": {
+        "local1": "Av. Guardia Civil 257 – Chorrillos",
+        "local2": "Av. Huaylas 2691 – Chorrillos"
+      },
+      "poweredBy": {
+        "name": "AgenciaServitec",
+        "webUrl": "https://agenciaservitec.com"
+      }
+    }
+  },
   "development": {
     "version": "0.0.1",
     "firebaseApp": {

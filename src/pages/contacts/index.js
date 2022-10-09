@@ -23,13 +23,13 @@ import {
 import { useDevice, useFormUtils, useGenerateRandomColor } from "../../hooks";
 import moment from "moment";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 
 export const Contacts = () => {
   const [contacts, setContacts] = useState([]);
   const [loadingContacts, setLoadingContacts] = useState(true);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const { isMobile } = useDevice();
   const { color } = useGenerateRandomColor();
 
@@ -94,7 +94,7 @@ export const Contacts = () => {
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
-  const navigateTo = (url) => history.push(url);
+  const navigateTo = (url) => navigate(url);
 
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
 

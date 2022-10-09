@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { Button, Result } from "antd";
 
 export const Page403 = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -13,7 +13,7 @@ export const Page403 = () => {
         title="403"
         subTitle="Sorry, you are not authorized to access this page."
         extra={
-          <Button type="primary" onClick={() => history.goBack()}>
+          <Button type="primary" onClick={() => navigate(-1)}>
             Go Back
           </Button>
         }

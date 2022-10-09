@@ -44,6 +44,16 @@ export const DrawerLayout = ({
           key="2"
           icon={<WindowsOutlined />}
           onClick={() => {
+            navigateTo("/clients");
+            setIsVisibleDrawer(false);
+          }}
+        >
+          Clientes
+        </Menu.Item>
+        <Menu.Item
+          key="2"
+          icon={<WindowsOutlined />}
+          onClick={() => {
             navigateTo("/contacts");
             setIsVisibleDrawer(false);
           }}

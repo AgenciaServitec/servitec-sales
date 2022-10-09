@@ -1,11 +1,26 @@
 import React from "react";
-import ReactDOM from "react-dom";
-/*import "./styles/fonts/index.css";*/
-import "antd/dist/antd.css";
+import ReactDOM from "react-dom/client";
+import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import CheckVersion from "./versions/CheckVersion";
+import "antd/dist/antd.min.css";
+import "./styles/fonts/index.css";
+import { ScrollTop } from "./ScrollTop";
+import { ThemeProvider } from "styled-components";
+import { BrowserRouter } from "react-router-dom";
+import { GlobalStyle, theme } from "./styles";
 
-ReactDOM.render(<CheckVersion />, document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <ThemeProvider theme={theme}>
+    <GlobalStyle />
+    <BrowserRouter>
+      <ScrollTop>
+        <App />
+      </ScrollTop>
+    </BrowserRouter>
+  </ThemeProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
