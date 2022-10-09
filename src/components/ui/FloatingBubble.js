@@ -1,46 +1,33 @@
 import React from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFacebook,
-  faGithub,
-  faWhatsapp,
-} from "@fortawesome/free-brands-svg-icons";
-export const FloatingBubble = () => {
-  return (
+
+export const FloatingBubble = () =>
+  (
     <Container>
       <a href="https://www.facebook.com/" target="_blank" rel="noreferrer">
         <div className="social">
-          <span>
-            {" "}
-            <FontAwesomeIcon icon={faFacebook} />
-          </span>
+          <div>
+            Noel moriano
+          </div>
+          <div>
+            Hankook
+          </div>
         </div>
       </a>
     </Container>
   );
-};
 
 const Container = styled.div`
-  //background: #3498db;
   a {
-    //color: currentColor;
-    animation-name: social;
-    animation-duration: 1000ms;
-    animation-timing-function: ease-in-out;
-    animation-delay: 0s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-
-    a:visited {
-      color: currentColor;
+    &:visited {
+      color: black;
     }
+    
     .social {
+      background: yellow;
       position: absolute;
-
-      color: white;
-      width: 6rem;
-      height: 6rem;
+      width: 7.5rem;
+      height: 7.5rem;
       border: 4px solid white;
       border-radius: 50%;
       text-align: center;
@@ -52,8 +39,12 @@ const Container = styled.div`
       bottom: 0;
       left: 0;
       margin: auto;
-
-      color: currentColor;
+      color: black;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      
       animation-name: social;
       animation-duration: 1000ms;
       animation-timing-function: ease-in-out;
@@ -64,24 +55,23 @@ const Container = styled.div`
 
     @keyframes social {
       0% {
-        transform: translate(148px, 78px);
+        transform: translate(150px, 78px);
       }
       100% {
-        transform: translate(148px, 84px);
+        transform: translate(150px, 84px);
       }
     }
     .social:hover {
-      background-color: white;
-      color: #3498db;
-      twidth: 80px;
-      theight: 80px;
-      ttransform-origin: 50% 50%;
+      background-color: #3498db;
+      width: 8.5rem;
+      height: 8.5rem;
+      transform-origin: 50% 50%;
     }
 
     span {
       position: relative;
       transform: translateY(-50%);
-      width: 100%;
+      width: 100% ;
       height: 100%;
     }
   }
