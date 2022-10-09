@@ -1,6 +1,6 @@
-# COBIENE WEB (cobiene-mil-pe)
+# SENDING EMAILS
 
-Pagina web del ejercito para el publico, donde puedes visualizar las entidades, convenios y aliados, etc
+Esta App web se encarga de enviar y guardar los datos de los usuarios que se pusieron en contacto desde una web client, podemos visualizar los datos del usuario en tiempo real desde el dashboard y poder ponernos en contácto con el usuario de una manera mas rapida.
 
 ## Starting 🚀
 
