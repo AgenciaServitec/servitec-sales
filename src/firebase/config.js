@@ -9,7 +9,7 @@ const hostName = window.location.hostname;
 
 const hostsProduction = ["sendingEmails.web.app"];
 
-const currentEnvironment = includes(hostsProduction, hostName)
+const currentEnvironment = !includes(hostsProduction, hostName)
   ? "production"
   : "development";
 
