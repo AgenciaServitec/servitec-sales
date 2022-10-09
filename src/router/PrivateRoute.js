@@ -1,15 +1,8 @@
-import React from "react";
-import { useGlobal } from "reactn";
-import { Redirect, Route } from "react-router-dom";
+import { useAuthentication } from "../providers";
+import { Navigate } from "react-router-dom";
 
-export const PrivateRoute = (props) => {
-  const [globalAuthUser] = useGlobal("authUser");
+export const PrivateRoute = ({ path = "/", children }) => {
+  const { authUser } = useAuthentication();
 
-  return (
-    <Route
-      exact
-      path={props.path}
-      render={() => (globalAuthUser ? props.children : <Redirect to="/" />)}
-    />
-  );
+  return authUser ? children : Navigate({ to: path });
 };
