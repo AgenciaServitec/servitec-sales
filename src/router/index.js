@@ -4,6 +4,7 @@ import {
   ClientsIntegration,
   Contact,
   Contacts,
+  Home,
   Page403,
   Page404,
 } from "../pages";
@@ -16,7 +17,7 @@ export const Router = () => (
       path="/"
       element={
         <BaseLayout>
-          <Contacts />
+          <Home />
         </BaseLayout>
       }
     />
