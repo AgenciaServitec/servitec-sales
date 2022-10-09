@@ -5,10 +5,7 @@ const global = css`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: ${({ theme }) => theme.colors.black40};
-    -webkit-font-smoothing: antialiased;
-    //font-family: -apple-system, BlinkMacSystemFont, "Roboto", sans-serif;
-    //font-style: normal;
+    color: ${({ theme }) => theme.colors.body};
     cursor: default;
     font-size: 16px;
   }

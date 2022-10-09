@@ -61,9 +61,6 @@
     "prettier": "^2.3.1",
     "source-map-explorer": "^2.5.2"
   },
-  "resolutions": {
-    "react-error-overlay": "6.0.9"
-  },
   "browserslist": [
     ">0.2%",
     "not dead",
