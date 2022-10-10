@@ -30,6 +30,7 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 
     animation-name: social;
     animation-duration: 1000ms;
