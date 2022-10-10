@@ -38,6 +38,13 @@ const Container = styled.div`
     animation-delay: 0s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    transition: all ease-in-out 700ms;
+
+    &:hover {
+      width: 9em;
+      height: 9em;
+      transition: all ease-in-out 400ms;
+    }
 
     div {
       color: ${theme.colors.black};

@@ -75,6 +75,7 @@ export const Home = () => {
 const WrapperButtons = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
   gap: 4rem;
 `;
