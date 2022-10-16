@@ -24,7 +24,7 @@ export const Home = () => {
     await firestore
       .collection("contacts")
       .orderBy("createAt", "desc")
-      .limit(5)
+      .where("status", "==", "pending")
       .onSnapshot((snapshot) => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
@@ -48,21 +48,6 @@ export const Home = () => {
   };
 
   if (loadingContacts) return <Spinner fullscreen />;
-
-  const bgColor = (hostname) => {
-    switch (hostname) {
-      case "publicidadgoogle.site":
-        return "#c1c0c0";
-      case "cobiene-352004.web.app":
-        return "#80eb80";
-      case "hankookalvillantas.com":
-        return "orange";
-      case "avcllantas.com":
-        return "blue";
-      default:
-        return "yellow";
-    }
-  };
 
   const findClientColor = (hostname) =>
     clientColors.find((clientColor) => clientColor.code === hostname);
