@@ -12,6 +12,9 @@ import { clientColors } from "../../data-list";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
+
+  const [contact, setContact] = useState(null);
+
   const [loadingContacts, setLoadingContacts] = useState(true);
 
   const [isVisibleDrawerRight, setIsVisibleDrawerRight] = useState(false);
@@ -56,8 +59,9 @@ export const Home = () => {
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <DrawerUserInformation
-          setIsVisibleDrawerRight={setIsVisibleDrawerRight}
+          onSetIsVisibleDrawerRight={setIsVisibleDrawerRight}
           isVisibleDrawerRight={isVisibleDrawerRight}
+          contact={contact}
         />
       </Col>
       <Col xs={24} sm={18}>
@@ -72,6 +76,7 @@ export const Home = () => {
                 onSetIsVisibleDrawerRight={() =>
                   setIsVisibleDrawerRight(!isVisibleDrawerRight)
                 }
+                onSetContact={setContact}
               />
             ))}
           </BubbleUI>

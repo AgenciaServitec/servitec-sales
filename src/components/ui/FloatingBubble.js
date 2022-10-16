@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { Tag } from "antd";
 import { capitalize } from "lodash";
 import { darken } from "polished";
 
@@ -9,12 +8,16 @@ export const FloatingBubble = ({
   bgColor,
   color,
   contact,
+  onSetContact,
 }) => {
   return (
     <Container
       bgColor={bgColor}
       color={color}
-      onClick={() => onSetIsVisibleDrawerRight(true)}
+      onClick={() => {
+        onSetContact(contact);
+        onSetIsVisibleDrawerRight(true);
+      }}
     >
       <span className="item-full-name">{`${capitalize(
         contact.firstName

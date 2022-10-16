@@ -1,59 +1,178 @@
-import { Button, Col, Drawer, Form, Row, Select, Space } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Col, Drawer, Row, Switch, Divider } from "antd";
 import styled from "styled-components";
-import { Input, TextArea } from "../../ui";
+import {
+  Input,
+  TextArea,
+  Form,
+  Button,
+  modalConfirm,
+  notification,
+} from "../../ui";
 import { mediaQuery } from "../../../styles";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useFormUtils } from "../../../hooks";
+import { Group } from "../../ui/component-container/Group";
+import moment from "moment";
+import { firestore } from "../../../firebase";
 
 export const DrawerUserInformation = ({
   isVisibleDrawerRight,
-  setIsVisibleDrawerRight,
+  onSetIsVisibleDrawerRight,
+  contact,
 }) => {
+  const [statusType, setStatusType] = useState(false);
+  const [savingContact, setSavingContact] = useState(false);
+
+  const schema = yup.object({
+    status: yup.bool(),
+  });
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const { required, error } = useFormUtils({ errors, schema });
+
+  const resetStatusType = () => setStatusType(false);
+
+  console.log("statusType->", statusType);
+
+  const onSubmitSaveContact = () => {
+    try {
+      setSavingContact(true);
+
+      modalConfirm({
+        title: "¿Quieres marcar este contacto como atendido?",
+        content: "Al aceptar, el contacto desaparecerá de la vista",
+        onOk: async () => await onSaveContact(),
+      });
+
+      notification({
+        type: "success",
+      });
+
+      onSetIsVisibleDrawerRight(false);
+    } catch (e) {
+      console.error("ErrorSaveContact:", e);
+      notification({ type: "error" });
+    } finally {
+      setSavingContact(false);
+    }
+  };
+
+  const onSaveContact = async () => {
+    await firestore
+      .collection("contacts")
+      .doc(contact.id)
+      .set({ status: statusType ? "attended" : "pending" });
+  };
+
   return (
     <ContainerDrawer
       title="Informacion de contacto"
       width={720}
-      onClose={() => setIsVisibleDrawerRight(!isVisibleDrawerRight)}
+      onClose={() => {
+        onSetIsVisibleDrawerRight(!isVisibleDrawerRight);
+        resetStatusType();
+      }}
       visible={isVisibleDrawerRight}
       bodyStyle={{
         paddingBottom: 80,
       }}
     >
-      <Form layout="vertical" hideRequiredMark>
-        <Row gutter={[16, 16]}>
-          <Col span={12}>
-            <Input label="Cliente" />
+      <Form
+        layout="vertical"
+        hideRequiredMark
+        onSubmit={handleSubmit(onSubmitSaveContact)}
+      >
+        <Row gutter={[0, 10]}>
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Nombres:</span>
+              <span>{contact?.firstName || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Input label="Dominio" />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Apellidos:</span>
+              <span>{contact?.lastName || ""}</span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Input label="Nombres" />
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Email:</span>
+              <span>{contact?.email || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Input label="Apellidos" />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Codigo país:</span>
+              <span>{contact?.phone.countryCode || ""}</span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Input label="Codigo de pais" />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Número:</span>
+              <span>{contact?.phone.number || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Input label="Numero" />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Feccha creación:</span>
+              <span>
+                {moment(contact?.createAt.toDate()).format(
+                  "DD/MM/YYYY HH:mm A"
+                ) || ""}
+              </span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Input label="Email" />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Hostname:</span>
+              <span>{contact?.hostname || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Input label="Fecha de Creación" />
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Asunto:</span>
+              <span>{contact?.issue || ""}</span>
+            </ItemDetail>
           </Col>
-
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Mensaje:</span>
+              <span>{contact?.message || ""}</span>
+            </ItemDetail>
+          </Col>
+          <Divider />
           <Col span={24}>
-            <Input label="Asunto" />
+            <Group label="Cliente Respondido">
+              <Switch
+                onClick={(e) => setStatusType(e)}
+                checkedChildren="Si"
+                unCheckedChildren="No"
+                defaultChecked={false}
+                checked={statusType}
+              />
+            </Group>
           </Col>
-
           <Col span={24}>
-            <TextArea />
+            <Button
+              htmlType="submit"
+              block
+              type="primary"
+              disabled={!statusType || savingContact}
+            >
+              Guardar
+            </Button>
           </Col>
         </Row>
       </Form>
@@ -77,5 +196,20 @@ const ContainerDrawer = styled(Drawer)`
     text-align: right;
     background: #fff;
     border-top: 1px solid #e9e9e9;
+  }
+`;
+
+const ItemDetail = styled.div`
+  padding: 0.5em 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  span {
+    margin-bottom: -0.2em;
+    font-size: 0.7em;
+  }
+  span:last-child {
+    font-size: 1em;
+    font-weight: 500;
   }
 `;

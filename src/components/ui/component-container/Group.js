@@ -37,20 +37,20 @@ const Container = styled.fieldset`
   border-radius: ${({ theme }) => theme.border_radius.x_small};
   border: solid 1px
     ${({ error, theme }) => (error ? theme.colors.error : theme.colors.light)};
-  padding: 1rem;
+  padding: 0.3em 1em;
   margin-top: -7px;
 `;
 
 const Legend = styled.legend`
   ${({ error, theme, required }) => css`
-    background: ${theme.bg.primary};
+    background: ${theme.colors.primary3};
     color: ${error ? theme.colors.error : theme.colors.heading};
     border-radius: ${theme.border_radius.x_small};
     font-size: ${theme.font_sizes.x_small};
     font-family: "UbuntuMedium", sans-serif;
     padding: 0.1rem 0.5rem;
     width: auto;
-    margin-bottom: 0;
+    margin: 0.6em 0;
 
     ${required &&
     css`
