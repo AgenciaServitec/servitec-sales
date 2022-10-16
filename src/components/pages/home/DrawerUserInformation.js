@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { Col, Drawer, Row, Switch, Divider } from "antd";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Col, Divider, Drawer, Row, Switch } from "antd";
 import styled from "styled-components";
-import {
-  Input,
-  TextArea,
-  Form,
-  Button,
-  modalConfirm,
-  notification,
-} from "../../ui";
+import { Button, Form, modalConfirm, notification } from "../../ui";
 import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useFormUtils } from "../../../hooks";
 import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
@@ -30,33 +22,20 @@ export const DrawerUserInformation = ({
     status: yup.bool(),
   });
 
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-    reset,
-  } = useForm({
+  const { handleSubmit } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const { required, error } = useFormUtils({ errors, schema });
-
   const resetStatusType = () => setStatusType(false);
 
-  console.log("statusType->", statusType);
-
-  const onSubmitSaveContact = () => {
+  const onSubmitSaveContact = async () => {
     try {
       setSavingContact(true);
 
-      modalConfirm({
+      await modalConfirm({
         title: "¿Quieres marcar este contacto como atendido?",
         content: "Al aceptar, el contacto desaparecerá de la vista",
         onOk: async () => await onSaveContact(),
-      });
-
-      notification({
-        type: "success",
       });
 
       onSetIsVisibleDrawerRight(false);
@@ -72,7 +51,14 @@ export const DrawerUserInformation = ({
     await firestore
       .collection("contacts")
       .doc(contact.id)
-      .set({ status: statusType ? "attended" : "pending" });
+      .set(
+        { ...contact, status: statusType ? "attended" : "pending" },
+        { merge: true }
+      );
+
+    notification({
+      type: "success",
+    });
   };
 
   return (
