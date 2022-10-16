@@ -8,6 +8,7 @@ import { Spinner } from "../../components/ui";
 import styled from "styled-components";
 import BubbleUI from "react-bubble-ui";
 import "react-bubble-ui/dist/index.css";
+import { clientColors } from "../../data-list";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
@@ -63,6 +64,9 @@ export const Home = () => {
     }
   };
 
+  const findClientColor = (hostname) =>
+    clientColors.find((clientColor) => clientColor.code === hostname);
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -73,12 +77,13 @@ export const Home = () => {
       </Col>
       <Col span={24}>
         <WrapperButtons>
-          <BubbleUI options={options} className="myBubbleUI">
+          <BubbleUI options={options} className="my-bubble-ui">
             {contacts.map((contact, index) => (
               <FloatingBubble
                 key={index}
                 contact={contact}
-                bgColor={bgColor(contact.hostname)}
+                bgColor={findClientColor(contact.clientCode)?.bg || "#e6e5e5"}
+                color={findClientColor(contact.clientCode)?.color || "#fff"}
                 onSetIsVisibleDrawerRight={() =>
                   setIsVisibleDrawerRight(!isVisibleDrawerRight)
                 }
@@ -98,10 +103,10 @@ const WrapperButtons = styled.div`
   flex-wrap: wrap;
   gap: 4rem;
 
-  .myBubbleUI {
+  .my-bubble-ui {
     width: 100%;
-    max-width: 1000px;
-    height: 500px;
+    max-width: 90vw;
+    height: 70vh;
     border-radius: 50px;
   }
 `;
