@@ -2,6 +2,7 @@ import { Button, Col, Drawer, Form, Row, Select, Space } from "antd";
 import React from "react";
 import styled from "styled-components";
 import { Input, TextArea } from "../../ui";
+import { mediaQuery } from "../../../styles";
 
 export const DrawerUserInformation = ({
   isVisibleDrawerRight,
@@ -61,6 +62,12 @@ export const DrawerUserInformation = ({
 };
 
 const ContainerDrawer = styled(Drawer)`
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+    ${mediaQuery.minTablet} {
+      width: 40% !important;
+    }
+  }
   .site-form-in-drawer-wrapper {
     position: absolute;
     right: 0px;

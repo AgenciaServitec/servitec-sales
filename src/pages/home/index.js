@@ -6,6 +6,8 @@ import { FloatingBubble } from "../../components/ui/FloatingBubble";
 import { firestore, querySnapshotToArray } from "../../firebase";
 import { Spinner } from "../../components/ui";
 import styled from "styled-components";
+import BubbleUI from "react-bubble-ui";
+import "react-bubble-ui/dist/index.css";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
@@ -27,6 +29,21 @@ export const Home = () => {
         setContacts(contactsData);
         setLoadingContacts(false);
       });
+  };
+
+  const options = {
+    size: 154,
+    minSize: 70,
+    gutter: 8,
+    provideProps: true,
+    numCols: 6,
+    fringeWidth: 160,
+    yRadius: 400,
+    xRadius: 400,
+    cornerRadius: 0,
+    showGuides: false,
+    compact: true,
+    gravitation: 10,
   };
 
   if (loadingContacts) return <Spinner fullscreen />;
@@ -56,16 +73,18 @@ export const Home = () => {
       </Col>
       <Col span={24}>
         <WrapperButtons>
-          {contacts.map((contact, index) => (
-            <FloatingBubble
-              key={index}
-              contact={contact}
-              bgColor={bgColor(contact.hostname)}
-              onSetIsVisibleDrawerRight={() =>
-                setIsVisibleDrawerRight(!isVisibleDrawerRight)
-              }
-            />
-          ))}
+          <BubbleUI options={options} className="myBubbleUI">
+            {contacts.map((contact, index) => (
+              <FloatingBubble
+                key={index}
+                contact={contact}
+                bgColor={bgColor(contact.hostname)}
+                onSetIsVisibleDrawerRight={() =>
+                  setIsVisibleDrawerRight(!isVisibleDrawerRight)
+                }
+              />
+            ))}
+          </BubbleUI>
         </WrapperButtons>
       </Col>
     </Row>
@@ -78,4 +97,11 @@ const WrapperButtons = styled.div`
   align-items: center;
   flex-wrap: wrap;
   gap: 4rem;
+
+  .myBubbleUI {
+    width: 100%;
+    max-width: 1000px;
+    height: 500px;
+    border-radius: 50px;
+  }
 `;
