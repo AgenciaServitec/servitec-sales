@@ -1,0 +1,32 @@
+[
+  {
+    "code": "cobiene",
+    "color": "#fff",
+    "bg": "#7f9e48"
+  },
+  {
+    "code": "facil-factura",
+    "color": "#fff",
+    "bg": "#009fbf"
+  },
+  {
+    "code": "avc-llantas",
+    "color": "#fff",
+    "bg": "#5a5d5e"
+  },
+  {
+    "code": "all-in-one-servitec",
+    "color": "#fff",
+    "bg": "#292929"
+  },
+  {
+    "code": "gamont-llantas",
+    "color": "#fff",
+    "bg": "#df0000"
+  },
+  {
+    "code": "publicidad-google",
+    "color": "#444",
+    "bg": "#ffffff"
+  }
+]
