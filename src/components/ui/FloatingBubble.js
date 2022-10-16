@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
 import { darken } from "polished";
+import { keyframes } from "../../styles";
 
 export const FloatingBubble = ({
   onSetIsVisibleDrawerRight,
@@ -9,28 +10,26 @@ export const FloatingBubble = ({
   color,
   contact,
   onSetContact,
-}) => {
-  return (
-    <Container
-      bgColor={bgColor}
-      color={color}
-      onClick={() => {
-        onSetContact(contact);
-        onSetIsVisibleDrawerRight(true);
-      }}
-    >
-      <span className="item-full-name">{`${capitalize(
-        contact.firstName
-      )} ${capitalize(contact.lastName)}`}</span>
-      {contact?.hostname && (
-        <span className="item-tag">{contact.hostname}</span>
-      )}
-    </Container>
-  );
-};
+  isLastContact,
+}) => (
+  <Container
+    isLastContact={isLastContact}
+    bgColor={bgColor}
+    color={color}
+    onClick={() => {
+      onSetContact(contact);
+      onSetIsVisibleDrawerRight(true);
+    }}
+  >
+    <span className="item-full-name">{`${capitalize(
+      contact.firstName
+    )} ${capitalize(contact.lastName)}`}</span>
+    {contact?.hostname && <span className="item-tag">{contact.hostname}</span>}
+  </Container>
+);
 
 const Container = styled.div`
-  ${({ bgColor, color, theme }) => css`
+  ${({ bgColor, color, isLastContact }) => css`
     width: 90%;
     height: 90%;
     border-radius: 50%;
@@ -43,6 +42,10 @@ const Container = styled.div`
     justify-content: center;
     cursor: pointer;
     transition: all ease-in-out 700ms;
+    ${isLastContact &&
+    css`
+      animation: ${keyframes.pulseBoxShadow} 2s infinite;
+    `}
 
     &:hover {
       width: 100%;
