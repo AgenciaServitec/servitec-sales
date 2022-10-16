@@ -70,8 +70,8 @@ const ContainerDrawer = styled(Drawer)`
   }
   .site-form-in-drawer-wrapper {
     position: absolute;
-    right: 0px;
-    bottom: 0px;
+    right: 0;
+    bottom: 0;
     width: 100%;
     padding: 10px 16px;
     text-align: right;
