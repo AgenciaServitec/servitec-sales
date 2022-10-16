@@ -32,8 +32,8 @@ export const Home = () => {
   };
 
   const options = {
-    size: 154,
-    minSize: 70,
+    size: 200,
+    minSize: 100,
     gutter: 8,
     provideProps: true,
     numCols: 6,
@@ -43,7 +43,7 @@ export const Home = () => {
     cornerRadius: 0,
     showGuides: false,
     compact: true,
-    gravitation: 10,
+    gravitation: 40,
   };
 
   if (loadingContacts) return <Spinner fullscreen />;

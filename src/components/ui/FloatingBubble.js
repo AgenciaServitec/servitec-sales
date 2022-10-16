@@ -26,8 +26,8 @@ export const FloatingBubble = ({
 
 const Container = styled.div`
   ${({ bgColor, theme }) => css`
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     border-radius: 50%;
     background: ${bgColor};
     text-align: center;
@@ -39,7 +39,8 @@ const Container = styled.div`
     transition: all ease-in-out 700ms;
 
     &:hover {
-      width: 110%;
+      width: 100%;
+      height: 100%;
       transition: all ease-in-out 400ms;
     }
 
