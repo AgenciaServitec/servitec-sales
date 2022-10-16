@@ -7,11 +7,15 @@ export const FloatingBubble = ({
   onSetIsVisibleDrawerRight,
   bgColor,
   contact,
+  onSetContact,
 }) => {
   return (
     <Container
       bgColor={bgColor}
-      onClick={() => onSetIsVisibleDrawerRight(true)}
+      onClick={() => {
+        onSetContact(contact);
+        onSetIsVisibleDrawerRight(true);
+      }}
     >
       <div>{capitalize(contact.firstName)}</div>
       <div>{capitalize(contact.lastName)}</div>

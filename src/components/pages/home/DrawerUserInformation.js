@@ -1,30 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Col, Drawer, Row, Switch } from "antd";
+import { Col, Drawer, Row, Switch, Divider } from "antd";
 import styled from "styled-components";
-import { Input, TextArea, Form } from "../../ui";
+import {
+  Input,
+  TextArea,
+  Form,
+  Button,
+  modalConfirm,
+  notification,
+} from "../../ui";
 import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFormUtils } from "../../../hooks";
+import { Group } from "../../ui/component-container/Group";
+import moment from "moment";
+import { firestore } from "../../../firebase";
 
 export const DrawerUserInformation = ({
   isVisibleDrawerRight,
-  setIsVisibleDrawerRight,
+  onSetIsVisibleDrawerRight,
   contact,
 }) => {
-  // console.log("contact", contact);
+  const [statusType, setStatusType] = useState(false);
+  const [savingContact, setSavingContact] = useState(false);
 
   const schema = yup.object({
-    clientCode: yup.string().required(),
-    hostname: yup.string().required(),
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    countryCode: yup.string().required(),
-    number: yup.string().required(),
-    email: yup.string().required(),
-    issue: yup.string().required(),
-    message: yup.string().required(),
+    status: yup.bool(),
   });
 
   const {
@@ -38,33 +41,48 @@ export const DrawerUserInformation = ({
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  useEffect(() => {
-    resetForm();
-  }, [contact]);
+  const resetStatusType = () => setStatusType(false);
 
-  const resetForm = () => {
-    reset({
-      clientCode: contact?.clientCode || "",
-      hostname: contact?.hostname || "",
-      firstName: contact?.firstName || "",
-      lastName: contact?.lastName || "",
-      countryCode: contact?.phone?.countryCode || "",
-      number: contact?.phone?.number || "",
-      email: contact?.email || "",
-      issue: contact?.issue || "",
-      message: contact?.message || "",
-    });
+  console.log("statusType->", statusType);
+
+  const onSubmitSaveContact = () => {
+    try {
+      setSavingContact(true);
+
+      modalConfirm({
+        title: "¿Quieres marcar este contacto como atendido?",
+        content: "Al aceptar, el contacto desaparecerá de la vista",
+        onOk: async () => await onSaveContact(),
+      });
+
+      notification({
+        type: "success",
+      });
+
+      onSetIsVisibleDrawerRight(false);
+    } catch (e) {
+      console.error("ErrorSaveContact:", e);
+      notification({ type: "error" });
+    } finally {
+      setSavingContact(false);
+    }
   };
 
-  const onSubmitSaveContact = (formData) => {
-    console.log(formData);
+  const onSaveContact = async () => {
+    await firestore
+      .collection("contacts")
+      .doc(contact.id)
+      .set({ status: statusType ? "attended" : "pending" });
   };
 
   return (
     <ContainerDrawer
       title="Informacion de contacto"
       width={720}
-      onClose={() => setIsVisibleDrawerRight(!isVisibleDrawerRight)}
+      onClose={() => {
+        onSetIsVisibleDrawerRight(!isVisibleDrawerRight);
+        resetStatusType();
+      }}
       visible={isVisibleDrawerRight}
       bodyStyle={{
         paddingBottom: 80,
@@ -75,184 +93,87 @@ export const DrawerUserInformation = ({
         hideRequiredMark
         onSubmit={handleSubmit(onSubmitSaveContact)}
       >
-        <Row gutter={[16, 16]}>
-          <Col span={12}>
-            <Controller
-              name="clientCode"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Cliente"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+        <Row gutter={[0, 10]}>
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Nombres:</span>
+              <span>{contact?.firstName || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Controller
-              name="hostname"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Dominio"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Apellidos:</span>
+              <span>{contact?.lastName || ""}</span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Controller
-              name="firstName"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Nombres"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Email:</span>
+              <span>{contact?.email || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Controller
-              name="lastName"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Apellidos"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Codigo país:</span>
+              <span>{contact?.phone.countryCode || ""}</span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Controller
-              name="countryCode"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Codigo de pais"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Número:</span>
+              <span>{contact?.phone.number || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Controller
-              name="number"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Numero"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Feccha creación:</span>
+              <span>
+                {moment(contact?.createAt.toDate()).format(
+                  "DD/MM/YYYY HH:mm A"
+                ) || ""}
+              </span>
+            </ItemDetail>
           </Col>
-
-          <Col span={12}>
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Email"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={12}>
+            <ItemDetail>
+              <span>Hostname:</span>
+              <span>{contact?.hostname || ""}</span>
+            </ItemDetail>
           </Col>
-          <Col span={12}>
-            <Controller
-              name="createAt"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Fecha de Creación"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Asunto:</span>
+              <span>{contact?.issue || ""}</span>
+            </ItemDetail>
           </Col>
-
+          <Col xs={24} sm={24}>
+            <ItemDetail>
+              <span>Mensaje:</span>
+              <span>{contact?.message || ""}</span>
+            </ItemDetail>
+          </Col>
+          <Divider />
           <Col span={24}>
-            <Controller
-              name="issue"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Asunto"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+            <Group label="Cliente Respondido">
+              <Switch
+                onClick={(e) => setStatusType(e)}
+                checkedChildren="Si"
+                unCheckedChildren="No"
+                defaultChecked={false}
+                checked={statusType}
+              />
+            </Group>
           </Col>
-
           <Col span={24}>
-            <Controller
-              name="message"
-              defaultValue=""
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <TextArea
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
+            <Button
+              htmlType="submit"
+              block
+              type="primary"
+              disabled={!statusType || savingContact}
+            >
+              Guardar
+            </Button>
           </Col>
-          {/*<Col>*/}
-          {/*  <Switch defaultChecked />*/}
-          {/*</Col>*/}
         </Row>
       </Form>
     </ContainerDrawer>
@@ -275,5 +196,20 @@ const ContainerDrawer = styled(Drawer)`
     text-align: right;
     background: #fff;
     border-top: 1px solid #e9e9e9;
+  }
+`;
+
+const ItemDetail = styled.div`
+  padding: 0.5em 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  span {
+    margin-bottom: -0.2em;
+    font-size: 0.7em;
+  }
+  span:last-child {
+    font-size: 1em;
+    font-weight: 500;
   }
 `;
