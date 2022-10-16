@@ -37,14 +37,14 @@ export const Home = () => {
     minSize: 100,
     gutter: 8,
     provideProps: true,
-    numCols: 6,
+    numCols: 5,
     fringeWidth: 160,
     yRadius: 400,
     xRadius: 400,
     cornerRadius: 0,
     showGuides: false,
     compact: true,
-    gravitation: 40,
+    gravitation: 10,
   };
 
   if (loadingContacts) return <Spinner fullscreen />;
@@ -60,7 +60,7 @@ export const Home = () => {
           isVisibleDrawerRight={isVisibleDrawerRight}
         />
       </Col>
-      <Col span={24}>
+      <Col xs={24} sm={18}>
         <WrapperButtons>
           <BubbleUI options={options} className="my-bubble-ui">
             {contacts.map((contact, index) => (
@@ -77,6 +77,14 @@ export const Home = () => {
           </BubbleUI>
         </WrapperButtons>
       </Col>
+      <Col xs={24} sm={6}>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
+          earum eos fugiat inventore molestiae optio repellendus repudiandae
+          vitae voluptatibus voluptatum? Aspernatur corporis excepturi facere
+          illo impedit laborum magni, maiores voluptatem!
+        </p>
+      </Col>
     </Row>
   );
 };
@@ -90,8 +98,11 @@ const WrapperButtons = styled.div`
 
   .my-bubble-ui {
     width: 100%;
-    max-width: 90vw;
-    height: 70vh;
+    max-width: 1000px;
+    height: 60vh;
+    margin: auto;
     border-radius: 50px;
+    background: #d8d8d8;
+    overflow: hidden;
   }
 `;
