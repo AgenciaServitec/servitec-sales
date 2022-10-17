@@ -18,4 +18,5 @@ export * from "./SelectOption";
 export * from "./Spinner";
 export * from "./TextArea";
 export * from "./TimePicker";
+export * from "./Audio";
 // export { default as Upload } from "./Upload";

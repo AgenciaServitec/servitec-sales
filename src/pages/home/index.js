@@ -1,30 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { DrawerUserInformation } from "../../components/pages";
 import { FloatingBubble } from "../../components/ui/FloatingBubble";
 import { firestore, querySnapshotToArray } from "../../firebase";
-import { Spinner } from "../../components/ui";
+import { Audio, Spinner } from "../../components/ui";
 import styled from "styled-components";
 import BubbleUI from "react-bubble-ui";
 import "react-bubble-ui/dist/index.css";
 import { clientColors } from "../../data-list";
 import { orderBy } from "lodash";
+import Title from "antd/lib/typography/Title";
+import { ContactSound } from "../../multimedia";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
-
   const [contact, setContact] = useState(null);
 
   const [loadingContacts, setLoadingContacts] = useState(true);
-
   const [isVisibleDrawerRight, setIsVisibleDrawerRight] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     (() => fetchContacts())();
   }, []);
 
+  const lastContact = orderBy(contacts, "createAt", "desc")[0];
+
   const fetchContacts = async () => {
+    setIsPlaying(true);
+
     await firestore
       .collection("contacts")
       .orderBy("createAt", "desc")
@@ -33,11 +38,12 @@ export const Home = () => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
         setLoadingContacts(false);
+        setIsPlaying(false);
       });
   };
 
   const options = {
-    size: 200,
+    size: 190,
     minSize: 100,
     gutter: 8,
     provideProps: true,
@@ -56,10 +62,10 @@ export const Home = () => {
   const findClientColor = (hostname) =>
     clientColors.find((clientColor) => clientColor.code === hostname);
 
-  const lastContact = orderBy(contacts, "createAt", "desc")[0];
-
   return (
     <Row gutter={[16, 16]}>
+      <Audio key={isPlaying} audio={ContactSound} autoPlay={isPlaying} />
+
       <Col span={24}>
         <DrawerUserInformation
           onSetIsVisibleDrawerRight={setIsVisibleDrawerRight}
@@ -87,12 +93,9 @@ export const Home = () => {
         </WrapperButtons>
       </Col>
       <Col xs={24} sm={6}>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi
-          earum eos fugiat inventore molestiae optio repellendus repudiandae
-          vitae voluptatibus voluptatum? Aspernatur corporis excepturi facere
-          illo impedit laborum magni, maiores voluptatem!
-        </p>
+        <Title>
+          Recepcion de contactos en tiempo real de clientes y webs de servitec
+        </Title>
       </Col>
     </Row>
   );
