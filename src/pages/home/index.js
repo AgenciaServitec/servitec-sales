@@ -1,10 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { DrawerUserInformation } from "../../components/pages";
 import { FloatingBubble } from "../../components/ui/FloatingBubble";
 import { firestore, querySnapshotToArray } from "../../firebase";
-import { Audio, Spinner } from "../../components/ui";
+import { Spinner } from "../../components/ui";
 import styled from "styled-components";
 import BubbleUI from "react-bubble-ui";
 import "react-bubble-ui/dist/index.css";
@@ -12,6 +12,7 @@ import { clientColors } from "../../data-list";
 import { orderBy } from "lodash";
 import Title from "antd/lib/typography/Title";
 import { ContactSound } from "../../multimedia";
+import useSound from "use-sound";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
@@ -19,7 +20,8 @@ export const Home = () => {
 
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [isVisibleDrawerRight, setIsVisibleDrawerRight] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
+
+  const [play] = useSound(ContactSound);
 
   useEffect(() => {
     (() => fetchContacts())();
@@ -27,9 +29,9 @@ export const Home = () => {
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
 
-  const fetchContacts = async () => {
-    setIsPlaying(true);
+  const playToSound = () => play();
 
+  const fetchContacts = async () => {
     await firestore
       .collection("contacts")
       .orderBy("createAt", "desc")
@@ -38,8 +40,9 @@ export const Home = () => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
         setLoadingContacts(false);
-        setIsPlaying(false);
       });
+
+    playToSound();
   };
 
   const options = {
@@ -64,8 +67,6 @@ export const Home = () => {
 
   return (
     <Row gutter={[16, 16]}>
-      <Audio key={isPlaying} audio={ContactSound} autoPlay={isPlaying} />
-
       <Col span={24}>
         <DrawerUserInformation
           onSetIsVisibleDrawerRight={setIsVisibleDrawerRight}
@@ -81,7 +82,7 @@ export const Home = () => {
                 key={index}
                 contact={contact}
                 isLastContact={lastContact.id === contact.id}
-                bgColor={findClientColor(contact.clientCode)?.bg || "#e6e5e5"}
+                bgColor={findClientColor(contact.clientCode)?.bg || "#c4c4c4"}
                 color={findClientColor(contact.clientCode)?.color || "#fff"}
                 onSetIsVisibleDrawerRight={() =>
                   setIsVisibleDrawerRight(!isVisibleDrawerRight)
