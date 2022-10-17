@@ -6,16 +6,14 @@ import { keyframes } from "../../styles";
 
 export const FloatingBubble = ({
   onSetIsVisibleDrawerRight,
-  bgColor,
-  color,
+  clientColors,
   contact,
   onSetContact,
   isLastContact,
 }) => (
   <Container
     isLastContact={isLastContact}
-    bgColor={bgColor}
-    color={color}
+    clientColors={clientColors}
     onClick={() => {
       onSetContact(contact);
       onSetIsVisibleDrawerRight(true);
@@ -29,12 +27,12 @@ export const FloatingBubble = ({
 );
 
 const Container = styled.div`
-  ${({ bgColor, color, isLastContact }) => css`
+  ${({ clientColors, isLastContact }) => css`
     width: 90%;
     height: 90%;
     border-radius: 50%;
-    border: 2px solid ${darken(0.08, bgColor)};
-    background: ${bgColor};
+    border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -58,7 +56,7 @@ const Container = styled.div`
     }
 
     .item-full-name {
-      color: ${color};
+      color: ${({ clientColors }) => clientColors?.color || "#fff"};
       font-size: 0.9em;
       padding: 0.2em 0.4em;
       border-radius: 1em;
@@ -71,9 +69,9 @@ const Container = styled.div`
       padding: 0.2em 0.4em;
       border-radius: 1em;
       text-align: center;
-      background: ${darken(0.09, bgColor)};
-      border: 2px solid ${darken(0.08, bgColor)};
-      color: ${color};
+      background: ${darken(0.09, clientColors?.bg || "#c4c4c4")};
+      border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+      color: ${clientColors?.color || "#fff"};
     }
   `}
 `;

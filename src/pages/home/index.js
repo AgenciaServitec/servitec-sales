@@ -8,11 +8,11 @@ import { Spinner } from "../../components/ui";
 import styled from "styled-components";
 import BubbleUI from "react-bubble-ui";
 import "react-bubble-ui/dist/index.css";
-import { clientColors } from "../../data-list";
 import { orderBy } from "lodash";
 import Title from "antd/lib/typography/Title";
 import { ContactSound } from "../../multimedia";
 import useSound from "use-sound";
+import { findClientColor } from "../../utils";
 
 export const Home = () => {
   const [contacts, setContacts] = useState([]);
@@ -62,9 +62,6 @@ export const Home = () => {
 
   if (loadingContacts) return <Spinner fullscreen />;
 
-  const findClientColor = (hostname) =>
-    clientColors.find((clientColor) => clientColor.code === hostname);
-
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -82,8 +79,7 @@ export const Home = () => {
                 key={index}
                 contact={contact}
                 isLastContact={lastContact.id === contact.id}
-                bgColor={findClientColor(contact.clientCode)?.bg || "#c4c4c4"}
-                color={findClientColor(contact.clientCode)?.color || "#fff"}
+                clientColors={findClientColor(contact.clientCode)}
                 onSetIsVisibleDrawerRight={() =>
                   setIsVisibleDrawerRight(!isVisibleDrawerRight)
                 }

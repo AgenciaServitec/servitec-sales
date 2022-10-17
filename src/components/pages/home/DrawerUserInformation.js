@@ -131,7 +131,7 @@ export const DrawerUserInformation = ({
           <IconAction
             onClick={() =>
               navigateWithBlankTo(
-                `https://wa.me/${contact?.phone?.code}${contact?.phone?.number}`
+                `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
               )
             }
             size={65}
@@ -151,7 +151,11 @@ export const DrawerUserInformation = ({
         </Col>
         <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
           <IconAction
-            onClick={() => navigateWithBlankTo(`tel:${contact?.phone?.number}`)}
+            onClick={() =>
+              navigateWithBlankTo(
+                `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
+              )
+            }
             size={55}
             style={{ color: "#0583ea" }}
             tooltipTitle="Teléfono"

@@ -6,7 +6,7 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { Form, IconAction, Input, notification } from "../../components/ui";
 import Button from "antd/lib/button";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -20,10 +20,12 @@ import {
   toLower,
   toUpper,
 } from "lodash";
-import { useDevice, useFormUtils, useGenerateRandomColor } from "../../hooks";
+import { useDevice, useFormUtils } from "../../hooks";
 import moment from "moment";
 import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
+import { findClientColor } from "../../utils";
+import { lighten } from "polished";
 
 export const Contacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -31,7 +33,6 @@ export const Contacts = () => {
 
   const navigate = useNavigate();
   const { isMobile } = useDevice();
-  const { color } = useGenerateRandomColor();
 
   const schema = yup.object({
     searchDataForm: yup.string().required(),
@@ -181,7 +182,7 @@ export const Contacts = () => {
                     key={contact.id}
                     onClick={() =>
                       navigateWithBlankTo(
-                        `https://wa.me/+51${contact.phoneNumber}`
+                        `https://wa.me/${contact.phone.countryCode}${contact.phone.number}`
                       )
                     }
                     size={65}
@@ -202,7 +203,9 @@ export const Contacts = () => {
                   <IconAction
                     key={contact.id}
                     onClick={() =>
-                      navigateWithBlankTo(`tel:${contact.phoneNumber}`)
+                      navigateWithBlankTo(
+                        `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
+                      )
                     }
                     size={55}
                     style={{ color: "#0583ea" }}
@@ -215,11 +218,7 @@ export const Contacts = () => {
                   avatar={
                     <ContactPicture
                       onClick={() => navigateTo(`/contacts/${contact.id}`)}
-                      background={toUpper(
-                        `#${Math.round(
-                          Math.random() + contact.firstName.length
-                        )}${color.slice(-5)}`
-                      )}
+                      clientColors={findClientColor(contact.clientCode)}
                     >
                       {toUpper(contact.firstName.split("")[0])}
                     </ContactPicture>
@@ -266,16 +265,14 @@ export const Contacts = () => {
                           <Text strong>{contact.message}</Text>
                         </div>
                       )}
-                      {contact.createAt && (
-                        <div className="item">
-                          <Text className="item-text">F. creación: </Text>
-                          <Text strong>
-                            {moment(contact.createAt.toDate()).format(
-                              "DD/MM/YYYY HH:mm:ss a"
-                            )}
-                          </Text>
-                        </div>
-                      )}
+                      <div className="item">
+                        <Text className="item-text">F. creación: </Text>
+                        <Text strong>
+                          {moment(contact.createAt.toDate()).format(
+                            "DD/MM/YYYY HH:mm:ss a"
+                          )}
+                        </Text>
+                      </div>
                       <div className="item">
                         <Text className="item-text">Host name: </Text>
                         <Text strong>
@@ -289,11 +286,11 @@ export const Contacts = () => {
                             rel="noreferrer"
                           >
                             <Tag
-                              color={
-                                contact.hostname === "hankookalvillantas.com"
-                                  ? "magenta"
-                                  : "volcano"
-                              }
+                              color={lighten(
+                                0.09,
+                                findClientColor(contact.clientCode)?.bg ||
+                                  "#c4c4c4"
+                              )}
                             >
                               {contact.hostname || ""}
                             </Tag>
@@ -324,16 +321,18 @@ const Wrapper = styled.div`
 `;
 
 const ContactPicture = styled.div`
-  width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  background: ${({ background }) => background || "red"};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3.5rem;
-  color: #fff;
-  cursor: pointer;
+  ${({ clientColors }) => css`
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    color: ${({ clientColors }) => clientColors?.color || "#fff"};
+    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    cursor: pointer;
+  `}
 `;
 
 const DescriptionWrapper = styled.div`
