@@ -250,7 +250,9 @@ export const Contacts = () => {
                       </div>
                       <div className="item">
                         <Text className="item-text">Teléfono: </Text>
-                        <Text strong>{contact.phoneNumber}</Text>
+                        <Text
+                          strong
+                        >{`${contact.phone.countryCode} ${contact.phone.number}`}</Text>
                       </div>
                       {contact.issue && (
                         <div className="item">
