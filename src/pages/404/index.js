@@ -11,10 +11,10 @@ export const Page404 = () => {
       <Result
         status="404"
         title="404"
-        subTitle="Sorry, the page you visited does not exist."
+        subTitle="Lo sentimos, la página que visitaste no existe."
         extra={
           <Button type="primary" onClick={() => navigate(-1)}>
-            Go Back
+            Ir atras
           </Button>
         }
       />
@@ -23,8 +23,8 @@ export const Page404 = () => {
 };
 
 const Container = styled.section`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;

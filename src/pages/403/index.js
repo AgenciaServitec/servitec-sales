@@ -11,10 +11,10 @@ export const Page403 = () => {
       <Result
         status="403"
         title="403"
-        subTitle="Sorry, you are not authorized to access this page."
+        subTitle="Lo sentimos, no está autorizado para acceder a esta página."
         extra={
           <Button type="primary" onClick={() => navigate(-1)}>
-            Go Back
+            Ir atras
           </Button>
         }
       />
@@ -23,8 +23,8 @@ export const Page403 = () => {
 };
 
 const Container = styled.section`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
