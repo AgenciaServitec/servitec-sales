@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Timeline from "antd/lib/timeline";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { firestore } from "../../../firebase";
 import {
   useCollectionData,
@@ -13,13 +13,18 @@ import Title from "antd/lib/typography/Title";
 import Text from "antd/lib/typography/Text";
 import styled from "styled-components";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowCircleLeft,
+  faEnvelope,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { orderBy } from "lodash";
 import { Tag } from "antd";
 
 export const Contact = () => {
   const { contactId } = useParams();
+  const navigate = useNavigate();
 
   const [contact, loadingContact, errorContact] = useDocumentDataOnce(
     firestore.collection("contacts").doc(contactId)
@@ -35,6 +40,8 @@ export const Contact = () => {
     if (errorContact || errorContacts) return notification({ type: "error" });
   }, [errorContact, errorContacts]);
 
+  const onGoBack = () => navigate(-1);
+
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
@@ -44,6 +51,15 @@ export const Contact = () => {
   return (
     <>
       <Row>
+        <Col span={24}>
+          <IconAction
+            key={contact.id}
+            onClick={() => onGoBack()}
+            size={50}
+            style={{ color: "#008dd2" }}
+            icon={faArrowCircleLeft}
+          />
+        </Col>
         <Col xs={24} sm={24} md={8}>
           <Title level={3}>
             {`${contact.firstName} ${contact.lastName}`.toUpperCase()}

@@ -11,13 +11,21 @@ import moment from "moment";
 import { firestore } from "../../../firebase";
 import { capitalize } from "lodash";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarTimes,
+  faEnvelope,
+  faPhone,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const DrawerUserInformation = ({
-  isVisibleDrawerRight,
-  onSetIsVisibleDrawerRight,
   contact,
+  onCloseDrawerContact,
+  isVisibleDrawerRight,
+  onNavigateWithBlankTo,
+  onNavigateTo,
 }) => {
+  if (!contact) return null;
+
   const [statusType, setStatusType] = useState(false);
   const [savingContact, setSavingContact] = useState(false);
 
@@ -35,7 +43,7 @@ export const DrawerUserInformation = ({
     try {
       setSavingContact(true);
 
-      await modalConfirm({
+      modalConfirm({
         title: "¿Quieres marcar este contacto como atendido?",
         content: "Al aceptar, el contacto desaparecerá de la vista",
         onOk: async () => await onSaveContact(),
@@ -61,17 +69,15 @@ export const DrawerUserInformation = ({
       type: "success",
     });
 
-    onSetIsVisibleDrawerRight(false);
+    onCloseDrawerContact();
   };
-
-  const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
   return (
     <ContainerDrawer
-      title="Informacion de contacto"
+      title="Detalle de contacto"
       width={650}
       onClose={() => {
-        onSetIsVisibleDrawerRight(!isVisibleDrawerRight);
+        onCloseDrawerContact();
         resetStatusType();
       }}
       visible={isVisibleDrawerRight}
@@ -127,10 +133,10 @@ export const DrawerUserInformation = ({
       </Row>
       <Divider />
       <Row>
-        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <IconAction
             onClick={() =>
-              navigateWithBlankTo(
+              onNavigateWithBlankTo(
                 `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
               )
             }
@@ -140,19 +146,19 @@ export const DrawerUserInformation = ({
             icon={faWhatsapp}
           />
         </Col>
-        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <IconAction
-            onClick={() => navigateWithBlankTo(`mailto:${contact.email}`)}
+            onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
             size={65}
             tooltipTitle="Email"
             styled={{ color: (theme) => theme.colors.error }}
             icon={faEnvelope}
           />
         </Col>
-        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <IconAction
             onClick={() =>
-              navigateWithBlankTo(
+              onNavigateWithBlankTo(
                 `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
               )
             }
@@ -160,6 +166,16 @@ export const DrawerUserInformation = ({
             style={{ color: "#0583ea" }}
             tooltipTitle="Teléfono"
             icon={faPhone}
+          />
+        </Col>
+        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+          <IconAction
+            key={contact.id}
+            onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
+            size={55}
+            style={{ color: "#e7c600" }}
+            tooltipTitle="Time line"
+            icon={faCalendarTimes}
           />
         </Col>
       </Row>
@@ -171,7 +187,7 @@ export const DrawerUserInformation = ({
       >
         <Row gutter={[0, 10]}>
           <Col span={24}>
-            <Group label="Cliente Respondido">
+            <Group label="El cliente fue atendido?">
               <Switch
                 onClick={(e) => setStatusType(e)}
                 checkedChildren="Si"

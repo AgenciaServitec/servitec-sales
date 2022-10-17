@@ -2,21 +2,21 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
 import { darken } from "polished";
-import { keyframes } from "../../styles";
+import { keyframes } from "../../../styles";
 
 export const FloatingBubble = ({
-  onSetIsVisibleDrawerRight,
-  clientColors,
   contact,
-  onSetContact,
   isLastContact,
+  clientColors,
+  onOpenDrawerContact,
+  onSetContact,
 }) => (
   <Container
     isLastContact={isLastContact}
     clientColors={clientColors}
     onClick={() => {
       onSetContact(contact);
-      onSetIsVisibleDrawerRight(true);
+      onOpenDrawerContact();
     }}
   >
     <span className="item-full-name">{`${capitalize(

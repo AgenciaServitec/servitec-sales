@@ -1,1 +1,2 @@
-export * from "./home/DrawerUserInformation";
+export * from "./contacts/DrawerUserInformation";
+export * from "./contacts";

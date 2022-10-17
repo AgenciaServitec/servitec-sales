@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { firestore, querySnapshotToArray } from "../../firebase";
 import Title from "antd/es/typography/Title";
-import { Divider, List, Skeleton, Tag } from "antd";
+import { Divider, Tabs } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { Form, IconAction, Input, notification } from "../../components/ui";
+import { Form, Input, notification } from "../../components/ui";
 import Button from "antd/lib/button";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Text from "antd/lib/typography/Text";
-import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
-import {
-  capitalize,
-  defaultTo,
-  orderBy,
-  startCase,
-  toLower,
-  toUpper,
-} from "lodash";
+import { defaultTo, orderBy, toLower } from "lodash";
 import { useDevice, useFormUtils } from "../../hooks";
-import moment from "moment";
-import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
-import { findClientColor } from "../../utils";
-import { lighten } from "polished";
+import {
+  ContactInBubbles,
+  ContactInList,
+  DrawerUserInformation,
+} from "../../components/pages";
+import useSound from "use-sound";
+import { ContactSound } from "../../multimedia";
 
 export const Contacts = () => {
   const [contacts, setContacts] = useState([]);
+  const [contact, setContact] = useState(null);
+
   const [loadingContacts, setLoadingContacts] = useState(true);
+  const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
+
+  const [play] = useSound(ContactSound);
 
   const navigate = useNavigate();
   const { isMobile } = useDevice();
@@ -54,11 +54,16 @@ export const Contacts = () => {
   }, []);
 
   const fetchContacts = async () => {
-    await firestore.collection("contacts").onSnapshot((snapshot) => {
-      const contactsData = querySnapshotToArray(snapshot);
-      setContacts(contactsData);
-      setLoadingContacts(false);
-    });
+    await firestore
+      .collection("contacts")
+      .orderBy("createAt", "desc")
+      .where("status", "==", "pending")
+      .onSnapshot((snapshot) => {
+        const contactsData = querySnapshotToArray(snapshot);
+        setContacts(contactsData);
+        setLoadingContacts(false);
+        playToSound();
+      });
   };
 
   const onSubmitFetchContacts = async (formData) => {
@@ -93,219 +98,142 @@ export const Contacts = () => {
     return fetchContacts();
   };
 
+  const playToSound = () => play();
+
+  const lastContact = orderBy(contacts, "createAt", "desc")[0];
+
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
   const navigateTo = (url) => navigate(url);
 
+  const onOpenDrawerContact = () => setIsVisibleDrawerContact(true);
+  const onCloseDrawerContact = () => setIsVisibleDrawerContact(false);
+
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Title level={3}>Contactos recibidos</Title>
-      </Col>
+    <>
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Title level={3}>Contactos recibidos</Title>
+        </Col>
 
-      <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmitFetchContacts)}>
-          <Row gutter={[16, 15]}>
-            <Col span={24}>
-              <Controller
-                name="searchDataForm"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Ingrese datos de busqueda"
-                    size="large"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-              <br />
-              <Text>
-                Puedes realizar la busqueda con los siguientes datos, separados
-                por comas (,): nombres, apellidos, teléfono, email, f.creación,
-                hostname, status
-              </Text>
-              <br />
-              <Text keyboard>
-                Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
-                alvillantas.com, pending
-              </Text>
-            </Col>
-            <Col span={24}>
-              <Wrapper>
-                <Button
-                  type="default"
-                  size="large"
-                  onClick={() => onResetContact()}
-                  loading={loadingContacts}
-                  disabled={loadingContacts}
-                >
-                  Resetear
-                </Button>
-                <Button
-                  type="primary"
-                  size="large"
-                  htmlType="submit"
-                  loading={loadingContacts}
-                  disabled={loadingContacts}
-                >
-                  Buscar
-                </Button>
-              </Wrapper>
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-      <Divider />
-      <Col span={24}>
-        <Title level={5}>
-          Total contactos: {defaultTo(contacts, []).length}
-        </Title>
-      </Col>
-      <Col span={24}>
-        <Skeleton avatar loading={loadingContacts} active>
-          <List
-            className="demo-loadmore-list"
-            itemLayout={isMobile ? "vertical" : "horizontal"}
-            loadMore={loadingContacts}
-            dataSource={viewContacts()}
-            renderItem={(contact) => (
-              <List.Item
-                actions={[
-                  <IconAction
-                    key={contact.id}
-                    onClick={() =>
-                      navigateWithBlankTo(
-                        `https://wa.me/${contact.phone.countryCode}${contact.phone.number}`
-                      )
-                    }
-                    size={65}
-                    style={{ color: "#65d844" }}
-                    tooltipTitle="Whatsapp"
-                    icon={faWhatsapp}
-                  />,
-                  <IconAction
-                    key={contact.id}
-                    onClick={() =>
-                      navigateWithBlankTo(`mailto:${contact.email}`)
-                    }
-                    size={65}
-                    tooltipTitle="Email"
-                    styled={{ color: (theme) => theme.colors.error }}
-                    icon={faEnvelope}
-                  />,
-                  <IconAction
-                    key={contact.id}
-                    onClick={() =>
-                      navigateWithBlankTo(
-                        `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
-                      )
-                    }
-                    size={55}
-                    style={{ color: "#0583ea" }}
-                    tooltipTitle="Teléfono"
-                    icon={faPhone}
-                  />,
-                ]}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <ContactPicture
-                      onClick={() => navigateTo(`/contacts/${contact.id}`)}
-                      clientColors={findClientColor(contact.clientCode)}
-                    >
-                      {toUpper(contact.firstName.split("")[0])}
-                    </ContactPicture>
-                  }
-                  title={
-                    <h2
-                      className="link-color"
-                      onClick={() => navigateTo(`/contacts/${contact.id}`)}
-                    >
-                      {startCase(
-                        capitalize(`${contact.firstName} ${contact.lastName}`)
-                      )}
-                    </h2>
-                  }
-                  description={
-                    <DescriptionWrapper>
-                      <div className="item">
-                        <Text className="item-text">Nombres: </Text>
-                        <Text strong>{capitalize(contact.firstName)}</Text>
-                      </div>
-                      <div className="item">
-                        <Text className="item-text">Apellidos: </Text>
-                        <Text strong>{capitalize(contact.lastName)}</Text>
-                      </div>
-                      <div className="item">
-                        <Text className="item-text">Email: </Text>
-                        <Text strong>{contact.email}</Text>
-                      </div>
-                      <div className="item">
-                        <Text className="item-text">Teléfono: </Text>
-                        <Text
-                          strong
-                        >{`${contact.phone.countryCode} ${contact.phone.number}`}</Text>
-                      </div>
-                      {contact.issue && (
-                        <div className="item">
-                          <Text className="item-text">Asunto: </Text>
-                          <Text strong>{contact.issue}</Text>
-                        </div>
-                      )}
-                      {contact.message && (
-                        <div className="item">
-                          <Text className="item-text">Mensaje: </Text>
-                          <Text strong>{contact.message}</Text>
-                        </div>
-                      )}
-                      <div className="item">
-                        <Text className="item-text">F. creación: </Text>
-                        <Text strong>
-                          {moment(contact.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm:ss a"
-                          )}
-                        </Text>
-                      </div>
-                      <div className="item">
-                        <Text className="item-text">Host name: </Text>
-                        <Text strong>
-                          <a
-                            href={
-                              contact?.hostname
-                                ? `https://${contact.hostname}`
-                                : "#"
-                            }
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            <Tag
-                              color={lighten(
-                                0.09,
-                                findClientColor(contact.clientCode)?.bg ||
-                                  "#c4c4c4"
-                              )}
-                            >
-                              {contact.hostname || ""}
-                            </Tag>
-                          </a>
-                        </Text>
-                      </div>
-                    </DescriptionWrapper>
-                  }
+        <Col span={24}>
+          <Form onSubmit={handleSubmit(onSubmitFetchContacts)}>
+            <Row gutter={[16, 15]}>
+              <Col span={24}>
+                <Controller
+                  name="searchDataForm"
+                  control={control}
+                  defaultValue=""
+                  render={({ field: { onChange, value, name } }) => (
+                    <Input
+                      label="Ingrese datos de busqueda"
+                      size="large"
+                      name={name}
+                      value={value}
+                      onChange={onChange}
+                      error={error(name)}
+                      required={required(name)}
+                    />
+                  )}
                 />
-              </List.Item>
-            )}
+                <br />
+                <Text>
+                  Puedes realizar la busqueda con los siguientes datos,
+                  separados por comas (,): nombres, apellidos, teléfono, email,
+                  f.creación, hostname, status
+                </Text>
+                <br />
+                <Text keyboard>
+                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
+                  alvillantas.com, pending
+                </Text>
+              </Col>
+              <Col span={24}>
+                <Wrapper>
+                  <Button
+                    type="default"
+                    size="large"
+                    onClick={() => onResetContact()}
+                    loading={loadingContacts}
+                    disabled={loadingContacts}
+                  >
+                    Resetear
+                  </Button>
+                  <Button
+                    type="primary"
+                    size="large"
+                    htmlType="submit"
+                    loading={loadingContacts}
+                    disabled={loadingContacts}
+                  >
+                    Buscar
+                  </Button>
+                </Wrapper>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+        <Divider />
+        <Col span={24}>
+          <Title level={5}>
+            Total contactos: {defaultTo(contacts, []).length}
+          </Title>
+        </Col>
+        <Col span={24}>
+          <Tabs
+            defaultActiveKey="1"
+            items={[
+              {
+                key: 1,
+                label: "BUBBLES",
+                children: (
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24} md={19}>
+                      <ContactInBubbles
+                        contacts={viewContacts()}
+                        lastContact={lastContact}
+                        onOpenDrawerContact={onOpenDrawerContact}
+                        onSetContact={setContact}
+                      />
+                    </Col>
+                    <Col xs={24} sm={25} md={5}>
+                      <Title level={2}>
+                        Recepción de contactos en tiempo real de clientes y webs
+                        de servitec
+                      </Title>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 2,
+                label: "LISTA",
+                children: (
+                  <ContactInList
+                    loadingContacts={loadingContacts}
+                    isMobile={isMobile}
+                    contacts={viewContacts()}
+                    onSetContact={setContact}
+                    onOpenDrawerContact={onOpenDrawerContact}
+                    onNavigateWithBlankTo={navigateWithBlankTo}
+                    onNavigateTo={navigateTo}
+                  />
+                ),
+              },
+            ]}
           />
-        </Skeleton>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+      <DrawerUserInformation
+        contact={contact}
+        onCloseDrawerContact={onCloseDrawerContact}
+        isVisibleDrawerRight={isVisibleDrawerContact}
+        onNavigateWithBlankTo={navigateWithBlankTo}
+        onNavigateTo={navigateTo}
+      />
+    </>
   );
 };
 
@@ -318,30 +246,4 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-end;
   grid-gap: 1rem;
-`;
-
-const ContactPicture = styled.div`
-  ${({ clientColors }) => css`
-    width: 6rem;
-    height: 6rem;
-    border-radius: 50%;
-    color: ${({ clientColors }) => clientColors?.color || "#fff"};
-    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3.5rem;
-    cursor: pointer;
-  `}
-`;
-
-const DescriptionWrapper = styled.div`
-  display: grid;
-  grid-row-gap: 0.3rem;
-  justify-content: flex-start;
-  .item {
-    .item-text {
-      color: ${({ theme }) => theme.colors.heading};
-    }
-  }
 `;

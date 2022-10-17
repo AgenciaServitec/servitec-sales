@@ -17,7 +17,7 @@ export const Router = () => (
       path="/"
       element={
         <BaseLayout>
-          <Home />
+          <Contacts />
         </BaseLayout>
       }
     />
