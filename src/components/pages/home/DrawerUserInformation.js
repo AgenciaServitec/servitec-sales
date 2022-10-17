@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Col, Divider, Drawer, Row, Switch } from "antd";
 import styled from "styled-components";
-import { Button, Form, modalConfirm, notification } from "../../ui";
+import { Button, Form, IconAction, modalConfirm, notification } from "../../ui";
 import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
+import { capitalize } from "lodash";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
 
 export const DrawerUserInformation = ({
   isVisibleDrawerRight,
@@ -37,8 +40,6 @@ export const DrawerUserInformation = ({
         content: "Al aceptar, el contacto desaparecerá de la vista",
         onOk: async () => await onSaveContact(),
       });
-
-      onSetIsVisibleDrawerRight(false);
     } catch (e) {
       console.error("ErrorSaveContact:", e);
       notification({ type: "error" });
@@ -59,12 +60,16 @@ export const DrawerUserInformation = ({
     notification({
       type: "success",
     });
+
+    onSetIsVisibleDrawerRight(false);
   };
+
+  const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
   return (
     <ContainerDrawer
       title="Informacion de contacto"
-      width={720}
+      width={650}
       onClose={() => {
         onSetIsVisibleDrawerRight(!isVisibleDrawerRight);
         resetStatusType();
@@ -74,71 +79,93 @@ export const DrawerUserInformation = ({
         paddingBottom: 80,
       }}
     >
+      <Row>
+        <Col xs={24} sm={12}>
+          <DescriptionItem
+            title="Nombres"
+            content={capitalize(contact?.firstName) || ""}
+          />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DescriptionItem
+            title="Apellidos"
+            content={capitalize(contact?.lastName) || ""}
+          />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DescriptionItem title="Email" content={contact?.email || ""} />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DescriptionItem
+            title="Teléfono"
+            content={
+              `${contact?.phone.countryCode} ${contact?.phone.number}` || ""
+            }
+          />
+        </Col>
+        <Col span={24}>
+          <DescriptionItem title="Asunto" content={contact?.issue || ""} />
+        </Col>
+        <Col span={24}>
+          <DescriptionItem title="Mensaje" content={contact?.message || ""} />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DescriptionItem
+            title="Hostname (web client)"
+            content={contact?.hostname || ""}
+          />
+        </Col>
+        <Col xs={24} sm={12}>
+          <DescriptionItem
+            title="Fecha creación"
+            content={
+              moment(contact?.createAt.toDate()).format("DD/MM/YYYY HH:mm A") ||
+              ""
+            }
+          />
+        </Col>
+      </Row>
+      <Divider />
+      <Row>
+        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+          <IconAction
+            onClick={() =>
+              navigateWithBlankTo(
+                `https://wa.me/${contact?.phone?.code}${contact?.phone?.number}`
+              )
+            }
+            size={65}
+            style={{ color: "#65d844" }}
+            tooltipTitle="Whatsapp"
+            icon={faWhatsapp}
+          />
+        </Col>
+        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+          <IconAction
+            onClick={() => navigateWithBlankTo(`mailto:${contact.email}`)}
+            size={65}
+            tooltipTitle="Email"
+            styled={{ color: (theme) => theme.colors.error }}
+            icon={faEnvelope}
+          />
+        </Col>
+        <Col span={8} style={{ display: "flex", justifyContent: "center" }}>
+          <IconAction
+            onClick={() => navigateWithBlankTo(`tel:${contact?.phone?.number}`)}
+            size={55}
+            style={{ color: "#0583ea" }}
+            tooltipTitle="Teléfono"
+            icon={faPhone}
+          />
+        </Col>
+      </Row>
+      <Divider />
       <Form
         layout="vertical"
         hideRequiredMark
         onSubmit={handleSubmit(onSubmitSaveContact)}
       >
         <Row gutter={[0, 10]}>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Nombres:</span>
-              <span>{contact?.firstName || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Apellidos:</span>
-              <span>{contact?.lastName || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={24}>
-            <ItemDetail>
-              <span>Email:</span>
-              <span>{contact?.email || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Codigo país:</span>
-              <span>{contact?.phone.countryCode || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Número:</span>
-              <span>{contact?.phone.number || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Feccha creación:</span>
-              <span>
-                {moment(contact?.createAt.toDate()).format(
-                  "DD/MM/YYYY HH:mm A"
-                ) || ""}
-              </span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={12}>
-            <ItemDetail>
-              <span>Hostname:</span>
-              <span>{contact?.hostname || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={24}>
-            <ItemDetail>
-              <span>Asunto:</span>
-              <span>{contact?.issue || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Col xs={24} sm={24}>
-            <ItemDetail>
-              <span>Mensaje:</span>
-              <span>{contact?.message || ""}</span>
-            </ItemDetail>
-          </Col>
-          <Divider />
           <Col span={24}>
             <Group label="Cliente Respondido">
               <Switch
@@ -152,9 +179,10 @@ export const DrawerUserInformation = ({
           </Col>
           <Col span={24}>
             <Button
-              htmlType="submit"
               block
+              htmlType="submit"
               type="primary"
+              size="large"
               disabled={!statusType || savingContact}
             >
               Guardar
@@ -168,9 +196,8 @@ export const DrawerUserInformation = ({
 
 const ContainerDrawer = styled(Drawer)`
   .ant-drawer-content-wrapper {
-    width: 100% !important;
-    ${mediaQuery.minTablet} {
-      width: 40% !important;
+    ${mediaQuery.maxTablet} {
+      width: 100% !important;
     }
   }
   .site-form-in-drawer-wrapper {
@@ -183,19 +210,44 @@ const ContainerDrawer = styled(Drawer)`
     background: #fff;
     border-top: 1px solid #e9e9e9;
   }
+
+  .site-description-item-profile-wrapper {
+    margin-bottom: 7px;
+
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 1.5715;
+  }
+
+  [data-theme="compact"] .site-description-item-profile-wrapper {
+    font-size: 12px;
+    line-height: 1.66667;
+  }
+
+  .ant-drawer-body p.site-description-item-profile-p {
+    display: block;
+    margin-bottom: 16px;
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 1em;
+    line-height: 1.5715;
+  }
+
+  [data-theme="compact"] .ant-drawer-body p.site-description-item-profile-p {
+    font-size: 1em;
+    line-height: 1.66667;
+  }
+
+  .site-description-item-profile-p-label {
+    display: inline-block;
+    margin-right: 8px;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 0.9em;
+  }
 `;
 
-const ItemDetail = styled.div`
-  padding: 0.5em 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  span {
-    margin-bottom: -0.2em;
-    font-size: 0.7em;
-  }
-  span:last-child {
-    font-size: 1em;
-    font-weight: 500;
-  }
-`;
+const DescriptionItem = ({ title, content }) => (
+  <div className="site-description-item-profile-wrapper">
+    <p className="site-description-item-profile-p-label">{title}:</p>
+    {content}
+  </div>
+);

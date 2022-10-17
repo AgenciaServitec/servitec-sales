@@ -49,8 +49,8 @@ export const theme = {
     warning: "#F5C203",
     error: "#FC2626",
 
-    heading: "#20415A",
-    body: "#6D8BA1",
+    heading: "#040c10",
+    body: "#171d1f",
 
     gray: "#D3DEE6",
     gray2: "#F2F6F8",

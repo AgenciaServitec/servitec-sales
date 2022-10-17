@@ -6,8 +6,6 @@ const global = css`
     padding: 0;
     box-sizing: border-box;
     color: ${({ theme }) => theme.colors.body};
-    cursor: default;
-    font-size: 16px;
   }
 
   hr {
