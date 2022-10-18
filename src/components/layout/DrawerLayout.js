@@ -1,11 +1,6 @@
 import React from "react";
 import { Drawer, Menu } from "antd";
-import {
-  WindowsOutlined,
-  HomeOutlined,
-  UserSwitchOutlined,
-  RedEnvelopeTwoTone,
-} from "@ant-design/icons";
+import { HomeOutlined, UserSwitchOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import Title from "antd/lib/typography/Title";
@@ -31,15 +26,6 @@ export const DrawerLayout = ({
       icon: <UserSwitchOutlined />,
       onClick: () => {
         navigateTo("/clients");
-        setIsVisibleDrawer(false);
-      },
-    },
-    {
-      label: "Contáctos",
-      key: "3",
-      icon: <RedEnvelopeTwoTone />,
-      onClick: () => {
-        navigateTo("/contacts");
         setIsVisibleDrawer(false);
       },
     },

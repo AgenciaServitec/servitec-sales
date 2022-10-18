@@ -1,4 +1,4 @@
 import { clientColors } from "../data-list";
 
-export const findClientColor = (hostname) =>
-  clientColors.find((clientColor) => clientColor.code === hostname);
+export const findClientColor = (clientCode) =>
+  clientColors.find((clientColor) => clientColor.code === clientCode);

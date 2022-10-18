@@ -4,7 +4,6 @@ import {
   ClientsIntegration,
   Contact,
   Contacts,
-  Home,
   Page403,
   Page404,
 } from "../pages";
@@ -15,15 +14,6 @@ export const Router = () => (
     <Route
       exact
       path="/"
-      element={
-        <BaseLayout>
-          <Contacts />
-        </BaseLayout>
-      }
-    />
-    <Route
-      exact
-      path="/contacts"
       element={
         <BaseLayout>
           <Contacts />
