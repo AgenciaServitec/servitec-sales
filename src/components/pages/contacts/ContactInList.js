@@ -25,6 +25,7 @@ import { useFormUtils } from "../../../hooks";
 export const ContactInList = ({
   isMobile,
   onSetContact,
+  onSetTotalContacts,
   onOpenDrawerContact,
   onNavigateWithBlankTo,
   onNavigateTo,
@@ -44,6 +45,7 @@ export const ContactInList = ({
       .onSnapshot((snapshot) => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
+        onSetTotalContacts(contactsData.length);
         setLoadingContacts(false);
       });
   };
@@ -77,6 +79,7 @@ export const ContactInList = ({
         .onSnapshot((snapshot) => {
           const contactsData = querySnapshotToArray(snapshot);
           setContacts(contactsData);
+          onSetTotalContacts(contactsData.length);
           setLoadingContacts(false);
         });
     } catch (e) {

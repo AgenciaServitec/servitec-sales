@@ -4,20 +4,21 @@ import Title from "antd/es/typography/Title";
 import { Tabs } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import styled from "styled-components";
-import { defaultTo, orderBy } from "lodash";
+import { orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
 import {
   ContactInBubbles,
   ContactInList,
   DrawerUserInformation,
+  FiltersContact,
 } from "../../components/pages";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
 
 export const Contacts = () => {
   const [contacts, setContacts] = useState([]);
+  const [totalContacts, setTotalContacts] = useState(0);
   const [contact, setContact] = useState(null);
 
   const [loadingContacts, setLoadingContacts] = useState(true);
@@ -40,6 +41,7 @@ export const Contacts = () => {
       .onSnapshot((snapshot) => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
+        setTotalContacts(contactsData.length);
         setLoadingContacts(false);
         playToSound();
       });
@@ -62,9 +64,10 @@ export const Contacts = () => {
     <>
       <Row gutter={[16, 0]}>
         <Col span={24}>
-          <Title level={5}>
-            Total contactos: {defaultTo(contacts, []).length}
-          </Title>
+          <Title level={5}>Total contactos: {totalContacts}</Title>
+        </Col>
+        <Col span={24}>
+          <FiltersContact />
         </Col>
         <Col span={24}>
           <Tabs
@@ -101,6 +104,7 @@ export const Contacts = () => {
                     isMobile={isMobile}
                     contacts={viewContacts()}
                     onSetContact={setContact}
+                    onSetTotalContacts={setTotalContacts}
                     onOpenDrawerContact={onOpenDrawerContact}
                     onNavigateWithBlankTo={navigateWithBlankTo}
                     onNavigateTo={navigateTo}
