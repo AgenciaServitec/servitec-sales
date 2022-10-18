@@ -113,11 +113,10 @@ export const Contacts = () => {
 
   return (
     <>
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 0]}>
         <Col span={24}>
           <Title level={3}>Contactos recibidos</Title>
         </Col>
-
         <Col span={24}>
           <Form onSubmit={handleSubmit(onSubmitFetchContacts)}>
             <Row gutter={[16, 15]}>
@@ -139,16 +138,19 @@ export const Contacts = () => {
                   )}
                 />
                 <br />
-                <Text>
-                  Puedes realizar la busqueda con los siguientes datos,
-                  separados por comas (,): nombres, apellidos, teléfono, email,
-                  f.creación, hostname, status
-                </Text>
-                <br />
-                <Text keyboard>
-                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
-                  alvillantas.com, pending
-                </Text>
+                <div>
+                  <Text>
+                    Puedes realizar la busqueda con los siguientes datos,
+                    separados por comas (,): nombres, apellidos, teléfono,
+                    email, f.creación, hostname, status
+                  </Text>
+                </div>
+                <div>
+                  <Text keyboard>
+                    Ejemplo: noel, moriano, 931136482, noel@gmail.com,
+                    01/12/2022, alvillantas.com, pending
+                  </Text>
+                </div>
               </Col>
               <Col span={24}>
                 <Wrapper>

@@ -8,7 +8,12 @@ import {
   useCollectionData,
   useDocumentDataOnce,
 } from "react-firebase-hooks/firestore";
-import { IconAction, notification, Spinner } from "../../../components/ui";
+import {
+  IconAction,
+  notification,
+  Spinner,
+  TagHostname,
+} from "../../../components/ui";
 import Title from "antd/lib/typography/Title";
 import Text from "antd/lib/typography/Text";
 import styled from "styled-components";
@@ -138,25 +143,7 @@ export const Contact = () => {
                     </li>
                     <li>
                       <Text strong>
-                        <a
-                          href={
-                            contact?.hostname
-                              ? `https://${contact.hostname}`
-                              : "#"
-                          }
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          <Tag
-                            color={
-                              contact.hostname === "hankookalvillantas.com"
-                                ? "magenta"
-                                : "volcano"
-                            }
-                          >
-                            {contact.hostname || ""}
-                          </Tag>
-                        </a>
+                        <TagHostname contact={contact} />
                       </Text>
                     </li>
                   </ul>

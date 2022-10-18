@@ -1,9 +1,9 @@
 import React from "react";
 import { List, Skeleton, Tag } from "antd";
-import { IconAction } from "../../ui";
+import { IconAction, TagHostname } from "../../ui";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
-  faCalendarTimes,
+  faCalendarAlt,
   faEnvelope,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
@@ -11,7 +11,7 @@ import { findClientColor } from "../../../utils";
 import { capitalize, startCase, toUpper } from "lodash";
 import Text from "antd/lib/typography/Text";
 import moment from "moment/moment";
-import { lighten, darken } from "polished";
+import { darken, lighten } from "polished";
 import styled, { css } from "styled-components";
 
 export const ContactInList = ({
@@ -71,7 +71,7 @@ export const ContactInList = ({
                 size={55}
                 style={{ color: "#e7c600" }}
                 tooltipTitle="Time line"
-                icon={faCalendarTimes}
+                icon={faCalendarAlt}
               />,
             ]}
           >
@@ -143,30 +143,7 @@ export const ContactInList = ({
                   <div className="item">
                     <Text className="item-text">Host name: </Text>
                     <Text strong>
-                      <a
-                        href={
-                          contact?.hostname
-                            ? `https://${contact.hostname}`
-                            : "#"
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Tag
-                          color={lighten(
-                            0.09,
-                            findClientColor(contact.clientCode)?.bg || "#c4c4c4"
-                          )}
-                          style={{
-                            color:
-                              findClientColor(contact.clientCode)?.color ||
-                              "#fff",
-                            border: "1px solid rgba(0,0,0,.2)",
-                          }}
-                        >
-                          {contact.hostname || ""}
-                        </Tag>
-                      </a>
+                      <TagHostname contact={contact} />
                     </Text>
                   </div>
                 </DescriptionWrapper>

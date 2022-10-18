@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Col, Divider, Drawer, Row, Switch } from "antd";
 import styled from "styled-components";
-import { Button, Form, IconAction, modalConfirm, notification } from "../../ui";
+import {
+  Button,
+  Form,
+  IconAction,
+  modalConfirm,
+  notification,
+  TagHostname,
+} from "../../ui";
 import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,7 +19,7 @@ import { firestore } from "../../../firebase";
 import { capitalize } from "lodash";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
-  faCalendarTimes,
+  faCalendarAlt,
   faEnvelope,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
@@ -117,8 +124,8 @@ export const DrawerUserInformation = ({
         </Col>
         <Col xs={24} sm={12}>
           <DescriptionItem
-            title="Hostname (web client)"
-            content={contact?.hostname || ""}
+            title="Hostname"
+            content={contact?.hostname ? <TagHostname contact={contact} /> : ""}
           />
         </Col>
         <Col xs={24} sm={12}>
@@ -175,7 +182,7 @@ export const DrawerUserInformation = ({
             size={55}
             style={{ color: "#e7c600" }}
             tooltipTitle="Time line"
-            icon={faCalendarTimes}
+            icon={faCalendarAlt}
           />
         </Col>
       </Row>
@@ -187,7 +194,7 @@ export const DrawerUserInformation = ({
       >
         <Row gutter={[0, 10]}>
           <Col span={24}>
-            <Group label="El cliente fue atendido?">
+            <Group label="¿El cliente fue atendido?">
               <Switch
                 onClick={(e) => setStatusType(e)}
                 checkedChildren="Si"

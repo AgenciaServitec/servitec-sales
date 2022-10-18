@@ -19,4 +19,5 @@ export * from "./Spinner";
 export * from "./TextArea";
 export * from "./TimePicker";
 export * from "./Audio";
+export * from "./TagHostname";
 // export { default as Upload } from "./Upload";
