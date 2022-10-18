@@ -92,7 +92,7 @@ export const DrawerUserInformation = ({
         paddingBottom: 80,
       }}
     >
-      <Row>
+      <Row gutter={[0, 7]}>
         <Col xs={24} sm={12}>
           <DescriptionItem
             title="Nombres"
@@ -267,6 +267,7 @@ const ContainerDrawer = styled(Drawer)`
   .site-description-item-profile-p-label {
     display: inline-block;
     margin-right: 8px;
+    margin-bottom: 0;
     color: rgba(0, 0, 0, 0.65);
     font-size: 0.9em;
   }
