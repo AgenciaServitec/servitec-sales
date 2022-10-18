@@ -15,8 +15,12 @@ import {
 } from "../../components/pages";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
+import { useQueryString } from "../../hooks/useQueryString";
 
 export const Contacts = () => {
+  const [status, setStatus] = useQueryString("status", "pending");
+  const [clientCode, setClientCode] = useQueryString("clientCode", "all");
+
   const [contacts, setContacts] = useState([]);
   const [totalContacts, setTotalContacts] = useState(0);
   const [contact, setContact] = useState(null);
@@ -58,7 +62,15 @@ export const Contacts = () => {
   const onOpenDrawerContact = () => setIsVisibleDrawerContact(true);
   const onCloseDrawerContact = () => setIsVisibleDrawerContact(false);
 
-  const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
+  const viewContacts = () => {
+    const result = contacts
+      .filter((contact) => contact.status === status)
+      .filter((contact) =>
+        clientCode === "all" ? true : contact.clientCode === clientCode
+      );
+
+    return orderBy(result, ["createAt"], ["desc"]);
+  };
 
   return (
     <>
@@ -67,7 +79,12 @@ export const Contacts = () => {
           <Title level={5}>Total contactos: {totalContacts}</Title>
         </Col>
         <Col span={24}>
-          <FiltersContact />
+          <FiltersContact
+            onSetStatus={setStatus}
+            onSetClientCode={setClientCode}
+            status={status}
+            clientCode={clientCode}
+          />
         </Col>
       </Row>
       <Row gutter={[16, 0]}>

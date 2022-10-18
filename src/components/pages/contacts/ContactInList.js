@@ -23,6 +23,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useFormUtils } from "../../../hooks";
 
 export const ContactInList = ({
+  contacts,
   isMobile,
   onSetContact,
   onSetTotalContacts,
@@ -30,25 +31,8 @@ export const ContactInList = ({
   onNavigateWithBlankTo,
   onNavigateTo,
 }) => {
-  const [contacts, setContacts] = useState([]);
-  const [loadingContacts, setLoadingContacts] = useState(loadingContacts);
-
-  useEffect(() => {
-    (() => fetchContacts())();
-  }, []);
-
-  const fetchContacts = async () => {
-    await firestore
-      .collection("contacts")
-      .orderBy("createAt", "desc")
-      .where("status", "==", "pending")
-      .onSnapshot((snapshot) => {
-        const contactsData = querySnapshotToArray(snapshot);
-        setContacts(contactsData);
-        onSetTotalContacts(contactsData.length);
-        setLoadingContacts(false);
-      });
-  };
+  const [contactsContains, setContactsContains] = useState([]);
+  const [loadingContactsContains, setLoadingContactsContains] = useState(false);
 
   const schema = yup.object({
     searchDataForm: yup.string().required(),
@@ -67,7 +51,7 @@ export const ContactInList = ({
 
   const onSubmitFetchContacts = async (formData) => {
     try {
-      setLoadingContacts(true);
+      setLoadingContactsContains(true);
 
       const searchData = formData.searchDataForm
         .split(",")
@@ -78,15 +62,15 @@ export const ContactInList = ({
         .where("searchData", "array-contains-any", searchData)
         .onSnapshot((snapshot) => {
           const contactsData = querySnapshotToArray(snapshot);
-          setContacts(contactsData);
+          setContactsContains(contactsData);
           onSetTotalContacts(contactsData.length);
-          setLoadingContacts(false);
+          setLoadingContactsContains(false);
         });
     } catch (e) {
       console.log("search:", e);
       notification({ type: "error" });
     } finally {
-      setLoadingContacts(false);
+      setLoadingContactsContains(false);
     }
   };
 
@@ -94,9 +78,9 @@ export const ContactInList = ({
     reset({
       searchDataForm: "",
     });
-
-    return fetchContacts();
   };
+
+  const viewContactsInList = contacts.concat(contactsContains);
 
   // const onDeleteContact = async (contactId) => {
   //   await firestore.collection("contacts").doc(contactId).delete();
@@ -145,8 +129,8 @@ export const ContactInList = ({
                   type="default"
                   size="large"
                   onClick={() => onResetContact()}
-                  loading={loadingContacts}
-                  disabled={loadingContacts}
+                  loading={loadingContactsContains}
+                  disabled={loadingContactsContains}
                 >
                   Resetear
                 </Button>
@@ -154,8 +138,8 @@ export const ContactInList = ({
                   type="primary"
                   size="large"
                   htmlType="submit"
-                  loading={loadingContacts}
-                  disabled={loadingContacts}
+                  loading={loadingContactsContains}
+                  disabled={loadingContactsContains}
                 >
                   Buscar
                 </Button>
@@ -165,12 +149,12 @@ export const ContactInList = ({
         </Form>
       </Col>
       <Divider />
-      <Skeleton avatar loading={loadingContacts} active>
+      <Skeleton avatar loading={loadingContactsContains} active>
         <List
           className="demo-loadmore-list"
           itemLayout={isMobile ? "vertical" : "horizontal"}
-          loadMore={loadingContacts}
-          dataSource={contacts}
+          loadMore={loadingContactsContains}
+          dataSource={viewContactsInList}
           renderItem={(contact) => (
             <List.Item
               actions={[
