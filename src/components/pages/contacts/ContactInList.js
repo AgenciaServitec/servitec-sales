@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Divider, List, Skeleton } from "antd";
-import { Form, IconAction, Input, notification, TagHostname } from "../../ui";
+import {
+  Form,
+  IconAction,
+  notification,
+  Select,
+  SelectOption,
+  TagHostname,
+} from "../../ui";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faCalendarAlt,
@@ -8,7 +15,7 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { findClientColor } from "../../../utils";
-import { capitalize, startCase, toLower, toUpper } from "lodash";
+import { capitalize, includes, startCase, toUpper } from "lodash";
 import Text from "antd/lib/typography/Text";
 import moment from "moment/moment";
 import { darken } from "polished";
@@ -17,7 +24,6 @@ import Col from "antd/lib/col";
 import Row from "antd/lib/row";
 import { Controller, useForm } from "react-hook-form";
 import Button from "antd/lib/button";
-import { firestore, querySnapshotToArray } from "../../../firebase";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { useFormUtils } from "../../../hooks";
@@ -31,11 +37,11 @@ export const ContactInList = ({
   onNavigateWithBlankTo,
   onNavigateTo,
 }) => {
-  const [contactsContains, setContactsContains] = useState([]);
+  const [contactsContains, setContactsContains] = useState(contacts || []);
   const [loadingContactsContains, setLoadingContactsContains] = useState(false);
 
   const schema = yup.object({
-    searchDataForm: yup.string().required(),
+    searchDataForm: yup.array().required(),
   });
 
   const {
@@ -53,19 +59,14 @@ export const ContactInList = ({
     try {
       setLoadingContactsContains(true);
 
-      const searchData = formData.searchDataForm
-        .split(",")
-        .map((string) => toLower(string.trim()));
+      const result = (formData?.searchDataForm || []).map((search) =>
+        includes(contacts.searchData, search)
+      );
 
-      await firestore
-        .collection("contacts")
-        .where("searchData", "array-contains-any", searchData)
-        .onSnapshot((snapshot) => {
-          const contactsData = querySnapshotToArray(snapshot);
-          setContactsContains(contactsData);
-          onSetTotalContacts(contactsData.length);
-          setLoadingContactsContains(false);
-        });
+      setContactsContains(result);
+      onSetTotalContacts(result.length);
+
+      setLoadingContactsContains(false);
     } catch (e) {
       console.log("search:", e);
       notification({ type: "error" });
@@ -76,15 +77,27 @@ export const ContactInList = ({
 
   const onResetContact = () => {
     reset({
-      searchDataForm: "",
+      searchDataForm: [],
     });
   };
-
-  const viewContactsInList = contacts.concat(contactsContains);
 
   // const onDeleteContact = async (contactId) => {
   //   await firestore.collection("contacts").doc(contactId).delete();
   // };
+
+  const childSelectGender = (value) => {
+    let children = [];
+
+    value.forEach((gender, index) =>
+      children.push(
+        <SelectOption key={index} value={gender}>
+          {gender}
+        </SelectOption>
+      )
+    );
+
+    return children;
+  };
 
   return (
     <>
@@ -95,17 +108,20 @@ export const ContactInList = ({
               <Controller
                 name="searchDataForm"
                 control={control}
-                defaultValue=""
+                defaultValue={[]}
                 render={({ field: { onChange, value, name } }) => (
-                  <Input
+                  <Select
                     label="Ingrese datos de busqueda"
+                    mode="tags"
                     size="large"
-                    name={name}
-                    value={value}
                     onChange={onChange}
+                    value={value}
+                    style={{ width: "100%" }}
                     error={error(name)}
                     required={required(name)}
-                  />
+                  >
+                    {childSelectGender(value)}
+                  </Select>
                 )}
               />
               <br />
@@ -154,7 +170,7 @@ export const ContactInList = ({
           className="demo-loadmore-list"
           itemLayout={isMobile ? "vertical" : "horizontal"}
           loadMore={loadingContactsContains}
-          dataSource={viewContactsInList}
+          dataSource={contactsContains}
           renderItem={(contact) => (
             <List.Item
               actions={[
@@ -219,7 +235,7 @@ export const ContactInList = ({
                     }}
                     clientColors={findClientColor(contact.clientCode)}
                   >
-                    {toUpper(contact.firstName.split("")[0])}
+                    {contact?.firstName && toUpper(contact.firstName.charAt(0))}
                   </ContactPicture>
                 }
                 title={
@@ -253,28 +269,30 @@ export const ContactInList = ({
                       <Text className="item-text">Teléfono: </Text>
                       <Text
                         strong
-                      >{`${contact.phone.countryCode} ${contact.phone.number}`}</Text>
+                      >{`${contact?.phone?.countryCode} ${contact?.phone?.number}`}</Text>
                     </div>
-                    {contact.issue && (
+                    {contact?.issue && (
                       <div className="item">
                         <Text className="item-text">Asunto: </Text>
                         <Text strong>{contact.issue}</Text>
                       </div>
                     )}
-                    {contact.message && (
+                    {contact?.message && (
                       <div className="item">
                         <Text className="item-text">Mensaje: </Text>
                         <Text strong>{contact.message}</Text>
                       </div>
                     )}
-                    <div className="item">
-                      <Text className="item-text">F. creación: </Text>
-                      <Text strong>
-                        {moment(contact.createAt.toDate()).format(
-                          "DD/MM/YYYY HH:mm:ss a"
-                        )}
-                      </Text>
-                    </div>
+                    {contact?.createAt && (
+                      <div className="item">
+                        <Text className="item-text">F. creación: </Text>
+                        <Text strong>
+                          {moment(contact.createAt.toDate()).format(
+                            "DD/MM/YYYY HH:mm:ss a"
+                          )}
+                        </Text>
+                      </div>
+                    )}
                     <div className="item">
                       <Text className="item-text">Host name: </Text>
                       <Text strong>
