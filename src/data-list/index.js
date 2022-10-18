@@ -1,4 +1,4 @@
 import iso3166 from "./iso3166.json";
-import clientColors from "./clientColors.json";
+import clientData from "./clientData.json";
 
-export { iso3166, clientColors };
+export { iso3166, clientData };

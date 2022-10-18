@@ -1,4 +1,4 @@
-import { clientColors } from "../data-list";
+import { clientData } from "../data-list";
 
 export const findClientColor = (clientCode) =>
-  clientColors.find((clientColor) => clientColor.code === clientCode);
+  clientData.find((clientColor) => clientColor.code === clientCode);

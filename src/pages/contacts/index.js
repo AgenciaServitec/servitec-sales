@@ -62,13 +62,15 @@ export const Contacts = () => {
 
   return (
     <>
-      <Row gutter={[16, 0]}>
+      <Row gutter={[10, 10]}>
         <Col span={24}>
           <Title level={5}>Total contactos: {totalContacts}</Title>
         </Col>
         <Col span={24}>
           <FiltersContact />
         </Col>
+      </Row>
+      <Row gutter={[16, 0]}>
         <Col span={24}>
           <Tabs
             defaultActiveKey="1"
