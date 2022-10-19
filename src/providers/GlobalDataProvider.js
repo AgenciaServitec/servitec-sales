@@ -29,7 +29,7 @@ export const GlobalDataProvider = ({ children }) => {
 
   useEffect(() => {
     playToSound();
-  }, [contactsLoading]);
+  }, [contacts]);
 
   useEffect(() => {
     error && notification({ type: "error" });
