@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { firestore, querySnapshotToArray } from "../../firebase";
 import Title from "antd/es/typography/Title";
-import { Tabs } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { orderBy } from "lodash";
+import Select from "antd/lib/select";
+import Text from "antd/lib/typography/Text";
+import Button from "antd/lib/button";
+import Tabs from "antd/lib/tabs";
+import { includes, orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
 import {
@@ -22,8 +25,8 @@ export const Contacts = () => {
   const [clientCode, setClientCode] = useQueryString("clientCode", "all");
 
   const [contacts, setContacts] = useState([]);
-  const [totalContacts, setTotalContacts] = useState(0);
   const [contact, setContact] = useState(null);
+  const [searchDataForm, setSearchDataForm] = useState([]);
 
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
@@ -35,17 +38,16 @@ export const Contacts = () => {
 
   useEffect(() => {
     (() => fetchContacts())();
-  }, []);
+  }, [status, clientCode]);
 
   const fetchContacts = async () => {
     await firestore
       .collection("contacts")
       .orderBy("createAt", "desc")
-      .where("status", "==", "pending")
+      .where("status", "==", status)
       .onSnapshot((snapshot) => {
         const contactsData = querySnapshotToArray(snapshot);
         setContacts(contactsData);
-        setTotalContacts(contactsData.length);
         setLoadingContacts(false);
         playToSound();
       });
@@ -67,16 +69,27 @@ export const Contacts = () => {
       .filter((contact) => contact.status === status)
       .filter((contact) =>
         clientCode === "all" ? true : contact.clientCode === clientCode
+      )
+      .filter((contact) =>
+        searchDataForm.length >= 1
+          ? contact.searchData.some((word) => includes(searchDataForm, word))
+          : true
       );
 
     return orderBy(result, ["createAt"], ["desc"]);
   };
 
+  const onResetContact = () => setSearchDataForm([]);
+
+  const handleSearchDataFormChange = (value) => setSearchDataForm(value);
+
   return (
     <>
       <Row gutter={[10, 10]}>
         <Col span={24}>
-          <Title level={5}>Total contactos: {totalContacts}</Title>
+          <Title level={5}>
+            Total contactos: {viewContacts()?.length || 0}
+          </Title>
         </Col>
         <Col span={24}>
           <FiltersContact
@@ -85,6 +98,46 @@ export const Contacts = () => {
             status={status}
             clientCode={clientCode}
           />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <Row gutter={[16, 15]}>
+            <Col xs={24} sm={17} md={20}>
+              <Select
+                placeholder="Ingrese datos de busqueda"
+                mode="tags"
+                size="large"
+                value={searchDataForm}
+                onChange={handleSearchDataFormChange}
+                style={{ width: "100%" }}
+              />
+              <br />
+              <div>
+                <Text>
+                  Puedes realizar la busqueda con los siguientes datos: nombres,
+                  apellidos, teléfono, email, f.creación, hostname, código
+                  cliente, status
+                </Text>
+              </div>
+              <div>
+                <Text keyboard>
+                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
+                  publicidad-google, pending
+                </Text>
+              </div>
+            </Col>
+            <Col xs={24} sm={7} md={4}>
+              <Button
+                type="default"
+                size="large"
+                block
+                onClick={() => onResetContact()}
+              >
+                Resetear
+              </Button>
+            </Col>
+          </Row>
         </Col>
       </Row>
       <Row gutter={[16, 0]}>
@@ -119,11 +172,10 @@ export const Contacts = () => {
                 label: "LISTA",
                 children: (
                   <ContactInList
+                    contacts={viewContacts()}
                     loadingContacts={loadingContacts}
                     isMobile={isMobile}
-                    contacts={viewContacts()}
                     onSetContact={setContact}
-                    onSetTotalContacts={setTotalContacts}
                     onOpenDrawerContact={onOpenDrawerContact}
                     onNavigateWithBlankTo={navigateWithBlankTo}
                     onNavigateTo={navigateTo}

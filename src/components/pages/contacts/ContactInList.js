@@ -1,13 +1,6 @@
-import React, { useState } from "react";
-import { Divider, List, Skeleton } from "antd";
-import {
-  Form,
-  IconAction,
-  notification,
-  Select,
-  SelectOption,
-  TagHostname,
-} from "../../ui";
+import React from "react";
+import { List, Skeleton } from "antd";
+import { IconAction, TagHostname } from "../../ui";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faCalendarAlt,
@@ -15,162 +8,33 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { findClientColor } from "../../../utils";
-import { capitalize, includes, startCase, toUpper } from "lodash";
+import { capitalize, startCase, toUpper } from "lodash";
 import Text from "antd/lib/typography/Text";
 import moment from "moment/moment";
 import { darken } from "polished";
 import styled, { css } from "styled-components";
-import Col from "antd/lib/col";
-import Row from "antd/lib/row";
-import { Controller, useForm } from "react-hook-form";
-import Button from "antd/lib/button";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { useFormUtils } from "../../../hooks";
 
 export const ContactInList = ({
   contacts,
+  loadingContacts,
   isMobile,
   onSetContact,
-  onSetTotalContacts,
   onOpenDrawerContact,
   onNavigateWithBlankTo,
   onNavigateTo,
 }) => {
-  const [contactsContains, setContactsContains] = useState(contacts || []);
-  const [loadingContactsContains, setLoadingContactsContains] = useState(false);
-
-  const schema = yup.object({
-    searchDataForm: yup.array().required(),
-  });
-
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-    reset,
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  const { required, error } = useFormUtils({ errors, schema });
-
-  const onSubmitFetchContacts = async (formData) => {
-    try {
-      setLoadingContactsContains(true);
-
-      const result = (formData?.searchDataForm || []).map((search) =>
-        includes(contacts.searchData, search)
-      );
-
-      setContactsContains(result);
-      onSetTotalContacts(result.length);
-
-      setLoadingContactsContains(false);
-    } catch (e) {
-      console.log("search:", e);
-      notification({ type: "error" });
-    } finally {
-      setLoadingContactsContains(false);
-    }
-  };
-
-  const onResetContact = () => {
-    reset({
-      searchDataForm: [],
-    });
-  };
-
   // const onDeleteContact = async (contactId) => {
   //   await firestore.collection("contacts").doc(contactId).delete();
   // };
 
-  const childSelectGender = (value) => {
-    let children = [];
-
-    value.forEach((gender, index) =>
-      children.push(
-        <SelectOption key={index} value={gender}>
-          {gender}
-        </SelectOption>
-      )
-    );
-
-    return children;
-  };
-
   return (
     <>
-      <Col span={24}>
-        <Form onSubmit={handleSubmit(onSubmitFetchContacts)}>
-          <Row gutter={[16, 15]}>
-            <Col span={24}>
-              <Controller
-                name="searchDataForm"
-                control={control}
-                defaultValue={[]}
-                render={({ field: { onChange, value, name } }) => (
-                  <Select
-                    label="Ingrese datos de busqueda"
-                    mode="tags"
-                    size="large"
-                    onChange={onChange}
-                    value={value}
-                    style={{ width: "100%" }}
-                    error={error(name)}
-                    required={required(name)}
-                  >
-                    {childSelectGender(value)}
-                  </Select>
-                )}
-              />
-              <br />
-              <div>
-                <Text>
-                  Puedes realizar la busqueda con los siguientes datos,
-                  separados por comas (,): nombres, apellidos, teléfono, email,
-                  f.creación, hostname, status
-                </Text>
-              </div>
-              <div>
-                <Text keyboard>
-                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
-                  alvillantas.com, pending
-                </Text>
-              </div>
-            </Col>
-            <Col span={24}>
-              <Wrapper>
-                <Button
-                  type="default"
-                  size="large"
-                  onClick={() => onResetContact()}
-                  loading={loadingContactsContains}
-                  disabled={loadingContactsContains}
-                >
-                  Resetear
-                </Button>
-                <Button
-                  type="primary"
-                  size="large"
-                  htmlType="submit"
-                  loading={loadingContactsContains}
-                  disabled={loadingContactsContains}
-                >
-                  Buscar
-                </Button>
-              </Wrapper>
-            </Col>
-          </Row>
-        </Form>
-      </Col>
-      <Divider />
-      <Skeleton avatar loading={loadingContactsContains} active>
+      <Skeleton avatar loading={loadingContacts} active>
         <List
           className="demo-loadmore-list"
           itemLayout={isMobile ? "vertical" : "horizontal"}
-          loadMore={loadingContactsContains}
-          dataSource={contactsContains}
+          loadMore={loadingContacts}
+          dataSource={contacts}
           renderItem={(contact) => (
             <List.Item
               actions={[

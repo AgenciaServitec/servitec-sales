@@ -187,11 +187,7 @@ export const DrawerUserInformation = ({
         </Col>
       </Row>
       <Divider />
-      <Form
-        layout="vertical"
-        hideRequiredMark
-        onSubmit={handleSubmit(onSubmitSaveContact)}
-      >
+      <Form layout="vertical" onSubmit={handleSubmit(onSubmitSaveContact)}>
         <Row gutter={[0, 10]}>
           <Col span={24}>
             <Group label="¿El cliente fue atendido?">
