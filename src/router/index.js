@@ -4,38 +4,47 @@ import {
   ClientsIntegration,
   Contact,
   Contacts,
+  Login,
   Page403,
   Page404,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
+import { PrivateRoute } from "./PrivateRoute";
 
 export const Router = () => (
   <Routes>
+    <Route exact path="/login" element={<Login />} />
     <Route
       exact
       path="/"
       element={
-        <BaseLayout>
-          <Contacts />
-        </BaseLayout>
+        <PrivateRoute>
+          <BaseLayout>
+            <Contacts />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     <Route
       exact
       path="/contacts/:contactId"
       element={
-        <BaseLayout>
-          <Contact />
-        </BaseLayout>
+        <PrivateRoute>
+          <BaseLayout>
+            <Contact />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     <Route
       exact
       path="/clients"
       element={
-        <BaseLayout>
-          <ClientsIntegration />
-        </BaseLayout>
+        <PrivateRoute>
+          <BaseLayout>
+            <ClientsIntegration />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     <Route

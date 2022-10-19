@@ -5,3 +5,4 @@ export * from "./useLoadings";
 export * from "./useGenerateRandomColor";
 export * from "./useCoordinates";
 export * from "./useUserIpInfo";
+export * from "./useAsync";

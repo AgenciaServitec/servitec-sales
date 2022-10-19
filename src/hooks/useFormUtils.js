@@ -1,19 +1,5 @@
-import { useEffect } from "react";
-import { get, isEmpty, toNumber } from "lodash";
-
-// interface Props {
-//   errors?: FieldErrors;
-//   schema: yup.AnyObjectSchema;
-// }
-
-// type Tests = { name: string; params: Record<string, unknown> }[];
-
-// interface Return {
-//   error: (name: string) => undefined | Record<string, unknown>;
-//   required: (name: string) => boolean;
-//   eventInputNumber: (e: React.ChangeEvent<HTMLInputElement>) => number | null;
-//   eventCheckbox: (e: CheckboxChangeEvent) => boolean;
-// }
+import React, { useEffect } from "react";
+import { get, isEmpty, isString, toNumber } from "lodash";
 
 export const useFormUtils = ({ errors, schema }) => {
   useEffect(() => {
@@ -35,10 +21,22 @@ export const useFormUtils = ({ errors, schema }) => {
   const eventInputNumber = (e) => {
     const { value } = e.target;
 
+    if (toNumber(value) < 0) {
+      const removeSymbol = value.slice(1);
+
+      return toNumber(removeSymbol);
+    }
+
     return value ? toNumber(value) : null;
   };
 
-  const error = (name) => errors && errors[name];
+  const errorMessage = (name) => {
+    const message = errors && errors[name]?.message;
+
+    return isString(message) ? message : undefined;
+  };
+
+  const error = (name) => !!(errors && errors[name]);
 
   const required = (name) => {
     const describe = schema.describe();
@@ -59,5 +57,5 @@ export const useFormUtils = ({ errors, schema }) => {
 
   const eventCheckbox = (e) => e.target.checked;
 
-  return { error, required, eventInputNumber, eventCheckbox };
+  return { error, errorMessage, required, eventInputNumber, eventCheckbox };
 };

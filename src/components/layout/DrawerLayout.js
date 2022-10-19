@@ -1,15 +1,22 @@
 import React from "react";
 import { Drawer, Menu } from "antd";
-import { HomeOutlined, UserSwitchOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  LogoutOutlined,
+  UserSwitchOutlined,
+} from "@ant-design/icons";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import Title from "antd/lib/typography/Title";
+import { useAuthentication } from "../../providers";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
   setIsVisibleDrawer,
   navigateTo,
 }) => {
+  const { logout } = useAuthentication();
+
   const items = [
     {
       label: "Home",
@@ -26,6 +33,15 @@ export const DrawerLayout = ({
       icon: <UserSwitchOutlined />,
       onClick: () => {
         navigateTo("/clients");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Cerrar sesion",
+      key: "3",
+      icon: <LogoutOutlined />,
+      onClick: async () => {
+        await logout();
         setIsVisibleDrawer(false);
       },
     },
