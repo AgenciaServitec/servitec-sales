@@ -1,11 +1,17 @@
 import React from "react";
 import { Router } from "./router";
-import { AuthenticationProvider, VersionProvider } from "./providers";
+import {
+  VersionProvider,
+  AuthenticationProvider,
+  GlobalDataProvider,
+} from "./providers";
 
 const App = () => (
   <VersionProvider>
     <AuthenticationProvider>
-      <Router />
+      <GlobalDataProvider>
+        <Router />
+      </GlobalDataProvider>
     </AuthenticationProvider>
   </VersionProvider>
 );
