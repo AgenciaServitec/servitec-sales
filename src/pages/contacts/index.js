@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { firestore, querySnapshotToArray } from "../../firebase";
+import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -16,15 +15,11 @@ import {
   DrawerUserInformation,
   FiltersContact,
 } from "../../components/pages";
-import useSound from "use-sound";
-import { ContactSound } from "../../multimedia";
 import { useQueryString } from "../../hooks/useQueryString";
 import { useGlobalData } from "../../providers";
 
 export const Contacts = () => {
   const { contacts } = useGlobalData();
-
-  console.log("contacts->", contacts);
 
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientCode, setClientCode] = useQueryString("clientCode", "all");
@@ -32,7 +27,6 @@ export const Contacts = () => {
   const [contact, setContact] = useState(null);
   const [searchDataForm, setSearchDataForm] = useState([]);
 
-  const [loadingContacts, setLoadingContacts] = useState(true);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
   const navigate = useNavigate();
@@ -91,7 +85,7 @@ export const Contacts = () => {
                 placeholder="Ingrese datos de busqueda"
                 mode="tags"
                 size="large"
-                value={searchDataForm}
+                value={searchDataForm || null}
                 onChange={handleSearchDataFormChange}
                 style={{ width: "100%" }}
               />
@@ -156,7 +150,6 @@ export const Contacts = () => {
                 children: (
                   <ContactInList
                     contacts={viewContacts()}
-                    loadingContacts={loadingContacts}
                     isMobile={isMobile}
                     onSetContact={setContact}
                     onOpenDrawerContact={onOpenDrawerContact}

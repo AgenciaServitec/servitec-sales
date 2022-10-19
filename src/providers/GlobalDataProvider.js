@@ -16,6 +16,8 @@ export const GlobalDataProvider = ({ children }) => {
 
   const { authUser } = useAuthentication();
 
+  console.log("authUser->", authUser);
+
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     authUser ? firestore.collection("contacts") : null
   );
@@ -33,7 +35,7 @@ export const GlobalDataProvider = ({ children }) => {
     error && notification({ type: "error" });
   }, [error]);
 
-  if (loading) return <Spinner fullscreen />;
+  if (loading) return <Spinner height="70vh" />;
 
   return (
     <GlobalDataContext.Provider
@@ -45,4 +47,5 @@ export const GlobalDataProvider = ({ children }) => {
     </GlobalDataContext.Provider>
   );
 };
+
 export const useGlobalData = () => useContext(GlobalDataContext);
