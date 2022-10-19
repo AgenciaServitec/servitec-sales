@@ -19,41 +19,24 @@ import {
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
 import { useQueryString } from "../../hooks/useQueryString";
+import { useGlobalData } from "../../providers";
 
 export const Contacts = () => {
+  const { contacts } = useGlobalData();
+
+  console.log("contacts->", contacts);
+
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientCode, setClientCode] = useQueryString("clientCode", "all");
 
-  const [contacts, setContacts] = useState([]);
   const [contact, setContact] = useState(null);
   const [searchDataForm, setSearchDataForm] = useState([]);
 
   const [loadingContacts, setLoadingContacts] = useState(true);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
-  const [play] = useSound(ContactSound);
-
   const navigate = useNavigate();
   const { isMobile } = useDevice();
-
-  useEffect(() => {
-    (() => fetchContacts())();
-  }, [status, clientCode]);
-
-  const fetchContacts = async () => {
-    await firestore
-      .collection("contacts")
-      .orderBy("createAt", "desc")
-      .where("status", "==", status)
-      .onSnapshot((snapshot) => {
-        const contactsData = querySnapshotToArray(snapshot);
-        setContacts(contactsData);
-        setLoadingContacts(false);
-        playToSound();
-      });
-  };
-
-  const playToSound = () => play();
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
 
