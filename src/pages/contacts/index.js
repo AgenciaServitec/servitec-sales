@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -6,7 +6,7 @@ import Select from "antd/lib/select";
 import Text from "antd/lib/typography/Text";
 import Button from "antd/lib/button";
 import Tabs from "antd/lib/tabs";
-import { includes, orderBy, toLower } from "lodash";
+import { includes, orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
 import {
@@ -17,11 +17,19 @@ import {
 } from "../../components/pages";
 import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useGlobalData } from "../../providers";
-import { formatWord, formatWords, removeAccents } from "../../utils";
+import { formatWord, formatWords } from "../../utils";
+import useSound from "use-sound";
+import { ContactSound } from "../../multimedia";
 
 export const Contacts = () => {
   const { authUser } = useAuthentication();
   const { contacts } = useGlobalData();
+  const navigate = useNavigate();
+  const { isMobile } = useDevice();
+
+  const [play] = useSound(ContactSound);
+
+  const playToSound = () => play();
 
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientCode, setClientCode] = useQueryString("clientCode", "all");
@@ -31,8 +39,9 @@ export const Contacts = () => {
 
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
-  const navigate = useNavigate();
-  const { isMobile } = useDevice();
+  useEffect(() => {
+    authUser && playToSound();
+  }, [contacts]);
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
 

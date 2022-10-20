@@ -4,16 +4,12 @@ import { firestore } from "../firebase";
 import { useAuthentication } from "./Authentication";
 import { notification, Spinner } from "../components/ui";
 import { orderBy } from "lodash";
-import useSound from "use-sound";
-import { ContactSound } from "../multimedia";
 
 const GlobalDataContext = createContext({
   contacts: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
-  const [play] = useSound(ContactSound);
-
   const { authUser } = useAuthentication();
 
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
@@ -26,12 +22,6 @@ export const GlobalDataProvider = ({ children }) => {
 
   const error = contactsError;
   const loading = contactsLoading;
-
-  const playToSound = () => play();
-
-  useEffect(() => {
-    authUser && playToSound();
-  }, [contacts]);
 
   useEffect(() => {
     error && notification({ type: "error" });
