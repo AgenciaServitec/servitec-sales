@@ -8,7 +8,7 @@ export const InputPassword = ({
   disabled,
   error,
   label,
-  variant = "outlined",
+  variant = "filled",
   ...props
 }) => {
   const Container = ComponentContainer[variant];
