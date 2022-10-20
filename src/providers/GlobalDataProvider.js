@@ -16,10 +16,12 @@ export const GlobalDataProvider = ({ children }) => {
 
   const { authUser } = useAuthentication();
 
-  console.log("authUser->", authUser);
-
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
-    authUser ? firestore.collection("contacts") : null
+    authUser
+      ? firestore
+          .collection("contacts")
+          .where("searchData", "array-contains-any", authUser?.clientsIds || [])
+      : null
   );
 
   const error = contactsError;
@@ -28,7 +30,7 @@ export const GlobalDataProvider = ({ children }) => {
   const playToSound = () => play();
 
   useEffect(() => {
-    playToSound();
+    authUser && playToSound();
   }, [contacts]);
 
   useEffect(() => {

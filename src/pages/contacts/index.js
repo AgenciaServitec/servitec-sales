@@ -16,9 +16,10 @@ import {
   FiltersContact,
 } from "../../components/pages";
 import { useQueryString } from "../../hooks/useQueryString";
-import { useGlobalData } from "../../providers";
+import { useAuthentication, useGlobalData } from "../../providers";
 
 export const Contacts = () => {
+  const { authUser } = useAuthentication();
   const { contacts } = useGlobalData();
 
   const [status, setStatus] = useQueryString("status", "pending");
@@ -74,6 +75,7 @@ export const Contacts = () => {
             onSetClientCode={setClientCode}
             status={status}
             clientCode={clientCode}
+            authUser={authUser}
           />
         </Col>
       </Row>
