@@ -78,7 +78,7 @@ const mapSearchData = (
   contact: ContactCommon
 ): SearchData => ({
   contactId: contactId,
-  clientCode: contact.clientCode,
+  clientCode: "marko-creativos",
   firstName: contact.firstName,
   lastName: contact.lastName,
   email: contact.email,
