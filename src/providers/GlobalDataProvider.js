@@ -37,7 +37,7 @@ export const GlobalDataProvider = ({ children }) => {
     error && notification({ type: "error" });
   }, [error]);
 
-  if (loading) return <Spinner height="70vh" />;
+  if (loading) return <Spinner height="100vh" />;
 
   return (
     <GlobalDataContext.Provider

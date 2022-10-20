@@ -184,7 +184,7 @@ export const AuthenticationProvider = ({ children }) => {
     return auth.signOut();
   };
 
-  if (authenticating) return <Spinner fullscreen />;
+  if (authenticating) return <Spinner height="100vh" />;
 
   return (
     <AuthenticationContext.Provider

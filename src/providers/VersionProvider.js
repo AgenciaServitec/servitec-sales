@@ -15,7 +15,7 @@ export const VersionProvider = ({ children }) => {
 
   const onClickRefresh = () => document.location.reload();
 
-  if (settingDefaultLoading) return <Spinner fullscreen />;
+  if (settingDefaultLoading) return <Spinner height="100vh" />;
 
   if (settingDefaultError)
     return (
