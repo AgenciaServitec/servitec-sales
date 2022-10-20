@@ -88,7 +88,7 @@ const mapContact = (contactId: string, contact: GenericContact) => {
     { ...contact },
     {
       id: contactId,
-      clientCode: contact.clientCode || "generic",
+      clientCode: contact.clientCode.toLowerCase() || "generic",
       firstName: contact.firstName.toLowerCase(),
       lastName: contact.lastName.toLowerCase(),
       email: contact.email.toLowerCase(),
