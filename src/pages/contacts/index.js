@@ -26,18 +26,16 @@ export const Contacts = () => {
   const { contacts } = useGlobalData();
   const navigate = useNavigate();
   const { isMobile } = useDevice();
-
   const [play] = useSound(ContactSound);
-
-  const playToSound = () => play();
 
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientCode, setClientCode] = useQueryString("clientCode", "all");
 
   const [contact, setContact] = useState(null);
   const [searchDataForm, setSearchDataForm] = useState([]);
-
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
+
+  const playToSound = () => play();
 
   useEffect(() => {
     authUser && playToSound();
