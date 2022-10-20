@@ -28,5 +28,10 @@
     "code": "publicidad-google",
     "color": "#444",
     "bg": "#ffffff"
+  },
+  {
+    "code": "agencia-servitec",
+    "color": "#161616",
+    "bg": "#FCD535"
   }
 ]
