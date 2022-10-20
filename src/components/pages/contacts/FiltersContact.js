@@ -10,8 +10,6 @@ export const FiltersContact = ({
   clientCode,
   authUser,
 }) => {
-  console.log("authUser->", authUser);
-
   const handleStatusChange = (e) => onSetStatus(e.target.value);
 
   const handleClientCodeChange = (e) => onSetClientCode(e.target.value);
@@ -23,10 +21,10 @@ export const FiltersContact = ({
       <Col>
         <Form.Item label="Código cliente">
           <Radio.Group value={clientCode} onChange={handleClientCodeChange}>
-            {/*<Radio.Button value="all">Todos</Radio.Button>*/}
+            <Radio.Button value="all">Todos</Radio.Button>
             {viewCLientsIds.map((clientId, index) => (
               <Radio.Button key={index} value={clientId}>
-                {clientId === "all" ? "Todos" : clientId}
+                {clientId}
               </Radio.Button>
             ))}
           </Radio.Group>

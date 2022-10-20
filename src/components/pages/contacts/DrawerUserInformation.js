@@ -181,7 +181,7 @@ export const DrawerUserInformation = ({
             onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
             size={55}
             style={{ color: "#e7c600" }}
-            tooltipTitle="Time line"
+            tooltipTitle="Historial"
             icon={faCalendarAlt}
           />
         </Col>

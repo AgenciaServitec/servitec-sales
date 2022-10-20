@@ -9,6 +9,9 @@ import styled from "styled-components";
 import { version } from "../../firebase";
 import Title from "antd/lib/typography/Title";
 import { useAuthentication } from "../../providers";
+import { Logo } from "../../images";
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
@@ -50,12 +53,17 @@ export const DrawerLayout = ({
   return (
     <DrawerContainer
       title={
-        <div>
-          <Title level={3} style={{ margin: 0 }}>
-            Sending emails
-          </Title>
-          <h5>version: {version}</h5>
-        </div>
+        <Row>
+          <Col span={6}>
+            <img src={Logo} width={50} alt="Sending emails logo" />
+          </Col>
+          <Col span={18}>
+            <Title level={3} style={{ margin: 0 }}>
+              Sending emails
+            </Title>
+            <h5>version: {version}</h5>
+          </Col>
+        </Row>
       }
       placement="left"
       closable={true}
