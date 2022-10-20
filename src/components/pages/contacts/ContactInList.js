@@ -194,14 +194,3 @@ const DescriptionWrapper = styled.div`
     }
   }
 `;
-
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  grid-gap: 1rem;
-`;

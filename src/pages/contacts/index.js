@@ -6,7 +6,7 @@ import Select from "antd/lib/select";
 import Text from "antd/lib/typography/Text";
 import Button from "antd/lib/button";
 import Tabs from "antd/lib/tabs";
-import { includes, orderBy } from "lodash";
+import { includes, orderBy, toLower } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
 import {
@@ -17,6 +17,7 @@ import {
 } from "../../components/pages";
 import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useGlobalData } from "../../providers";
+import { formatWord, formatWords, removeAccents } from "../../utils";
 
 export const Contacts = () => {
   const { authUser } = useAuthentication();
@@ -50,7 +51,9 @@ export const Contacts = () => {
       )
       .filter((contact) =>
         searchDataForm.length >= 1
-          ? contact.searchData.some((word) => includes(searchDataForm, word))
+          ? contact.searchData.some((word) =>
+              includes(formatWords(searchDataForm), formatWord(word))
+            )
           : true
       );
 
