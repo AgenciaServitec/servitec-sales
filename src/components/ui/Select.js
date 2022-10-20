@@ -43,6 +43,7 @@ export const Select = ({
   filterOption = (inputValue, optionLabel) =>
     defaultFilterOption(inputValue, optionLabel),
   animation,
+  helperText,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
@@ -55,6 +56,7 @@ export const Select = ({
       disabled={disabled}
       label={label}
       animation={animation}
+      helperText={helperText}
     >
       <AntSelect
         allowClear={disabled ? false : allowClear}

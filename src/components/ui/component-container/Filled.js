@@ -28,6 +28,7 @@ export const Filled = ({
   componentId,
   animation = true,
   disabled = false,
+  helperText,
 }) => (
   <>
     <Container
@@ -44,10 +45,8 @@ export const Filled = ({
         {label}
       </label>
     </Container>
-    {error && (
-      <Error error={error}>
-        {capitalize(startCase(get(error, "message")))}
-      </Error>
+    {helperText && (
+      <Error error={error}>{capitalize(startCase(helperText))}</Error>
     )}
   </>
 );

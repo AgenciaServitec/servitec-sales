@@ -9,6 +9,8 @@ export const InputPassword = ({
   error,
   label,
   variant = "filled",
+  helperText,
+  animation,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
@@ -20,6 +22,8 @@ export const InputPassword = ({
       disabled={disabled}
       error={error}
       label={label}
+      helperText={helperText}
+      animation={animation}
     >
       <InputAntd.Password
         bordered={false}

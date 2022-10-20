@@ -18,6 +18,7 @@ export const TextArea = ({
   error,
   label,
   variant = "filled",
+  helperText,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
@@ -30,6 +31,7 @@ export const TextArea = ({
       error={error}
       label={label}
       animation={false}
+      helperText={helperText}
     >
       <InputAntd.TextArea
         bordered={false}

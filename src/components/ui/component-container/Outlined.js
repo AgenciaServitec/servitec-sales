@@ -28,6 +28,7 @@ export const Outlined = ({
   children,
   componentId,
   animation,
+  helperText,
   disabled = false,
 }) => (
   <>
@@ -45,10 +46,8 @@ export const Outlined = ({
         {label}
       </label>
     </Container>
-    {error && (
-      <Error error={error}>
-        {capitalize(startCase(get(error, "message")))}
-      </Error>
+    {helperText && (
+      <Error error={error}>{capitalize(startCase(helperText))}</Error>
     )}
   </>
 );

@@ -23,12 +23,19 @@ export const RadioGroup = ({
   options = [],
   variant = "outlined",
   children,
+  helperText,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
 
   return (
-    <Container required={required} error={error} label={label} animation={true}>
+    <Container
+      required={required}
+      error={error}
+      label={label}
+      animation={true}
+      helperText={helperText}
+    >
       <Row {...props}>
         <RadioGroupStyled {...props}>
           {!children

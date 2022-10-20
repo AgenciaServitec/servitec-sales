@@ -21,6 +21,7 @@ export const Input = ({
   variant = "filled",
   disabled,
   animation,
+  helperText,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
@@ -33,6 +34,7 @@ export const Input = ({
       error={error}
       label={label}
       disabled={disabled}
+      helperText={helperText}
       animation={animation}
     >
       <InputAntd

@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { capitalize, startCase, get } from "lodash";
+import { capitalize, startCase } from "lodash";
 import { keyframes } from "../../../styles";
 import Typography from "antd/lib/typography";
 import SpaceAntd from "antd/lib/space";
@@ -15,7 +15,7 @@ const { Text } = Typography;
 //   children?: React.ReactNode;
 // }
 
-export const Group = ({ label, required, error, children }) => (
+export const Group = ({ label, required, error, helperText, children }) => (
   <>
     <Container error={error}>
       <Legend required={required} error={error}>
@@ -25,10 +25,8 @@ export const Group = ({ label, required, error, children }) => (
         {children}
       </SpaceStyled>
     </Container>
-    {error && (
-      <Error error={error}>
-        {capitalize(startCase(get(error, "message")))}
-      </Error>
+    {helperText && (
+      <Error error={error}>{capitalize(startCase(helperText))}</Error>
     )}
   </>
 );

@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
 import { useFormUtils } from "../../hooks";
+import Title from "antd/es/typography/Title";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export const Login = () => {
     <Container>
       <div className="wrapper-login">
         <div className="title-login">
-          <h2>Iniciar sesión</h2>
+          <Title level={2}>Iniciar sesión</Title>
         </div>
         <Form onSubmit={handleSubmit(onSubmitLogin)}>
           <Controller
@@ -93,7 +94,12 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   background-blend-mode: multiply;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+  background: rgb(0, 213, 255);
+  background: radial-gradient(
+    circle,
+    rgba(0, 213, 255, 1) 4%,
+    rgb(0, 130, 218) 100%
+  );
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -112,17 +118,16 @@ const Container = styled.div`
     height: auto;
     padding: 1.7rem;
     border-radius: 1em;
-    background: rgba(80, 79, 79, 0.7);
-    color: ${({ theme }) => theme.colors.font1};
+    background: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.primary};
     margin: 1em;
 
     .title-login {
       text-align: center;
-    }
 
-    h1 {
-      margin-bottom: 1em;
-      text-align: center;
+      h2 {
+        color: inherit;
+      }
     }
 
     .item-text {
