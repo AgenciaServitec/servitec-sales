@@ -23,6 +23,9 @@ export const QuotesList = ({
   const [unitPrice, setUnitPrice] = useState(0);
 
   const addCategory = () => {
+    console.log("amount->", amount);
+    console.log("unitPrice->", unitPrice);
+
     if (isEmpty(amount) && isEmpty(productOrService) && isEmpty(unitPrice))
       return;
 
@@ -86,7 +89,7 @@ export const QuotesList = ({
               label="Precio uni."
               animation={false}
               value={unitPrice}
-              onChange={(value) => setAmount(+value)}
+              onChange={(value) => setUnitPrice(+value)}
               size="large"
               min={0}
             />

@@ -26,9 +26,7 @@ export const InputNumber = ({
 }) => {
   const Container = ComponentContainer[variant];
 
-  const onInputChange = (value) => {
-    onChange(value ? toNumber(value) : null);
-  };
+  const onInputChange = (value) => onChange(value ? toNumber(value) : null);
 
   return (
     <Container
@@ -40,13 +38,12 @@ export const InputNumber = ({
       animation={animation}
     >
       <InputNumberAntd
-        type="number"
         bordered={false}
         placeholder=""
         size="large"
         defaultValue={value}
         disabled={disabled}
-        onChange={onInputChange}
+        onChange={(value) => onInputChange(value)}
         {...props}
       />
     </Container>
