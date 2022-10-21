@@ -12,8 +12,6 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  console.log("authUser->", authUser);
-
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     authUser
       ? firestore
