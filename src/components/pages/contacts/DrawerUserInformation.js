@@ -23,6 +23,7 @@ import {
   faEnvelope,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
+import { SendEmailModal } from "./SendEmailModal";
 
 export const DrawerUserInformation = ({
   contact,
@@ -32,6 +33,8 @@ export const DrawerUserInformation = ({
   onNavigateTo,
 }) => {
   if (!contact) return null;
+
+  const [isVisibleSendEmailModal, setIsVisibleSendEmailModal] = useState(false);
 
   const [statusType, setStatusType] = useState(false);
   const [savingContact, setSavingContact] = useState(false);
@@ -79,163 +82,185 @@ export const DrawerUserInformation = ({
     onCloseDrawerContact();
   };
 
+  const onCLickIsVisibleSendEmailModal = () =>
+    setIsVisibleSendEmailModal(!isVisibleSendEmailModal);
+
   return (
-    <ContainerDrawer
-      title="Detalle de contacto"
-      width={650}
-      onClose={() => {
-        onCloseDrawerContact();
-        resetStatusType();
-      }}
-      visible={isVisibleDrawerRight}
-      bodyStyle={{
-        paddingBottom: 80,
-      }}
-    >
-      <Row gutter={[0, 7]}>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Nombres"
-            content={capitalize(contact?.firstName) || ""}
-          />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Apellidos"
-            content={capitalize(contact?.lastName) || ""}
-          />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem title="Email" content={contact?.email || ""} />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Teléfono"
-            content={
-              `${contact?.phone.countryCode} ${contact?.phone.number}` || ""
-            }
-          />
-        </Col>
-        <Col span={24}>
-          <DescriptionItem title="Asunto" content={contact?.issue || ""} />
-        </Col>
-        <Col span={24}>
-          <DescriptionItem title="Mensaje" content={contact?.message || ""} />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Hostname"
-            content={contact?.hostname ? <TagHostname contact={contact} /> : ""}
-          />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Fecha creación"
-            content={
-              moment(contact?.createAt.toDate()).format("DD/MM/YYYY HH:mm A") ||
-              ""
-            }
-          />
-        </Col>
-      </Row>
-      <Divider />
-      <Row>
-        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
-          <IconAction
-            onClick={() =>
-              onNavigateWithBlankTo(
-                `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
-              )
-            }
-            size={65}
-            style={{ color: "#65d844" }}
-            tooltipTitle="Whatsapp"
-            icon={faWhatsapp}
-          />
-        </Col>
-        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
-          <IconAction
-            onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
-            size={65}
-            tooltipTitle="Email"
-            styled={{ color: (theme) => theme.colors.error }}
-            icon={faEnvelope}
-          />
-        </Col>
-        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
-          <IconAction
-            onClick={() =>
-              onNavigateWithBlankTo(
-                `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
-              )
-            }
-            size={55}
-            style={{ color: "#0583ea" }}
-            tooltipTitle="Teléfono"
-            icon={faPhone}
-          />
-        </Col>
-        <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
-          <IconAction
-            key={contact.id}
-            onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
-            size={55}
-            style={{ color: "#e7c600" }}
-            tooltipTitle="Historial"
-            icon={faCalendarAlt}
-          />
-        </Col>
-      </Row>
-      <Divider />
-      <Row gutter={[16, 0]}>
-        <Col xs={24} sm={12}>
-          <Button type="primary" block>
-            Enviar cotizacion
-          </Button>
-        </Col>
-        <Col xs={24} sm={12}>
-          <Button type="primary" block>
-            Enviar mensaje
-          </Button>
-        </Col>
-      </Row>
-      <Divider />
-      {contact.status === "pending" && (
-        <Row>
+    <>
+      <ContainerDrawer
+        title="Detalle de contacto"
+        width={650}
+        onClose={() => {
+          onCloseDrawerContact();
+          resetStatusType();
+        }}
+        visible={isVisibleDrawerRight}
+        bodyStyle={{
+          paddingBottom: 80,
+        }}
+      >
+        <Row gutter={[0, 7]}>
+          <Col xs={24} sm={12}>
+            <DescriptionItem
+              title="Nombres"
+              content={capitalize(contact?.firstName) || ""}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <DescriptionItem
+              title="Apellidos"
+              content={capitalize(contact?.lastName) || ""}
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <DescriptionItem title="Email" content={contact?.email || ""} />
+          </Col>
+          <Col xs={24} sm={12}>
+            <DescriptionItem
+              title="Teléfono"
+              content={
+                `${contact?.phone.countryCode} ${contact?.phone.number}` || ""
+              }
+            />
+          </Col>
           <Col span={24}>
-            <Form
-              layout="vertical"
-              onSubmit={handleSubmit(onSubmitSaveContact)}
-            >
-              <Row gutter={[0, 10]}>
-                <Col span={24}>
-                  <Group label="¿El cliente fue atendido?">
-                    <Switch
-                      onClick={(e) => setStatusType(e)}
-                      checkedChildren="Si"
-                      unCheckedChildren="No"
-                      defaultChecked={false}
-                      checked={statusType}
-                    />
-                  </Group>
-                </Col>
-                <Col span={24}>
-                  <Button
-                    block
-                    htmlType="submit"
-                    type="primary"
-                    size="large"
-                    disabled={!statusType || savingContact}
-                  >
-                    Guardar
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
+            <DescriptionItem title="Asunto" content={contact?.issue || ""} />
+          </Col>
+          <Col span={24}>
+            <DescriptionItem title="Mensaje" content={contact?.message || ""} />
+          </Col>
+          <Col xs={24} sm={12}>
+            <DescriptionItem
+              title="Hostname"
+              content={
+                contact?.hostname ? <TagHostname contact={contact} /> : ""
+              }
+            />
+          </Col>
+          <Col xs={24} sm={12}>
+            <DescriptionItem
+              title="Fecha creación"
+              content={
+                moment(contact?.createAt.toDate()).format(
+                  "DD/MM/YYYY HH:mm A"
+                ) || ""
+              }
+            />
           </Col>
         </Row>
-      )}
-    </ContainerDrawer>
+        <Divider />
+        <Row>
+          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+            <IconAction
+              onClick={() =>
+                onNavigateWithBlankTo(
+                  `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
+                )
+              }
+              size={65}
+              style={{ color: "#65d844" }}
+              tooltipTitle="Whatsapp"
+              icon={faWhatsapp}
+            />
+          </Col>
+          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+            <IconAction
+              onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
+              size={65}
+              tooltipTitle="Email"
+              styled={{ color: (theme) => theme.colors.error }}
+              icon={faEnvelope}
+            />
+          </Col>
+          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+            <IconAction
+              onClick={() =>
+                onNavigateWithBlankTo(
+                  `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
+                )
+              }
+              size={55}
+              style={{ color: "#0583ea" }}
+              tooltipTitle="Teléfono"
+              icon={faPhone}
+            />
+          </Col>
+          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+            <IconAction
+              key={contact.id}
+              onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
+              size={55}
+              style={{ color: "#e7c600" }}
+              tooltipTitle="Historial"
+              icon={faCalendarAlt}
+            />
+          </Col>
+        </Row>
+        <Divider />
+        <Row gutter={[16, 0]}>
+          <Col xs={24} sm={12}>
+            <Button
+              type="primary"
+              block
+              onClick={() => onCLickIsVisibleSendEmailModal()}
+            >
+              Enviar cotizacion
+            </Button>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Button
+              type="primary"
+              block
+              onClick={() => onCLickIsVisibleSendEmailModal()}
+            >
+              Enviar mensaje
+            </Button>
+          </Col>
+        </Row>
+        <Divider />
+        {contact.status === "pending" && (
+          <Row>
+            <Col span={24}>
+              <Form
+                layout="vertical"
+                onSubmit={handleSubmit(onSubmitSaveContact)}
+              >
+                <Row gutter={[0, 10]}>
+                  <Col span={24}>
+                    <Group label="¿El cliente fue atendido?">
+                      <Switch
+                        onClick={(e) => setStatusType(e)}
+                        checkedChildren="Si"
+                        unCheckedChildren="No"
+                        defaultChecked={false}
+                        checked={statusType}
+                      />
+                    </Group>
+                  </Col>
+                  <Col span={24}>
+                    <Button
+                      block
+                      htmlType="submit"
+                      type="primary"
+                      size="large"
+                      disabled={!statusType || savingContact}
+                    >
+                      Guardar
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Col>
+          </Row>
+        )}
+      </ContainerDrawer>
+
+      <SendEmailModal
+        contact={contact}
+        onCLickIsVisibleSendEmailModal={onCLickIsVisibleSendEmailModal}
+        isVisibleSendEmailModal={isVisibleSendEmailModal}
+      />
+    </>
   );
 };
 
