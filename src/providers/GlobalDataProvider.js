@@ -12,11 +12,17 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
+  console.log("authUser->", authUser);
+
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     authUser
       ? firestore
           .collection("contacts")
-          .where("searchData", "array-contains-any", authUser?.clientsIds || [])
+          .where(
+            "searchData",
+            "array-contains-any",
+            authUser?.clientsIds || [""]
+          )
       : null
   );
 
