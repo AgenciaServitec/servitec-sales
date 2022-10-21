@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../firebase";
-import { useAuthentication } from "./Authentication";
+import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components/ui";
 import { orderBy } from "lodash";
 
