@@ -24,7 +24,7 @@ import {
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { SendEmailMessageModal } from "./SendEmailMessageModal";
-import { MethodSendingQuoteEmailModal } from "./MethodSendingQuoteEmailModal";
+import { SendEmailQuoteModal } from "./SendEmailQuoteModal";
 
 export const DrawerUserInformation = ({
   contact,
@@ -265,7 +265,7 @@ export const DrawerUserInformation = ({
         onCLickIsVisibleSendEmailModal={onCLickIsVisibleSendEmailModal}
         isVisibleSendEmailModal={isVisibleSendEmailModal}
       />
-      <MethodSendingQuoteEmailModal
+      <SendEmailQuoteModal
         contact={contact}
         onCLickIsVisibleQuotationEmailModal={
           onCLickIsVisibleQuotationEmailModal

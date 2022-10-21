@@ -8,10 +8,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../hooks";
 import Typography from "antd/lib/typography";
 import styled from "styled-components";
+import { QuotesList } from "./QuotesList";
 
 const { Text } = Typography;
 
-export const MethodSendingQuoteEmailModal = ({
+export const SendEmailQuoteModal = ({
   contact,
   isVisibleQuotationEmailModal,
   onCLickIsVisibleQuotationEmailModal,
@@ -19,10 +20,9 @@ export const MethodSendingQuoteEmailModal = ({
   const [sendingEmailQuotation, setSendingEmailQuotation] = useState(false);
 
   const schema = yup.object({
-    amount: yup.string().required(),
-    product: yup.string().required(),
-    description: yup.string().required(),
-    unitPrice: yup.string().required(),
+    email: yup.string().required(),
+    message: yup.string().required(),
+    quote: yup.array().required(),
     // total: yup.string().required(),
     // subTotal: yup.string().required(),
     // totalNeto: yup.string().required(),
@@ -35,7 +35,7 @@ export const MethodSendingQuoteEmailModal = ({
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const { required, error } = useFormUtils({ errors, schema });
+  const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   const onSubmitSendEmailQuotation = (formData) => {
     console.log("formData->", formData);
@@ -79,71 +79,38 @@ export const MethodSendingQuoteEmailModal = ({
               )}
             />
           </Col>
-          <Col span={2}>
+          <Col span={24}>
             <Controller
-              name="amount"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <InputNumber
-                  label="Cant."
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={9}>
-            <Controller
-              name="product"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Producto"
-                  onChange={onChange}
-                  value={value}
-                  name={name}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={10}>
-            <Controller
-              name="description"
+              name="message"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value, name } }) => (
                 <TextArea
-                  label="Descripción"
+                  label="Mensaje"
                   onChange={onChange}
                   value={value}
                   name={name}
                   rows={3}
-                  error={error(name)}
                   required={required(name)}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
                 />
               )}
             />
           </Col>
-          <Col span={3}>
+          <Col span={24}>
             <Controller
-              name="unitPrice"
+              name="quote"
               control={control}
-              defaultValue=""
               render={({ field: { onChange, value, name } }) => (
-                <InputNumber
-                  label="Precio uni."
-                  onChange={onChange}
-                  value={value}
+                <QuotesList
+                  label="Productos o servicios"
                   name={name}
-                  error={error(name)}
+                  value={value}
+                  onChange={onChange}
                   required={required(name)}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
                 />
               )}
             />
