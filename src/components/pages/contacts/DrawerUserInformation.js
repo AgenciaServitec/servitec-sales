@@ -200,36 +200,41 @@ export const DrawerUserInformation = ({
         </Col>
       </Row>
       <Divider />
-      <Row>
-        <Col span={24}>
-          <Form layout="vertical" onSubmit={handleSubmit(onSubmitSaveContact)}>
-            <Row gutter={[0, 10]}>
-              <Col span={24}>
-                <Group label="¿El cliente fue atendido?">
-                  <Switch
-                    onClick={(e) => setStatusType(e)}
-                    checkedChildren="Si"
-                    unCheckedChildren="No"
-                    defaultChecked={false}
-                    checked={statusType}
-                  />
-                </Group>
-              </Col>
-              <Col span={24}>
-                <Button
-                  block
-                  htmlType="submit"
-                  type="primary"
-                  size="large"
-                  disabled={!statusType || savingContact}
-                >
-                  Guardar
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
+      {contact.status === "pending" && (
+        <Row>
+          <Col span={24}>
+            <Form
+              layout="vertical"
+              onSubmit={handleSubmit(onSubmitSaveContact)}
+            >
+              <Row gutter={[0, 10]}>
+                <Col span={24}>
+                  <Group label="¿El cliente fue atendido?">
+                    <Switch
+                      onClick={(e) => setStatusType(e)}
+                      checkedChildren="Si"
+                      unCheckedChildren="No"
+                      defaultChecked={false}
+                      checked={statusType}
+                    />
+                  </Group>
+                </Col>
+                <Col span={24}>
+                  <Button
+                    block
+                    htmlType="submit"
+                    type="primary"
+                    size="large"
+                    disabled={!statusType || savingContact}
+                  >
+                    Guardar
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+        </Row>
+      )}
     </ContainerDrawer>
   );
 };
