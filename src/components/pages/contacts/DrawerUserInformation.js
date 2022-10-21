@@ -23,7 +23,8 @@ import {
   faEnvelope,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
-import { SendEmailModal } from "./SendEmailModal";
+import { SendEmailMessageModal } from "./SendEmailMessageModal";
+import { MethodSendingQuoteEmailModal } from "./MethodSendingQuoteEmailModal";
 
 export const DrawerUserInformation = ({
   contact,
@@ -35,6 +36,8 @@ export const DrawerUserInformation = ({
   if (!contact) return null;
 
   const [isVisibleSendEmailModal, setIsVisibleSendEmailModal] = useState(false);
+  const [isVisibleQuotationEmailModal, setIsVisibleQuotationEmailModal] =
+    useState(false);
 
   const [statusType, setStatusType] = useState(false);
   const [savingContact, setSavingContact] = useState(false);
@@ -84,6 +87,9 @@ export const DrawerUserInformation = ({
 
   const onCLickIsVisibleSendEmailModal = () =>
     setIsVisibleSendEmailModal(!isVisibleSendEmailModal);
+
+  const onCLickIsVisibleQuotationEmailModal = () =>
+    setIsVisibleQuotationEmailModal(!isVisibleQuotationEmailModal);
 
   return (
     <>
@@ -204,16 +210,16 @@ export const DrawerUserInformation = ({
               block
               onClick={() => onCLickIsVisibleSendEmailModal()}
             >
-              Enviar cotizacion
+              Enviar mensaje
             </Button>
           </Col>
           <Col xs={24} sm={12}>
             <Button
               type="primary"
               block
-              onClick={() => onCLickIsVisibleSendEmailModal()}
+              onClick={() => onCLickIsVisibleQuotationEmailModal()}
             >
-              Enviar mensaje
+              Enviar cotizacion
             </Button>
           </Col>
         </Row>
@@ -254,11 +260,17 @@ export const DrawerUserInformation = ({
           </Row>
         )}
       </ContainerDrawer>
-
-      <SendEmailModal
+      <SendEmailMessageModal
         contact={contact}
         onCLickIsVisibleSendEmailModal={onCLickIsVisibleSendEmailModal}
         isVisibleSendEmailModal={isVisibleSendEmailModal}
+      />
+      <MethodSendingQuoteEmailModal
+        contact={contact}
+        onCLickIsVisibleQuotationEmailModal={
+          onCLickIsVisibleQuotationEmailModal
+        }
+        isVisibleQuotationEmailModal={isVisibleQuotationEmailModal}
       />
     </>
   );

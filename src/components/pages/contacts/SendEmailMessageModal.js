@@ -10,7 +10,7 @@ import Typography from "antd/lib/typography";
 
 const { Title, Text } = Typography;
 
-export const SendEmailModal = ({
+export const SendEmailMessageModal = ({
   contact,
   isVisibleSendEmailModal,
   onCLickIsVisibleSendEmailModal,
