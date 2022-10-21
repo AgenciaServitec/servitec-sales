@@ -1,6 +1,10 @@
 import { createGlobalStyle, css } from "styled-components";
 
 const global = css`
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     margin: 0;
     padding: 0;
