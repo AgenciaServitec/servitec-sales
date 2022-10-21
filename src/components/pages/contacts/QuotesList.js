@@ -65,7 +65,6 @@ export const QuotesList = ({
           </Col>
           <Col xs={24} sm={3}>
             <InputNumber
-              key={amount}
               label="Cant."
               animation={false}
               value={amount}
@@ -85,7 +84,6 @@ export const QuotesList = ({
           </Col>
           <Col xs={24} sm={3}>
             <InputNumber
-              key={unitPrice}
               label="Precio uni."
               animation={false}
               value={unitPrice}

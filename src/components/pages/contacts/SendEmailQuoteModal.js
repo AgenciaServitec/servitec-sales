@@ -87,6 +87,7 @@ export const SendEmailQuoteModal = ({
               render={({ field: { onChange, value, name } }) => (
                 <TextArea
                   label="Mensaje"
+                  placeholder="Ingrese mensaje"
                   onChange={onChange}
                   value={value}
                   name={name}

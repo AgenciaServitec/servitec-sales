@@ -17,6 +17,7 @@ export const TextArea = ({
   disabled,
   error,
   label,
+  placeholder,
   variant = "filled",
   helperText,
   ...props
@@ -37,7 +38,7 @@ export const TextArea = ({
         bordered={false}
         value={value}
         disabled={disabled}
-        placeholder="Ingrese la synopsis del anime"
+        placeholder={placeholder}
         {...props}
       />
     </Container>
