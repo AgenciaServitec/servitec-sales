@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, TextArea } from "../../ui";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../hooks";
 import Typography from "antd/lib/typography";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export const SendEmailMessageModal = ({
   contact,
@@ -24,10 +24,17 @@ export const SendEmailMessageModal = ({
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
+
+  useEffect(() => {
+    reset({
+      email: contact.email,
+    });
+  }, [isVisibleSendEmailModal]);
 
   const onSubmitSendEmail = (formData) => {
     console.log("formData->", formData);
@@ -40,12 +47,26 @@ export const SendEmailMessageModal = ({
       onCancel={onCLickIsVisibleSendEmailModal}
     >
       <Form layout="vertical" onSubmit={handleSubmit(onSubmitSendEmail)}>
-        <Row gutter={[0, 10]}>
+        <Row gutter={[16, 16]}>
           <Col span={24}>
             <Text>Enviar mensaje por email a:</Text>
-            <Title level={5} style={{ marginTop: "0", marginBottom: "1em" }}>
-              {contact.email}
-            </Title>
+          </Col>
+          <Col span={24}>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Email"
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
           </Col>
           <Col span={24}>
             <Controller

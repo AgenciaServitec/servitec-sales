@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Form, Input, Modal, TextArea } from "../../ui";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, InputNumber, Modal, TextArea } from "../../ui";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { Controller, useForm } from "react-hook-form";
@@ -7,8 +7,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useFormUtils } from "../../../hooks";
 import Typography from "antd/lib/typography";
+import styled from "styled-components";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export const MethodSendingQuoteEmailModal = ({
   contact,
@@ -18,46 +19,84 @@ export const MethodSendingQuoteEmailModal = ({
   const [sendingEmailQuotation, setSendingEmailQuotation] = useState(false);
 
   const schema = yup.object({
+    amount: yup.string().required(),
     product: yup.string().required(),
-    message: yup.string().required(),
+    description: yup.string().required(),
+    unitPrice: yup.string().required(),
+    // total: yup.string().required(),
+    // subTotal: yup.string().required(),
+    // totalNeto: yup.string().required(),
   });
 
   const {
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const { required, error, errorMessage } = useFormUtils({ errors, schema });
+  const { required, error } = useFormUtils({ errors, schema });
 
   const onSubmitSendEmailQuotation = (formData) => {
     console.log("formData->", formData);
   };
 
+  useEffect(() => {
+    reset({
+      email: contact.email,
+    });
+  }, [isVisibleQuotationEmailModal]);
+
   return (
-    <Modal
+    <ModalContainer
       open={isVisibleQuotationEmailModal}
       closable={onCLickIsVisibleQuotationEmailModal}
       onCancel={onCLickIsVisibleQuotationEmailModal}
+      width={970}
     >
       <Form
         layout="vertical"
         onSubmit={handleSubmit(onSubmitSendEmailQuotation)}
       >
-        <Row gutter={[0, 16]}>
+        <Row gutter={[10, 16]}>
           <Col span={24}>
             <Text>Enviar cotización por email a:</Text>
-            <Title level={5} style={{ marginTop: "0", marginBottom: "1em" }}>
-              {contact.email}
-            </Title>
           </Col>
           <Col span={24}>
-            <Input
-              label="Cliente"
-              value={`${contact.firstName} ${contact.lastName}`}
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Email"
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
             />
           </Col>
-          <Col span={24}>
+          <Col span={2}>
+            <Controller
+              name="amount"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <InputNumber
+                  label="Cant."
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={9}>
             <Controller
               name="product"
               control={control}
@@ -69,26 +108,41 @@ export const MethodSendingQuoteEmailModal = ({
                   value={value}
                   name={name}
                   error={error(name)}
-                  helperText={errorMessage(name)}
                   required={required(name)}
                 />
               )}
             />
           </Col>
-          <Col span={24}>
+          <Col span={10}>
             <Controller
-              name="message"
+              name="description"
               control={control}
               defaultValue=""
               render={({ field: { onChange, value, name } }) => (
                 <TextArea
-                  label="Mensaje"
+                  label="Descripción"
                   onChange={onChange}
                   value={value}
                   name={name}
-                  rows={6}
+                  rows={3}
                   error={error(name)}
-                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col span={3}>
+            <Controller
+              name="unitPrice"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <InputNumber
+                  label="Precio uni."
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
                   required={required(name)}
                 />
               )}
@@ -107,6 +161,11 @@ export const MethodSendingQuoteEmailModal = ({
           </Col>
         </Row>
       </Form>
-    </Modal>
+    </ModalContainer>
   );
 };
+
+const ModalContainer = styled(Modal)`
+  width: auto;
+  min-width: 30em;
+`;
