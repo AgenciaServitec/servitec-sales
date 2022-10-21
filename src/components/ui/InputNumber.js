@@ -41,6 +41,7 @@ export const InputNumber = ({
         bordered={false}
         placeholder=""
         size="large"
+        value={value}
         defaultValue={value}
         disabled={disabled}
         onChange={(value) => onInputChange(value)}

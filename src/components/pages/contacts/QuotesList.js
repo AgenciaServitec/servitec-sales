@@ -23,9 +23,6 @@ export const QuotesList = ({
   const [unitPrice, setUnitPrice] = useState(0);
 
   const addCategory = () => {
-    console.log("amount->", amount);
-    console.log("unitPrice->", unitPrice);
-
     if (isEmpty(amount) && isEmpty(productOrService) && isEmpty(unitPrice))
       return;
 
@@ -68,9 +65,11 @@ export const QuotesList = ({
           </Col>
           <Col xs={24} sm={3}>
             <InputNumber
+              key={amount}
               label="Cant."
               animation={false}
               value={amount}
+              defaultValue={amount}
               onChange={(value) => setAmount(+value)}
               size="large"
               min={0}
@@ -86,9 +85,11 @@ export const QuotesList = ({
           </Col>
           <Col xs={24} sm={3}>
             <InputNumber
+              key={unitPrice}
               label="Precio uni."
               animation={false}
               value={unitPrice}
+              defaultValue={unitPrice}
               onChange={(value) => setUnitPrice(+value)}
               size="large"
               min={0}
