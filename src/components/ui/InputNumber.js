@@ -1,6 +1,7 @@
 import React from "react";
 import InputNumberAntd from "antd/lib/input-number";
 import { ComponentContainer } from "./component-container";
+import { toNumber } from "lodash";
 
 // interface Props {
 //   value?: string | number;
@@ -20,9 +21,14 @@ export const InputNumber = ({
   variant = "filled",
   helperText,
   animation,
+  onChange,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
+
+  const onInputChange = (value) => {
+    onChange(value ? toNumber(value) : null);
+  };
 
   return (
     <Container
@@ -34,11 +40,13 @@ export const InputNumber = ({
       animation={animation}
     >
       <InputNumberAntd
+        type="number"
         bordered={false}
         placeholder=""
         size="large"
-        value={value}
+        defaultValue={value}
         disabled={disabled}
+        onChange={onInputChange}
         {...props}
       />
     </Container>
