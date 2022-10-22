@@ -4,10 +4,12 @@ import {
   VersionProvider,
   AuthenticationProvider,
   GlobalDataProvider,
+  ConfigsInitializer,
 } from "./providers";
 
 const App = () => (
   <VersionProvider>
+    <ConfigsInitializer />
     <AuthenticationProvider>
       <GlobalDataProvider>
         <Router />
