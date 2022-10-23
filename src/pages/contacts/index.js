@@ -25,6 +25,7 @@ export const Contacts = () => {
   const { authUser } = useAuthentication();
   const { contacts } = useGlobalData();
   const navigate = useNavigate();
+
   const { isMobile } = useDevice();
   const [play] = useSound(ContactSound);
 
