@@ -7,6 +7,7 @@ import { orderBy } from "lodash";
 
 const GlobalDataContext = createContext({
   contacts: [],
+  clients: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
