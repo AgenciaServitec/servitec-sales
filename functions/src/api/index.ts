@@ -10,6 +10,7 @@ import { PostContact as PostContactPublicidadGoole } from "./publicidad-google";
 import { PostContact as PostCobiene } from "./cobiene";
 import { PostContact as PostFacilFactura } from "./facil-factura";
 import { PostContact as PostAvcLlantas } from "./avcLlantas";
+import { PostSendMessage } from "./email";
 
 const app: express.Application = express();
 
@@ -117,6 +118,13 @@ app.post(
   ],
   validateRequest,
   PostAvcLlantas
+);
+
+app.post(
+  "/email/send-message",
+  [body("email").exists(), body("message").exists()],
+  validateRequest,
+  PostSendMessage
 );
 
 app.use(errorHandler);
