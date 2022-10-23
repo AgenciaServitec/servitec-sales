@@ -24,8 +24,12 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
-  const error = contactsError;
-  const loading = contactsLoading;
+  const [clients = [], clientsLoading, clientsError] = useCollectionData(
+    authUser ? firestore.collection("clients") : null
+  );
+
+  const error = contactsError || clientsError;
+  const loading = contactsLoading || clientsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -37,6 +41,7 @@ export const GlobalDataProvider = ({ children }) => {
     <GlobalDataContext.Provider
       value={{
         contacts: orderBy(contacts, (contact) => [contact.createAt], ["asc"]),
+        clients: orderBy(clients, (client) => [client.createAt], ["asc"]),
       }}
     >
       {children}
