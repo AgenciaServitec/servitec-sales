@@ -8,6 +8,7 @@ import { orderBy } from "lodash";
 const GlobalDataContext = createContext({
   contacts: [],
   clients: [],
+  users: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
@@ -29,8 +30,12 @@ export const GlobalDataProvider = ({ children }) => {
     authUser ? firestore.collection("clients") : null
   );
 
-  const error = contactsError || clientsError;
-  const loading = contactsLoading || clientsLoading;
+  const [users = [], usersLoading, usersError] = useCollectionData(
+    authUser ? firestore.collection("users") : null
+  );
+
+  const error = contactsError || clientsError || usersError;
+  const loading = contactsLoading || clientsLoading || usersLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -43,6 +48,7 @@ export const GlobalDataProvider = ({ children }) => {
       value={{
         contacts: orderBy(contacts, (contact) => [contact.createAt], ["asc"]),
         clients: orderBy(clients, (client) => [client.createAt], ["asc"]),
+        users: orderBy(users, (user) => [user.createAt], ["asc"]),
       }}
     >
       {children}
