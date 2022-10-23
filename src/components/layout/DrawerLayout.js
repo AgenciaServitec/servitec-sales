@@ -4,6 +4,7 @@ import {
   HomeOutlined,
   LogoutOutlined,
   UserSwitchOutlined,
+  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import styled from "styled-components";
 import { version } from "../../firebase";
@@ -40,8 +41,17 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Cerrar sesion",
+      label: "Usuarios",
       key: "3",
+      icon: <UsergroupAddOutlined />,
+      onClick: () => {
+        navigateTo("/users");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Cerrar sesion",
+      key: "4",
       icon: <LogoutOutlined />,
       onClick: async () => {
         await logout();
