@@ -1,11 +1,5 @@
 import React from "react";
 import { Drawer, Menu } from "antd";
-import {
-  HomeOutlined,
-  LogoutOutlined,
-  UserSwitchOutlined,
-  UsergroupAddOutlined,
-} from "@ant-design/icons";
 import styled from "styled-components";
 import { version } from "../../firebase";
 import Title from "antd/lib/typography/Title";
@@ -13,6 +7,13 @@ import { useAuthentication } from "../../providers";
 import { Logo } from "../../images";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import {
+  faHome,
+  faLayerGroup,
+  faSignOutAlt,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
@@ -25,7 +26,7 @@ export const DrawerLayout = ({
     {
       label: "Home",
       key: "1",
-      icon: <HomeOutlined />,
+      icon: <FontAwesomeIcon icon={faHome} size="lg" />,
       onClick: () => {
         navigateTo("/");
         setIsVisibleDrawer(false);
@@ -34,7 +35,7 @@ export const DrawerLayout = ({
     {
       label: "Clientes",
       key: "2",
-      icon: <UserSwitchOutlined />,
+      icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
       onClick: () => {
         navigateTo("/clients");
         setIsVisibleDrawer(false);
@@ -43,7 +44,7 @@ export const DrawerLayout = ({
     {
       label: "Usuarios",
       key: "3",
-      icon: <UsergroupAddOutlined />,
+      icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
       onClick: () => {
         navigateTo("/users");
         setIsVisibleDrawer(false);
@@ -52,7 +53,7 @@ export const DrawerLayout = ({
     {
       label: "Cerrar sesion",
       key: "4",
-      icon: <LogoutOutlined />,
+      icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
       onClick: async () => {
         await logout();
         setIsVisibleDrawer(false);
