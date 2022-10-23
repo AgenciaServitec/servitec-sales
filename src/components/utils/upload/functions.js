@@ -1,5 +1,4 @@
 import { imageResizes } from "../../../firebase";
-import assert from "assert";
 import { timeoutPromise } from "../../../utils";
 // import { RcFile, UploadFile } from "antd/lib/upload/interface";
 
@@ -36,12 +35,10 @@ export const uploadFile = async ({
   fileName,
   storage,
   resize,
-  isImage,
   options: { file, onError, onProgress, onSuccess },
 }) =>
   await new Promise((resolve, reject) => {
-    assert(file instanceof File, "Options.file not is File");
-
+    if (file instanceof File) throw new Error("RequestOption.file not is File");
     // if (file === File) throw Error("Options.file not is File");
 
     const fileExtension = file.name.split(".").pop();
@@ -80,7 +77,7 @@ export const uploadFile = async ({
           .child(fileConfig.url.fileName)
           .getDownloadURL();
 
-        if (isImage) {
+        if (resize) {
           const fileThumbUrlRef = storage
             .ref(fileConfig.thumbUrl.path)
             .child(fileConfig.thumbUrl.fileName);
@@ -89,6 +86,7 @@ export const uploadFile = async ({
         }
         newFile.status = "success";
         newFile.name = fileConfig.url.fileName;
+        newFile.thumbUrl = null;
 
         onSuccess("ok");
         resolve({ newFile, status: true });

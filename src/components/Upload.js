@@ -14,7 +14,6 @@ import {
 } from "./utils/upload/components";
 import { isEmpty } from "lodash";
 import AntdMessage from "antd/lib/message";
-import assert from "assert";
 
 // type UploadValue = File;
 //
@@ -52,10 +51,11 @@ export const Upload = ({
   error,
   filePath,
   fileName,
+  withResize = false,
   isImage = true,
   label,
   required = false,
-  resize = "400x500",
+  resize = null,
   value,
   onChange,
   onUploading,
@@ -84,7 +84,7 @@ export const Upload = ({
   }, [JSON.stringify(files)]);
 
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
-    assert(url, "Missing url");
+    if (!url) throw new Error("Missing url");
 
     // if (!url) throw Error("Missing url");
 

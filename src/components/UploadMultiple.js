@@ -14,7 +14,6 @@ import {
   UploadDraggerBody,
 } from "./utils/upload/components";
 import { isEmpty } from "lodash";
-import assert from "assert";
 import { useLoadings } from "../hooks";
 
 // type UploadValue = File[];
@@ -101,7 +100,7 @@ export const UploadMultiple = ({
   };
 
   const uploadFileToFile = ({ uid, name, url, thumbUrl }) => {
-    assert(url, "Missing url");
+    if (!url) throw new Error("Missing url");
 
     return {
       uid,
@@ -112,10 +111,8 @@ export const UploadMultiple = ({
   };
 
   const customRequest = async (requestOption) => {
-    assert(
-      requestOption.file instanceof File,
-      "RequestOption.file not is File"
-    );
+    if (requestOption.file instanceof File)
+      throw new Error("RequestOption.file not is File");
 
     try {
       setUploadings({ [requestOption.file.uid]: true });
