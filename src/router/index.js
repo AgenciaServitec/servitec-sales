@@ -7,6 +7,7 @@ import {
   Login,
   Page403,
   Page404,
+  Users,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -43,6 +44,17 @@ export const Router = () => (
         <PrivateRoute>
           <BaseLayout>
             <ClientsIntegration />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="/users"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <Users />
           </BaseLayout>
         </PrivateRoute>
       }
