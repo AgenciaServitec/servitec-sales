@@ -57,3 +57,8 @@ interface GenericContact extends ContactCommon {
   receptorEmail: string;
   receptorEmailsCopy: string;
 }
+
+interface EmailMessage {
+  email: string;
+  message: string;
+}
