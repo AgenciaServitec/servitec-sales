@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
@@ -9,22 +9,39 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { Upload } from "../../../components";
+import { firestore } from "../../../firebase";
+import { useGlobalData } from "../../../providers";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
   const { clientId } = useParams();
+  const { clients } = useGlobalData();
+
+  const [client, setClient] = useState({});
+
+  useEffect(() => {
+    const _client =
+      clientId === "new"
+        ? { id: firestore.collection("clients").doc().id }
+        : clients.find((client) => client.id === clientId);
+
+    if (!_client) return navigate(-1);
+
+    setClient(_client);
+  }, []);
+
+  console.log("client->", client);
 
   const onGoBack = () => navigate(-1);
 
-  return <Client clientId={clientId} onGoBack={onGoBack} />;
+  return <Client clientId={clientId} client={client} onGoBack={onGoBack} />;
 };
 
-const Client = ({ clientId, onGoBack }) => {
+const Client = ({ clientId, client, onGoBack }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const schema = yup.object({
     name: yup.string().required(),
-    clientId: yup.string().required(),
     companyLogo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
@@ -45,16 +62,18 @@ const Client = ({ clientId, onGoBack }) => {
     console.log("formData->", formData);
   };
 
-  /* useEffect(() => {
+  useEffect(() => {
     resetForm();
-  }, [flipBookPage]);
+  }, [client]);
 
   const resetForm = () => {
     reset({
-      pageNumber: flipBookPage?.pageNumber || "",
-      flipBookPageImage: flipBookPage?.flipBookPageImage || null,
+      name: client?.name || "",
+      companyLogo: client?.companyLogo || null,
+      receptorEmail: client?.receptorEmail || "",
+      receptorEmailsCopy: client?.receptorEmailsCopy || "",
     });
-  };*/
+  };
 
   return (
     <Row>
@@ -83,24 +102,6 @@ const Client = ({ clientId, onGoBack }) => {
           </Col>
           <Col span={24}>
             <Controller
-              name="clientId"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Id client (API)"
-                  size="large"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
               name="companyLogo"
               control={control}
               defaultValue={null}
@@ -110,7 +111,7 @@ const Client = ({ clientId, onGoBack }) => {
                   accept="image/*"
                   name={name}
                   value={value}
-                  filePath={`flip-book-pages/${"id"}`}
+                  filePath={`clients/${client.id}`}
                   buttonText="Subir imagen"
                   error={error(name)}
                   required={required(name)}

@@ -38,7 +38,8 @@ export const uploadFile = async ({
   options: { file, onError, onProgress, onSuccess },
 }) =>
   await new Promise((resolve, reject) => {
-    if (file instanceof File) throw new Error("RequestOption.file not is File");
+    if (!(file instanceof File))
+      throw new Error("RequestOption.file not is File");
     // if (file === File) throw Error("Options.file not is File");
 
     const fileExtension = file.name.split(".").pop();

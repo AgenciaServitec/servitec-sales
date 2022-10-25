@@ -111,7 +111,7 @@ export const UploadMultiple = ({
   };
 
   const customRequest = async (requestOption) => {
-    if (requestOption.file instanceof File)
+    if (!(requestOption.file instanceof File))
       throw new Error("RequestOption.file not is File");
 
     try {
