@@ -6,13 +6,14 @@ import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
 import Typography from "antd/lib/typography";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Button, IconAction } from "../../components/ui";
+import { Button, IconAction, modalConfirm } from "../../components/ui";
 import { useDevice } from "../../hooks";
 import { useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
 import { Link } from "react-router-dom";
+import { firestore } from "../../firebase";
 
 const { Title, Text } = Typography;
 
@@ -32,17 +33,38 @@ export const ClientsIntegration = () => {
 
   const onEditClient = (client) => navigateTo(client.id);
 
+  const onRemoveClient = async (client) =>
+    await firestore
+      .collection("clients")
+      .doc(client.id)
+      .set({ isDeleted: true }, { merge: true });
+
+  const onConfirmRemoveClient = (client) =>
+    modalConfirm({
+      content: "El cliente se eliminara",
+      onOk: () => {
+        onRemoveClient(client);
+      },
+    });
+
   return (
     <Clients
       isMobile={isMobile}
       clients={clients}
       onAddClient={onAddClient}
       onEditClient={onEditClient}
+      onConfirmRemoveClient={onConfirmRemoveClient}
     />
   );
 };
 
-const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
+const Clients = ({
+  isMobile,
+  clients,
+  onAddClient,
+  onEditClient,
+  onConfirmRemoveClient,
+}) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -73,24 +95,19 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
                   tooltipTitle="Eliminar"
                   styled={{ color: (theme) => theme.colors.error }}
                   icon={faTrash}
-                  onClick={() => console.log("Remove")}
+                  onClick={() => onConfirmRemoveClient(client)}
                 />,
-                // <IconAction
-                //   key={contact.id}
-                //   onClick={() => onDeleteContact(contact.id)}
-                //   size={55}
-                //   style={{ color: "#ff0b02" }}
-                //   tooltipTitle="Eliminar"
-                //   icon={faTrash}
-                // />,
               ]}
             >
               <List.Item.Meta
                 avatar={
                   <Image
-                    src={client?.logo?.thumbUrl}
-                    width={170}
-                    height={100}
+                    src={
+                      client?.logo?.thumbUrl ||
+                      "https://firebasestorage.googleapis.com/v0/b/sendingemails-348505.appspot.com/o/resources%2Fimage-not-found.jpg?alt=media&token=35125bc7-a978-4ee0-8d01-d820b79b24b6"
+                    }
+                    width={150}
+                    height={90}
                     style={{ objectFit: "contain" }}
                     alt="company logo"
                   />
@@ -107,7 +124,9 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
                       <Text strong>{client.receptorEmail}</Text>
                     </div>
                     <div className="item">
-                      <Text className="item-text">Emails copy receptores:</Text>
+                      <Text className="item-text">
+                        Emails copy receptores:{" "}
+                      </Text>
                       <Text strong>{client.receptorEmailsCopy}</Text>
                     </div>
                     <div className="item">

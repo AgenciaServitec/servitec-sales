@@ -38,7 +38,7 @@ const { version, apiUrl, ipInfoApi } = currentConfig;
 
 console.log(currentEnvironment, ":", version);
 
-const imageResizes = [];
+const imageResizes = ["300x90"];
 
 export {
   currentConfig,

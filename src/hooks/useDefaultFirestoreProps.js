@@ -30,8 +30,6 @@ export const useDefaultFirestoreProps = (isSoftDelete = true) => {
   /*const navigate = useNavigate();*/
   const { authUser } = useAuthentication();
 
-  console.log("authUser->", authUser);
-
   /*  if (!authUser) {
     console.error("Missing authUser");
     return navigate("/");
