@@ -25,7 +25,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { orderBy } from "lodash";
-import { Tag } from "antd";
 
 export const Contact = () => {
   const { contactId } = useParams();

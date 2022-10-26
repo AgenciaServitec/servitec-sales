@@ -48,7 +48,7 @@ export const SendEmailMessageModal = ({
   const onSendEmail = async (formData) => {
     try {
       setSendingEmailMessage(true);
-      console.log("formData2", formData);
+
       const response = await fetchSendEmailMessage(formData);
 
       if (!response.ok) throw new Error(response.statusText);
@@ -59,6 +59,7 @@ export const SendEmailMessageModal = ({
     } catch (e) {
       console.error("ErrorSendingEmailMessage:", e);
       notification({ type: "error" });
+      setSendingEmailMessage(false);
     }
   };
 
@@ -73,11 +74,12 @@ export const SendEmailMessageModal = ({
       body: JSON.stringify(formData),
     });
 
-  const onSubmitConfirmSendEmail = (formData) =>
+  const onSubmitConfirmSendEmail = async (formData) => {
     modalConfirm({
-      title: "¿Seguro que quieres enviar?",
-      onOK: () => onSendEmail(formData),
+      content: "¿Seguro que quieres enviar?",
+      onOK: async () => await onSendEmail(formData),
     });
+  };
 
   return (
     <Modal
