@@ -10,7 +10,8 @@ import { Button, IconAction } from "../../components/ui";
 import { useDevice } from "../../hooks";
 import { useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+import { capitalize } from "lodash";
 
 const { Title, Text } = Typography;
 
@@ -86,7 +87,7 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
               <List.Item.Meta
                 avatar={
                   <Image
-                    src="https://firebasestorage.googleapis.com/v0/b/sendingemails-348505.appspot.com/o/resources%2Fservitec-logo.png?alt=media&token=340821f3-43eb-4002-8780-4cb8c6b4e99c"
+                    src={client?.logo?.thumbUrl}
                     width={170}
                     height={100}
                     style={{ objectFit: "contain" }}
@@ -99,55 +100,19 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
                   </h3>
                 }
                 description={
-                  "ASDSADADSAD"
-                  /*<DescriptionWrapper>
+                  <DescriptionWrapper color={client.color}>
                     <div className="item">
-                      <Text className="item-text">Name: </Text>
-                      <Text strong>{capitalize(contact.firstName)}</Text>
+                      <Text className="item-text">Email receptor: </Text>
+                      <Text strong>{client.receptorEmail}</Text>
                     </div>
                     <div className="item">
-                      <Text className="item-text">Apellidos: </Text>
-                      <Text strong>{capitalize(contact.lastName)}</Text>
+                      <Text className="item-text">Emails copy receptores:</Text>
+                      <Text strong>{client.receptorEmailsCopy}</Text>
                     </div>
                     <div className="item">
-                      <Text className="item-text">Email: </Text>
-                      <Text strong>{contact.email}</Text>
+                      <div className="item-color" color={client.color} />
                     </div>
-                    <div className="item">
-                      <Text className="item-text">Teléfono: </Text>
-                      <Text
-                        strong
-                      >{`${contact?.phone?.countryCode} ${contact?.phone?.number}`}</Text>
-                    </div>
-                    {contact?.issue && (
-                      <div className="item">
-                        <Text className="item-text">Asunto: </Text>
-                        <Text strong>{contact.issue}</Text>
-                      </div>
-                    )}
-                    {contact?.message && (
-                      <div className="item">
-                        <Text className="item-text">Mensaje: </Text>
-                        <Text strong>{contact.message}</Text>
-                      </div>
-                    )}
-                    {contact?.createAt && (
-                      <div className="item">
-                        <Text className="item-text">F. creación: </Text>
-                        <Text strong>
-                          {moment(contact.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm:ss a"
-                          )}
-                        </Text>
-                      </div>
-                    )}
-                    <div className="item">
-                      <Text className="item-text">Host name: </Text>
-                      <Text strong>
-                        <TagHostname contact={contact} />
-                      </Text>
-                    </div>
-                  </DescriptionWrapper>*/
+                  </DescriptionWrapper>
                 }
               />
             </List.Item>
@@ -159,12 +124,17 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
 };
 
 const DescriptionWrapper = styled.div`
-  display: grid;
-  grid-row-gap: 0.3rem;
-  justify-content: flex-start;
-  .item {
-    .item-text {
-      color: ${({ theme }) => theme.colors.heading};
+  ${({ color }) => css`
+    display: grid;
+    grid-row-gap: 0.3rem;
+    justify-content: flex-start;
+    .item {
+      .item-text {
+        color: ${({ theme }) => theme.colors.heading};
+      }
     }
-  }
+    .item-color {
+      background: ${color};
+    }
+  `}
 `;
