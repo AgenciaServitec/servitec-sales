@@ -52,7 +52,7 @@ export const uploadFile = async ({
       },
       thumbUrl: {
         path: `${filePath}/thumbs`,
-        fileName: `${fileName}_${resize}.${fileExtension}`,
+        fileName: `${fileName}_${resize}.webp`,
       },
     };
 
@@ -84,10 +84,12 @@ export const uploadFile = async ({
             .child(fileConfig.thumbUrl.fileName);
 
           newFile.thumbUrl = await keepTryingGetThumbURL(fileThumbUrlRef);
+        } else {
+          newFile.thumbUrl = null;
         }
+
         newFile.status = "success";
         newFile.name = fileConfig.url.fileName;
-        newFile.thumbUrl = null;
 
         onSuccess("ok");
         resolve({ newFile, status: true });

@@ -12,6 +12,7 @@ import { useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -95,9 +96,9 @@ const Clients = ({ isMobile, clients, onAddClient, onEditClient }) => {
                   />
                 }
                 title={
-                  <h3 className="link-color" onClick={() => {}}>
-                    {client.name}
-                  </h3>
+                  <Link to={`/clients/${client.id}`}>
+                    <h3 className="link-color">{capitalize(client.name)}</h3>
+                  </Link>
                 }
                 description={
                   <DescriptionWrapper color={client.color}>

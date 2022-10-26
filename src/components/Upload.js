@@ -51,7 +51,6 @@ export const Upload = ({
   error,
   filePath,
   fileName,
-  withResize = false,
   isImage = true,
   label,
   required = false,

@@ -154,6 +154,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                   name={name}
                   value={value}
                   filePath={`clients/${client.id}`}
+                  resize="300x90"
                   buttonText="Subir imagen"
                   error={error(name)}
                   required={required(name)}
