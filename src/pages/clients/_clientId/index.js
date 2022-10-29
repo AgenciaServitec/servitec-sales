@@ -3,7 +3,14 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
-import { Button, Form, Input, notification } from "../../../components/ui";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  notification,
+  Select,
+} from "../../../components/ui";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,6 +19,7 @@ import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
+import { phoneCodes } from "../../../data-list";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
@@ -65,6 +73,10 @@ export const ClientIntegration = () => {
       name: formData.name.toLowerCase(),
       receptorEmail: formData.receptorEmail.toLowerCase(),
       receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
+      phone: {
+        number: formData.phoneNumber,
+        countryCode: formData.countryCode,
+      },
     });
 
   const onGoBack = () => navigate(-1);
@@ -87,6 +99,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     logo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
+    countryCode: yup.string(),
+    phoneNumber: yup.number(),
     color: yup.string().required(),
   });
 
@@ -111,6 +125,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       logo: client?.logo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
+      countryCode: client?.countryCode || "+51",
+      phoneNumber: client?.phoneNumber || "",
       color: client?.color || "",
     });
   };
@@ -132,7 +148,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
               render={({ field: { onChange, value, name } }) => (
                 <Input
                   label="Nombre"
-                  size="large"
                   name={name}
                   value={value}
                   onChange={onChange}
@@ -172,7 +187,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
               render={({ field: { onChange, value, name } }) => (
                 <Input
                   label="Email del receptor"
-                  size="large"
                   name={name}
                   value={value}
                   onChange={onChange}
@@ -190,7 +204,43 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
               render={({ field: { onChange, value, name } }) => (
                 <Input
                   label="Copia email receptores, separardos por comas (,)"
-                  size="large"
+                  name={name}
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+          </Col>
+          <Col xs={24} sm={6} md={6}>
+            <Controller
+              name="countryCode"
+              control={control}
+              defaultValue="+51"
+              render={({ field: { onChange, value, name } }) => (
+                <Select
+                  label="Código"
+                  value={value}
+                  onChange={onChange}
+                  error={error(name)}
+                  required={required(name)}
+                  options={phoneCodes.map((phoneCode) => ({
+                    code: phoneCode.code,
+                    value: phoneCode.dial_code,
+                    label: `${phoneCode.name} (${phoneCode.dial_code})`,
+                  }))}
+                />
+              )}
+            />
+          </Col>
+          <Col xs={24} sm={18} md={18}>
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field: { onChange, value, name } }) => (
+                <InputNumber
+                  label="Ingrese teléfono"
                   name={name}
                   value={value}
                   onChange={onChange}
@@ -209,7 +259,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 <Input
                   type="color"
                   label="Color de cliente"
-                  size="large"
                   animation={false}
                   name={name}
                   value={value}
