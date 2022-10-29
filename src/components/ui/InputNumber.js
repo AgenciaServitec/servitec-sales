@@ -38,6 +38,7 @@ export const InputNumber = ({
       animation={animation}
     >
       <InputNumberAntd
+        type="number"
         bordered={false}
         placeholder=""
         size="large"
