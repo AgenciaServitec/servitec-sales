@@ -33,7 +33,9 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [users = [], usersLoading, usersError] = useCollectionData(
-    authUser ? firestore.collection("users") : null
+    authUser
+      ? firestore.collection("users").where("isDeleted", "==", false)
+      : null
   );
 
   const error = contactsError || clientsError || usersError;

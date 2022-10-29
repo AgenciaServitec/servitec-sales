@@ -23,7 +23,7 @@ import { ContactSound } from "../../multimedia";
 
 export const Contacts = () => {
   const { authUser } = useAuthentication();
-  const { contacts } = useGlobalData();
+  const { contacts, clients } = useGlobalData();
   const navigate = useNavigate();
 
   const { isMobile } = useDevice();
@@ -86,6 +86,7 @@ export const Contacts = () => {
             onSetClientCode={setClientCode}
             status={status}
             clientCode={clientCode}
+            clients={clients}
             authUser={authUser}
           />
         </Col>
