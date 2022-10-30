@@ -6,7 +6,12 @@ import Image from "antd/lib/image";
 import Divider from "antd/lib/divider";
 import Typography from "antd/lib/typography";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Button, IconAction, modalConfirm } from "../../components/ui";
+import {
+  Button,
+  IconAction,
+  modalConfirm,
+  TagHostname,
+} from "../../components/ui";
 import { useDevice } from "../../hooks";
 import { useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
@@ -128,6 +133,19 @@ const Clients = ({
                         Emails copy receptores:{" "}
                       </Text>
                       <Text strong>{client.receptorEmailsCopy}</Text>
+                    </div>
+                    <div className="item">
+                      <Text className="item-text">Hostname: </Text>
+                      <TagHostname
+                        color={client.color}
+                        hostname={client.hostname}
+                      />
+                    </div>
+                    <div className="item">
+                      <Text className="item-text">Teléfono: </Text>
+                      <Text
+                        strong
+                      >{`${client.phone.countryCode}${client.phone.number}`}</Text>
                     </div>
                     <div className="item">
                       <div className="item-color" color={client.color} />
