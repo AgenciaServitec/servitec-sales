@@ -92,7 +92,7 @@ export const ContactInList = ({
                     onSetContact(contact);
                     onOpenDrawerContact();
                   }}
-                  clientColors={findClientColor(contact.clientCode)}
+                  clientColor={contact.color}
                 >
                   {contact?.firstName && toUpper(contact.firstName.charAt(0))}
                 </ContactPicture>
@@ -169,13 +169,13 @@ export const ContactInList = ({
 };
 
 const ContactPicture = styled.div`
-  ${({ clientColors }) => css`
+  ${({ clientColor = "#c4c4c4" }) => css`
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
-    border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
-    color: ${({ clientColors }) => clientColors?.color || "#fff"};
-    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
+    border: 2px solid ${darken(0.08, clientColor)};
+    color: ${({ clientColor }) => clientColor || "#fff"};
+    background: ${({ clientColor }) => clientColor || "#c4c4c4"};
     display: flex;
     align-items: center;
     justify-content: center;
