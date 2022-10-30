@@ -34,7 +34,7 @@ export const ContactInBubbles = ({
           key={index}
           contact={contact}
           isLastContact={lastContact.id === contact.id}
-          clientColors={findClientColor(contact.clientCode)}
+          clientColor={contact.color}
           onOpenDrawerContact={onOpenDrawerContact}
           onSetContact={onSetContact}
         />

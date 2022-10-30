@@ -128,8 +128,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
       hostname: client?.hostname || "",
-      countryCode: client?.phone.countryCode || "+51",
-      phoneNumber: client?.phone.number || "",
+      countryCode: client?.phone?.countryCode || "+51",
+      phoneNumber: client?.phone?.number || "",
       color: client?.color || "",
     });
   };

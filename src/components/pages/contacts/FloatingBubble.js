@@ -1,19 +1,19 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
-import { darken } from "polished";
+import { darken, lighten } from "polished";
 import { keyframes } from "../../../styles";
 
 export const FloatingBubble = ({
   contact,
   isLastContact,
-  clientColors,
+  clientColor = "#c4c4c4",
   onOpenDrawerContact,
   onSetContact,
 }) => (
   <Container
     isLastContact={isLastContact}
-    clientColors={clientColors}
+    clientColor={clientColor}
     onClick={() => {
       onSetContact(contact);
       onOpenDrawerContact();
@@ -27,12 +27,12 @@ export const FloatingBubble = ({
 );
 
 const Container = styled.div`
-  ${({ clientColors, isLastContact }) => css`
+  ${({ clientColor, isLastContact }) => css`
     width: 90%;
     height: 90%;
     border-radius: 50%;
-    border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
-    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
+    border: 2px solid ${darken(0.08, clientColor)};
+    background: ${({ clientColor }) => clientColor};
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -56,8 +56,11 @@ const Container = styled.div`
     }
 
     .item-full-name {
-      color: ${({ clientColors }) => clientColors?.color || "#fff"};
-      font-size: 0.9em;
+      text-shadow: -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff,
+        1px 1px 1px #fff;
+      color: #000;
+      font-weight: bold;
+      font-size: 1em;
       padding: 0.2em 0.4em;
       border-radius: 1em;
       width: 80%;
@@ -69,9 +72,9 @@ const Container = styled.div`
       padding: 0.2em 0.4em;
       border-radius: 1em;
       text-align: center;
-      background: ${darken(0.09, clientColors?.bg || "#c4c4c4")};
-      border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
-      color: ${clientColors?.color || "#fff"};
+      background: ${darken(0.09, clientColor)};
+      border: 2px solid ${darken(0.08, clientColor)};
+      color: ${lighten(0.2, clientColor) || "#fff"};
     }
   `}
 `;
