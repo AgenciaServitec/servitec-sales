@@ -3,8 +3,8 @@ import { darken, lighten } from "polished";
 import { Tag } from "antd";
 import styled, { css } from "styled-components";
 
-export const TagHostname = ({ color, hostname }) => {
-  if (!color || !hostname) return null;
+export const TagHostname = ({ color = "#c4c4c4", hostname }) => {
+  if (!hostname) return null;
 
   return (
     <a
@@ -12,7 +12,7 @@ export const TagHostname = ({ color, hostname }) => {
       target="_blank"
       rel="noreferrer"
     >
-      <ItemTag color={lighten(0.09, color || "#c4c4c4")} bg={color}>
+      <ItemTag color={lighten(0.09, color)} bg={color}>
         {hostname || ""}
       </ItemTag>
     </a>

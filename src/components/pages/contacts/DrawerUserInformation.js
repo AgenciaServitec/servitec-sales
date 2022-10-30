@@ -139,7 +139,9 @@ export const DrawerUserInformation = ({
             <DescriptionItem
               title="Hostname"
               content={
-                contact?.hostname ? <TagHostname contact={contact} /> : ""
+                contact?.hostname ? (
+                  <TagHostname hostname={contact.hostname} />
+                ) : null
               }
             />
           </Col>

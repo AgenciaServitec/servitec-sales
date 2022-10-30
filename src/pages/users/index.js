@@ -38,8 +38,8 @@ export const Users = () => {
   const onConfirmRemoveUser = (client) =>
     modalConfirm({
       content: "El usuario se eliminara",
-      onOk: () => {
-        onRemoveUser(client);
+      onOk: async () => {
+        await onRemoveUser(client);
       },
     });
 
