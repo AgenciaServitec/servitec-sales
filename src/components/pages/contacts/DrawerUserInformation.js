@@ -25,9 +25,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SendEmailMessageModal } from "./SendEmailMessageModal";
 import { SendEmailQuoteModal } from "./SendEmailQuoteModal";
+import { findColor } from "../../../utils";
 
 export const DrawerUserInformation = ({
   contact,
+  clients,
   onCloseDrawerContact,
   isVisibleDrawerRight,
   onNavigateWithBlankTo,
@@ -140,7 +142,10 @@ export const DrawerUserInformation = ({
               title="Hostname"
               content={
                 contact?.hostname ? (
-                  <TagHostname hostname={contact.hostname} />
+                  <TagHostname
+                    hostname={contact.hostname}
+                    clientColors={findColor(contact.clientId, clients)}
+                  />
                 ) : null
               }
             />

@@ -7,3 +7,12 @@ export const formatWord = (word = "") => removeAccents(toLower(word));
 
 export const formatWords = (words = []) =>
   words.map((word) => removeAccents(toLower(word)));
+
+export const findColor = (clientId, clients = []) => {
+  const client = clients.find((client) => client.id === clientId);
+
+  return {
+    color: client?.textColor || "#fff",
+    bg: client?.bgColor || "#c4c4c4",
+  };
+};

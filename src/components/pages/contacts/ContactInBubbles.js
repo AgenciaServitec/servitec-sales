@@ -2,7 +2,6 @@ import React from "react";
 import BubbleUI from "react-bubble-ui";
 import { FloatingBubble } from "./FloatingBubble";
 import "react-bubble-ui/dist/index.css";
-import { findClientColor } from "../../../utils";
 import styled from "styled-components";
 import { mediaQuery } from "../../../styles";
 
@@ -24,6 +23,7 @@ const options = {
 export const ContactInBubbles = ({
   contacts,
   lastContact,
+  clients,
   onOpenDrawerContact,
   onSetContact,
 }) => (
@@ -33,8 +33,8 @@ export const ContactInBubbles = ({
         <FloatingBubble
           key={index}
           contact={contact}
+          clients={clients}
           isLastContact={lastContact.id === contact.id}
-          clientColor={contact.color}
           onOpenDrawerContact={onOpenDrawerContact}
           onSetContact={onSetContact}
         />

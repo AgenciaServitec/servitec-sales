@@ -7,16 +7,17 @@ import {
   faEnvelope,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
-import { findClientColor } from "../../../utils";
 import { capitalize, startCase, toUpper } from "lodash";
 import Text from "antd/lib/typography/Text";
 import moment from "moment/moment";
 import { darken } from "polished";
 import styled, { css } from "styled-components";
+import { findColor } from "../../../utils";
 
 export const ContactInList = ({
   contacts,
   isMobile,
+  clients,
   onSetContact,
   onOpenDrawerContact,
   onNavigateWithBlankTo,
@@ -92,7 +93,7 @@ export const ContactInList = ({
                     onSetContact(contact);
                     onOpenDrawerContact();
                   }}
-                  clientColor={contact.color}
+                  clientColors={findColor(contact?.clientId, clients)}
                 >
                   {contact?.firstName && toUpper(contact.firstName.charAt(0))}
                 </ContactPicture>
@@ -155,7 +156,10 @@ export const ContactInList = ({
                   <div className="item">
                     <Text className="item-text">Host name: </Text>
                     <Text strong>
-                      <TagHostname contact={contact} />
+                      <TagHostname
+                        hostname={contact.hostname}
+                        clientColors={findColor(contact?.clientId, clients)}
+                      />
                     </Text>
                   </div>
                 </DescriptionWrapper>
@@ -169,13 +173,13 @@ export const ContactInList = ({
 };
 
 const ContactPicture = styled.div`
-  ${({ clientColor = "#c4c4c4" }) => css`
+  ${({ clientColors }) => css`
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
-    border: 2px solid ${darken(0.08, clientColor)};
-    color: ${({ clientColor }) => clientColor || "#fff"};
-    background: ${({ clientColor }) => clientColor || "#c4c4c4"};
+    border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+    color: ${({ clientColors }) => clientColors?.color || "#fff"};
+    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
     display: flex;
     align-items: center;
     justify-content: center;

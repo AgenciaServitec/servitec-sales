@@ -103,7 +103,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     hostname: yup.string().required(),
     countryCode: yup.string(),
     phoneNumber: yup.number(),
-    color: yup.string().required(),
+    bgColor: yup.string().required(),
+    textColor: yup.string().required(),
   });
 
   const {
@@ -130,7 +131,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       hostname: client?.hostname || "",
       countryCode: client?.phone?.countryCode || "+51",
       phoneNumber: client?.phone?.number || "",
-      color: client?.color || "",
+      bgColor: client?.bgColor || "",
+      textColor: client?.textColor || "",
     });
   };
 
@@ -143,97 +145,98 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       </Col>
       <Col span={24}>
         <Form onSubmit={handleSubmit(submitSaveClient)}>
-          <Col span={24}>
-            <Controller
-              name="name"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Nombre"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              name="logo"
-              control={control}
-              defaultValue={null}
-              render={({ field: { onChange, value, name } }) => (
-                <Upload
-                  label="Logo cliente (300x90)"
-                  accept="image/*"
-                  name={name}
-                  value={value}
-                  filePath={`clients/${client.id}`}
-                  resize="300x90"
-                  buttonText="Subir imagen"
-                  error={error(name)}
-                  required={required(name)}
-                  onChange={(file) => onChange(file)}
-                  onUploading={setUploadingImage}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              name="receptorEmail"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Email del receptor"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              name="receptorEmailsCopy"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Copia email receptores, separardos por comas (,)"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
-          <Col span={24}>
-            <Controller
-              name="hostname"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  label="Client hostname"
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
           <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Nombre"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="logo"
+                control={control}
+                defaultValue={null}
+                render={({ field: { onChange, value, name } }) => (
+                  <Upload
+                    label="Logo cliente (300x90)"
+                    accept="image/*"
+                    name={name}
+                    value={value}
+                    filePath={`clients/${client.id}`}
+                    resize="300x90"
+                    buttonText="Subir imagen"
+                    error={error(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="receptorEmail"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Email del receptor"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="receptorEmailsCopy"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Copia email receptores, separardos por comas (,)"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="hostname"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Client hostname"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+
             <Col xs={24} sm={6} md={6}>
               <Controller
                 name="countryCode"
@@ -271,26 +274,46 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
+
+            <Col xs={24} sm={12}>
+              <Controller
+                name="bgColor"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    type="color"
+                    label="Color de cliente"
+                    animation={false}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col xs={24} sm={12}>
+              <Controller
+                name="textColor"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    type="color"
+                    label="Color de textos"
+                    animation={false}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
           </Row>
-          <Col span={24}>
-            <Controller
-              name="color"
-              control={control}
-              defaultValue=""
-              render={({ field: { onChange, value, name } }) => (
-                <Input
-                  type="color"
-                  label="Color de cliente"
-                  animation={false}
-                  name={name}
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                />
-              )}
-            />
-          </Col>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
               <Button

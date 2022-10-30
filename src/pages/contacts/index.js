@@ -145,6 +145,7 @@ export const Contacts = () => {
                       <ContactInBubbles
                         contacts={viewContacts()}
                         lastContact={lastContact}
+                        clients={clients}
                         onOpenDrawerContact={onOpenDrawerContact}
                         onSetContact={setContact}
                       />
@@ -165,6 +166,7 @@ export const Contacts = () => {
                   <ContactInList
                     contacts={viewContacts()}
                     isMobile={isMobile}
+                    clients={clients}
                     onSetContact={setContact}
                     onOpenDrawerContact={onOpenDrawerContact}
                     onNavigateWithBlankTo={navigateWithBlankTo}
@@ -178,6 +180,7 @@ export const Contacts = () => {
       </Row>
       <DrawerUserInformation
         contact={contact}
+        clients={clients}
         onCloseDrawerContact={onCloseDrawerContact}
         isVisibleDrawerRight={isVisibleDrawerContact}
         onNavigateWithBlankTo={navigateWithBlankTo}
