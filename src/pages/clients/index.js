@@ -19,6 +19,7 @@ import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
 import { Link } from "react-router-dom";
 import { firestore } from "../../firebase";
+import { findColor } from "../../utils";
 
 const { Title, Text } = Typography;
 
@@ -131,8 +132,8 @@ const Clients = ({
                     <div className="item">
                       <Text className="item-text">Hostname: </Text>
                       <TagHostname
-                        color={client.color}
                         hostname={client.hostname}
+                        clientColors={findColor(client?.id, clients)}
                       />
                     </div>
                     <div className="item">

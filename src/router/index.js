@@ -12,6 +12,7 @@ import {
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
+import { Scripts } from "../pages/scripts";
 
 export const Router = () => (
   <Routes>
@@ -77,6 +78,15 @@ export const Router = () => (
       element={
         <BaseLayout>
           <Page403 />
+        </BaseLayout>
+      }
+    />
+    <Route
+      exact
+      path="/scripts"
+      element={
+        <BaseLayout>
+          <Scripts />
         </BaseLayout>
       }
     />
