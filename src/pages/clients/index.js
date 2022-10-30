@@ -129,12 +129,6 @@ const Clients = ({
                       <Text strong>{client.receptorEmail}</Text>
                     </div>
                     <div className="item">
-                      <Text className="item-text">
-                        Emails copy receptores:{" "}
-                      </Text>
-                      <Text strong>{client.receptorEmailsCopy}</Text>
-                    </div>
-                    <div className="item">
                       <Text className="item-text">Hostname: </Text>
                       <TagHostname
                         color={client.color}
