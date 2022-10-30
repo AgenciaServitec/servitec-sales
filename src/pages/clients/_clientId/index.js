@@ -73,6 +73,7 @@ export const ClientIntegration = () => {
       name: formData.name.toLowerCase(),
       receptorEmail: formData.receptorEmail.toLowerCase(),
       receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
+      hostname: formData.hostname.toLowerCase(),
       phone: {
         number: formData.phoneNumber,
         countryCode: formData.countryCode,
@@ -99,6 +100,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     logo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
+    hostname: yup.string().required(),
     countryCode: yup.string(),
     phoneNumber: yup.number(),
     color: yup.string().required(),
@@ -125,6 +127,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       logo: client?.logo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
+      hostname: client?.hostname || "",
       countryCode: client?.countryCode || "+51",
       phoneNumber: client?.phoneNumber || "",
       color: client?.color || "",
@@ -213,34 +216,14 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
               )}
             />
           </Col>
-          <Col xs={24} sm={6} md={6}>
+          <Col span={24}>
             <Controller
-              name="countryCode"
+              name="hostname"
               control={control}
-              defaultValue="+51"
+              defaultValue=""
               render={({ field: { onChange, value, name } }) => (
-                <Select
-                  label="Código"
-                  value={value}
-                  onChange={onChange}
-                  error={error(name)}
-                  required={required(name)}
-                  options={phoneCodes.map((phoneCode) => ({
-                    code: phoneCode.code,
-                    value: phoneCode.dial_code,
-                    label: `${phoneCode.name} (${phoneCode.dial_code})`,
-                  }))}
-                />
-              )}
-            />
-          </Col>
-          <Col xs={24} sm={18} md={18}>
-            <Controller
-              name="phoneNumber"
-              control={control}
-              render={({ field: { onChange, value, name } }) => (
-                <InputNumber
-                  label="Ingrese teléfono"
+                <Input
+                  label="Client hostname"
                   name={name}
                   value={value}
                   onChange={onChange}
@@ -250,6 +233,45 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
               )}
             />
           </Col>
+          <Row gutter={[16, 16]}>
+            <Col xs={24} sm={6} md={6}>
+              <Controller
+                name="countryCode"
+                defaultValue="+51"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Código"
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    options={phoneCodes.map((phoneCode) => ({
+                      code: phoneCode.code,
+                      label: `${phoneCode.name} (${phoneCode.dial_code})`,
+                      value: phoneCode.dial_code,
+                    }))}
+                  />
+                )}
+              />
+            </Col>
+            <Col xs={24} sm={18} md={18}>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <InputNumber
+                    label="Ingrese teléfono"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+          </Row>
           <Col span={24}>
             <Controller
               name="color"
