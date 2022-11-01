@@ -1,5 +1,4 @@
 export * from "./utils";
-/*export * from "./logger";*/
 export * from "./currencyFormat";
 export * from "./encryption";
 export * from "./timeFormat";
