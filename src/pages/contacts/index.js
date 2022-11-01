@@ -30,7 +30,7 @@ export const Contacts = () => {
   const [play] = useSound(ContactSound);
 
   const [status, setStatus] = useQueryString("status", "pending");
-  const [clientCode, setClientCode] = useQueryString("clientCode", "all");
+  const [clientId, setClientId] = useQueryString("clientId", "all");
 
   const [contact, setContact] = useState(null);
   const [searchDataForm, setSearchDataForm] = useState([]);
@@ -55,7 +55,7 @@ export const Contacts = () => {
     const result = contacts
       .filter((contact) => contact.status === status)
       .filter((contact) =>
-        clientCode === "all" ? true : contact.clientCode === clientCode
+        clientId === "all" ? true : contact.clientId === clientId
       )
       .filter((contact) =>
         searchDataForm.length >= 1
@@ -83,9 +83,9 @@ export const Contacts = () => {
         <Col span={24}>
           <FiltersContact
             onSetStatus={setStatus}
-            onSetClientCode={setClientCode}
+            onSetClientId={setClientId}
             status={status}
-            clientCode={clientCode}
+            clientId={clientId}
             clients={clients}
             authUser={authUser}
           />

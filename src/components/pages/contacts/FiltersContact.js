@@ -6,15 +6,15 @@ import { includes, orderBy } from "lodash";
 
 export const FiltersContact = ({
   onSetStatus,
-  onSetClientCode,
+  onSetClientId,
   status,
-  clientCode,
+  clientId,
   clients,
   authUser,
 }) => {
   const handleStatusChange = (e) => onSetStatus(e.target.value);
 
-  const handleClientCodeChange = (e) => onSetClientCode(e.target.value);
+  const handleClientCodeChange = (e) => onSetClientId(e.target.value);
 
   const viewClients = orderBy(
     clients.filter((client) => includes(authUser?.clientsIds, client.id)),
@@ -26,7 +26,7 @@ export const FiltersContact = ({
     <Row gutter={[16, 0]}>
       <Col>
         <Form.Item label="Código cliente">
-          <Radio.Group value={clientCode} onChange={handleClientCodeChange}>
+          <Radio.Group value={clientId} onChange={handleClientCodeChange}>
             <Radio.Button value="all">Todos</Radio.Button>
             {viewClients.map((client, index) => (
               <Radio.Button key={index} value={client.id}>
