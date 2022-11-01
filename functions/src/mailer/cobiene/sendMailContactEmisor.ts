@@ -7,9 +7,7 @@ interface Mail {
 }
 
 export const sendMailContactEmisor = async (
-  contact: ContactCobiene,
-  to?: string,
-  bcc?: string
+  contact: ContactCobiene
 ): Promise<void> =>
   await sendMail({
     to: contact.email,

@@ -10,9 +10,7 @@ interface Mail {
 const { mailer } = environmentConfig;
 
 export const sendMailContactReceptor = async (
-  contact: ContactServitec,
-  to?: string,
-  bcc?: string
+  contact: ContactServitec
 ): Promise<void> =>
   await sendMail({
     to: mailer.servitec.contact.to,

@@ -10,9 +10,7 @@ interface Mail {
 const { mailer } = environmentConfig;
 
 export const sendMailContactReceptor = async (
-  contact: ContactFacilFactura,
-  to?: string,
-  bcc?: string
+  contact: ContactFacilFactura
 ): Promise<void> =>
   await sendMail({
     to: mailer.facilFactura.contact.to,

@@ -1,8 +1,7 @@
 import { template } from "./templates";
 import { html, sendMail } from "../sendMail";
-import { assign } from "lodash";
+import { assign, capitalize } from "lodash";
 import { environmentConfig } from "../../config";
-import { capitalize } from "lodash";
 
 interface Mail {
   contact: ContactMarkoCreativos;
@@ -11,9 +10,7 @@ interface Mail {
 const { mailer } = environmentConfig;
 
 export const sendMailContactReceptor = async (
-  contact: ContactMarkoCreativos,
-  to?: string,
-  bcc?: string
+  contact: ContactMarkoCreativos
 ): Promise<void> =>
   await sendMail({
     to: mailer.markoCreativos.contact.to,

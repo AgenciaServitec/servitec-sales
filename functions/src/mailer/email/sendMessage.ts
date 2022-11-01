@@ -16,7 +16,6 @@ interface Props {
 export const sendEmailMessage = async ({
   emailMessage,
   to,
-  bcc,
   subject = "Mensaje",
 }: Props): Promise<void> =>
   await sendMail({
