@@ -81,7 +81,7 @@ export const Router = () => (
         </BaseLayout>
       }
     />
-    <Route
+    {/*    <Route
       exact
       path="/scripts"
       element={
@@ -89,7 +89,7 @@ export const Router = () => (
           <Scripts />
         </BaseLayout>
       }
-    />
+    />*/}
     <Route
       exact
       path="*"
