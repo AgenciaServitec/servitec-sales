@@ -1,4 +1,5 @@
 import * as admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 
 export type FirestoreQuery =
   admin.firestore.Query<admin.firestore.DocumentData>;
@@ -10,8 +11,7 @@ export type FirestoreDocumentReference =
 
 export type FirestoreTimestamp = admin.firestore.Timestamp;
 
-export const now = (): admin.firestore.Timestamp =>
-  admin.firestore.Timestamp.now();
+export const now = (): admin.firestore.Timestamp => Timestamp.now();
 
 interface ToTimestamp {
   seconds: number;

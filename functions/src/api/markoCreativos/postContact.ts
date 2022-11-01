@@ -1,4 +1,3 @@
-import { logger } from "../../utils";
 import { NextFunction, Request, Response } from "express";
 import {
   sendMailContactEmisor,
@@ -20,7 +19,7 @@ export const PostContact = async (
   try {
     const { body: formData } = req;
 
-    logger.log("Contact markoCreativos:Initialize", {
+    console.log("Contact markoCreativos:Initialize", {
       body: req.body,
     });
 
@@ -35,7 +34,7 @@ export const PostContact = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     next(error);
   }
 };

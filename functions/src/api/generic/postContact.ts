@@ -1,4 +1,3 @@
-import { logger } from "../../utils";
 import { NextFunction, Request, Response } from "express";
 import { fetchCollection, firestore, now } from "../../_firebase";
 import { assign, capitalize, isEmpty, merge, toLower } from "lodash";
@@ -20,7 +19,7 @@ export const PostContact = async (
   try {
     const { body: formData } = req;
 
-    logger.log("「Contact generic Initialize」", {
+    console.log("「Contact generic Initialize」", {
       body: req.body,
     });
 
@@ -61,7 +60,7 @@ export const PostContact = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     next(error);
   }
 };

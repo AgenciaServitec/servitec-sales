@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { logger } from "../../utils";
 import { sendEmailMessage } from "../../mailer/email";
 import { defaultTo, toLower } from "lodash";
 import { environmentConfig, isProduction } from "../../config";
@@ -28,7 +27,7 @@ export const PostSendMessage = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     next(error);
   }
 };

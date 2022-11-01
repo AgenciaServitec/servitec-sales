@@ -1,5 +1,4 @@
 import { ErrorRequestHandler } from "express";
-import { logger } from "../../utils";
 import { isCreateApiError } from "../_utils";
 
 export const errorHandler: ErrorRequestHandler = (
@@ -11,7 +10,7 @@ export const errorHandler: ErrorRequestHandler = (
 ): void => {
   const { body, query, params, headers, path } = req;
 
-  logger.error("Error Handler", req.originalUrl, {
+  console.error("Error Handler", req.originalUrl, {
     body,
     query,
     params,
@@ -19,7 +18,7 @@ export const errorHandler: ErrorRequestHandler = (
     path,
   });
 
-  logger.error(err);
+  console.error(err);
 
   if (isCreateApiError(err)) {
     res.status(412).send(err.apiError).end();

@@ -18,7 +18,6 @@ export const sendMailContactEmisor = async ({
   contact,
   client,
   to,
-  bcc,
   subject = "Gracias por contáctarnos",
 }: Props): Promise<void> =>
   await sendMail({

@@ -1,6 +1,6 @@
-import { logger, uniq } from "../../utils";
 import moment from "moment";
 import { FirestoreTimestamp } from "../../_firebase";
+import { uniq } from "../../utils";
 
 interface Props extends ContactCommon {
   contactId: string;
@@ -23,7 +23,7 @@ export const searchData = (contact: Props): string[] => {
     .filter((string) => string)
     .map((string) => string.toString());
 
-  logger.log("[search data]", strings);
+  console.log("[search data]", strings);
 
   return uniq(strings);
 };

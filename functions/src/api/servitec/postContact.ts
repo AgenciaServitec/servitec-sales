@@ -1,4 +1,3 @@
-import { logger } from "../../utils";
 import { NextFunction, Request, Response } from "express";
 import {
   sendMailContactEmisor,
@@ -17,7 +16,7 @@ export const PostContact = async (
   try {
     const { body: contact } = req;
 
-    logger.log("「Contact servitec」Initialize", {
+    console.log("「Contact servitec」Initialize", {
       body: req.body,
     });
 
@@ -28,7 +27,7 @@ export const PostContact = async (
 
     res.sendStatus(200).end();
   } catch (error) {
-    logger.error(error);
+    console.error(error);
     next(error);
   }
 };
