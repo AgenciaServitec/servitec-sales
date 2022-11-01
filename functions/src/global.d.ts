@@ -50,15 +50,52 @@ interface AvcLlantas extends ContactCommon {
   nationality?: string;
 }
 
-interface GenericContact extends ContactCommon {
-  issue: string;
-  nationality?: string;
-  urlCompanyImage: string;
-  receptorEmail: string;
-  receptorEmailsCopy: string;
+interface GenericContact extends DefaultFirestoreProps {
+  clientId: string;
+  createAt: FirebaseFirestore.Timestamp;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: Phone;
+  searchData: string[];
+  hostname: string;
+  readonly id: string;
+  message?: string;
+  issue?: string;
+  status: string;
+  termsAndConditions: boolean;
 }
 
 interface EmailMessage {
   email: string;
   message: string;
+}
+
+interface Image {
+  name: string;
+  status?: string;
+  thumbUrl: string;
+  uid: string;
+  url: string;
+}
+
+interface Phone {
+  countryCode: string;
+  number: number;
+}
+
+interface Client {
+  bgColor: string;
+  createAt: FirebaseFirestore.Timestamp;
+  hostname: string;
+  readonly id: string;
+  isDeleted: boolean;
+  logo: Image;
+  name: string;
+  phone: Phone;
+  receptorEmail: string;
+  receptorEmailsCopy: string;
+  textColor: string;
+  updateAt: FirebaseFirestore.Timestamp;
+  updateBy: string;
 }

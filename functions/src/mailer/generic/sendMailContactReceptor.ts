@@ -8,6 +8,7 @@ interface Mail {
 
 interface Props {
   contact: GenericContact;
+  client: Client;
   to: string;
   bcc: string;
   subject: string;
@@ -15,6 +16,7 @@ interface Props {
 
 export const sendMailContactReceptor = async ({
   contact,
+  client,
   to,
   bcc,
   subject = "Email contacto",
@@ -23,10 +25,10 @@ export const sendMailContactReceptor = async ({
     to: to,
     bcc: bcc,
     subject: subject,
-    html: html(template.contactEmailReceptor, mapMail(contact)),
+    html: html(template.contactEmailReceptor, mapMail(contact, client)),
   });
 
-const mapMail = (contact: GenericContact): Mail => ({
+const mapMail = (contact: GenericContact, client: Client): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
     lastName: !isEmpty(contact.lastName) ? capitalize(contact.lastName) : null,
@@ -39,7 +41,7 @@ const mapMail = (contact: GenericContact): Mail => ({
       message: contact.message,
     }),
     urlCompanyImage:
-      contact.urlCompanyImage ||
+      client?.logo?.thumbUrl ||
       "https://firebasestorage.googleapis.com/v0/b/sendingemails-348505.appspot.com/o/resources%2Fimage-not-found.jpg?alt=media&token=35125bc7-a978-4ee0-8d01-d820b79b24b6",
   }),
 });

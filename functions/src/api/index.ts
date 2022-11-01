@@ -23,14 +23,11 @@ app.get("/", (req, res) => res.status(200).send("Welcome!").end());
 app.post(
   "/generic/contact",
   [
-    body("contact.clientCode").exists(),
-    body("contact.receptorEmail").exists(),
     body("contact.firstName").exists(),
     body("contact.lastName").exists(),
     body("contact.phone").exists(),
     body("contact.email").exists(),
     body("contact.hostname").exists(),
-    body("contact.urlCompanyImage").exists(),
   ],
   validateRequest,
   PostContactGeneric
