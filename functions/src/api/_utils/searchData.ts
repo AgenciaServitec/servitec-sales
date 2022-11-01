@@ -28,3 +28,22 @@ export const searchData = (contact: Props): string[] => {
 
   return uniq(strings);
 };
+
+export const searchDataGeneric = (
+  contact: Omit<GenericContact, "searchData">
+): string[] => {
+  return [
+    contact.id,
+    contact.clientId,
+    ...contact.firstName.split(" "),
+    ...contact?.lastName.split(" "),
+    `${contact?.phone?.countryCode}${contact?.phone?.number}`.trim(),
+    contact?.phone?.number,
+    contact.email,
+    contact?.hostname || "",
+    contact.status,
+    moment(contact.createAt).format("DD/MM/YYYY"),
+  ]
+    .filter((string) => string)
+    .map((string) => string.toString());
+};
