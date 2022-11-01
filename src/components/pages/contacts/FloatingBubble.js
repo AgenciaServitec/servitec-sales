@@ -95,7 +95,9 @@ const Container = styled.div`
 `;
 
 const ItemLogo = styled.div`
-  width: 8em;
+  max-width: 8em;
+  width: auto;
+  max-height: 3em;
   height: auto;
   margin-bottom: 0.3em;
   background: ${({ bgColor }) => darken(0.07, bgColor)};
@@ -103,7 +105,7 @@ const ItemLogo = styled.div`
   border-radius: 7em;
   img {
     width: 90%;
-    height: auto;
+    height: 100%;
     object-fit: contain;
   }
 `;
