@@ -9,6 +9,19 @@
 //   message?: string;
 // }
 
+type RoleCode = "admin" | "user";
+
+interface User extends DefaultFirestoreProps {
+  readonly id: string;
+  clientsIds: string[];
+  email: string;
+  firstName: string;
+  updateBy: string;
+  lastName: string;
+  password: string;
+  roleCode: RoleCode;
+}
+
 interface Phone {
   number: number;
   countryCode: string;
