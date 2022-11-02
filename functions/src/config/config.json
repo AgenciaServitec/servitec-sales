@@ -18,48 +18,6 @@
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
         }
-      },
-      "servitec": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "markoCreativos": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "gamontLlantas": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "publicidadGoogle": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "cobiene": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "facilFactura": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "avcLlantas": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
       }
     }
   },
@@ -69,48 +27,6 @@
     },
     "mailer": {
       "generic": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "servitec": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "markoCreativos": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
-          "to": "markocreativo@gmail.com"
-        }
-      },
-      "gamontLlantas": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
-          "to": "ventas@gamontllantas.com"
-        }
-      },
-      "publicidadGoogle": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
-          "to": "contactos@servitec-peru.com"
-        }
-      },
-      "cobiene": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
-          "to": "contactos@servitec-peru.com"
-        }
-      },
-      "facilFactura": {
-        "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
-        }
-      },
-      "avcLlantas": {
         "contact": {
           "bcc": "beto1perk@gmail.com",
           "to": "nmoriano26@gmail.com"
