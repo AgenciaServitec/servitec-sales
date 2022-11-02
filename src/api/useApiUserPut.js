@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import UrlAssembler from "url-assembler";
 import { useApi } from "./useApi";
 
 // interface Return {
@@ -13,10 +12,7 @@ export const useApiUserPut = () => {
 
   const putUser = useCallback(
     async (user) => {
-      const url = new UrlAssembler()
-        .template("/:userId")
-        .param({ userId: user.id })
-        .toString();
+      const url = `/${user.id}`;
 
       return put(url, user);
     },

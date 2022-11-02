@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   InputNumber,
+  InputPassword,
   notification,
   Select,
 } from "../../../components/ui";
@@ -45,7 +46,11 @@ export const UserIntegration = () => {
 
   const onSubmitSaveUser = async (formData) => {
     try {
+      console.log("formData->", formData);
+
       const _user = mapUser(formData);
+
+      console.log("_user->", _user);
 
       await saveUser(_user);
 
@@ -66,11 +71,13 @@ export const UserIntegration = () => {
     if (!responseStatus) return notification({ type: "error" });
   };
 
-  const mapUser = (user, formData) =>
+  const mapUser = (formData) =>
     assign({}, formData, {
       id: user.id,
       firstName: formData.firstName.toLowerCase(),
       lastName: formData.lastName.toLowerCase(),
+      email: formData.email.toLowerCase(),
+      password: formData.password,
       phone: {
         number: formData.phoneNumber,
         countryCode: formData.countryCode,
@@ -96,6 +103,8 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
   const schema = yup.object({
     firstName: yup.string().required(),
     lastName: yup.string().required(),
+    email: yup.string().email().required(),
+    password: yup.string().required(),
     countryCode: yup.string().required(),
     phoneNumber: yup.number().required(),
   });
@@ -119,6 +128,8 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     reset({
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      email: user?.email || "",
+      password: user?.password || "",
       countryCode: user?.phone?.countryCode || "+51",
       phoneNumber: user?.phone?.number || "",
       profileImage: user?.profileImage || null,
@@ -160,6 +171,40 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellidos"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Email"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="password"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <InputPassword
+                    label="Contraseña"
                     name={name}
                     value={value}
                     onChange={onChange}
