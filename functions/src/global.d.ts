@@ -1,13 +1,13 @@
-interface ContactCommon {
-  clientCode: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: Phone;
-  hostname: string;
-  status: string;
-  message?: string;
-}
+// interface ContactCommon {
+//   clientCode: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: Phone;
+//   hostname: string;
+//   status: string;
+//   message?: string;
+// }
 
 interface Phone {
   number: number;
