@@ -9,7 +9,7 @@
 //   message?: string;
 // }
 
-type RoleCode = "admin" | "user";
+type RoleCode = "super_admin" | "client_admin";
 
 interface User extends DefaultFirestoreProps {
   readonly id: string;

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "multipleAgencies": true,
+    "roleName": "Super admin",
+    "roleCode": "super_admin",
+    "redirectTo": "/"
+  },
+  {
+    "id": "2",
+    "multipleAgencies": true,
+    "roleName": "Client admin",
+    "roleCode": "client_admin",
+    "redirectTo": "/"
+  }
+]

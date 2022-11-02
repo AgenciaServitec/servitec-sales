@@ -19,8 +19,8 @@ import { useFormUtils } from "../../../hooks";
 import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
-import { assign } from "lodash";
-import { phoneCodes } from "../../../data-list";
+import { assign, capitalize } from "lodash";
+import { phoneCodes, roles } from "../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../api";
 
 export const UserIntegration = () => {
@@ -29,7 +29,7 @@ export const UserIntegration = () => {
   const { postUser, postUserResponse, postUserLoading } = useApiUserPost();
   const { putUser, putUserResponse, putUserLoading } = useApiUserPut();
 
-  const { users } = useGlobalData();
+  const { users, clients } = useGlobalData();
 
   const [user, setUser] = useState({});
 
@@ -46,11 +46,7 @@ export const UserIntegration = () => {
 
   const onSubmitSaveUser = async (formData) => {
     try {
-      console.log("formData->", formData);
-
       const _user = mapUser(formData);
-
-      console.log("_user->", _user);
 
       await saveUser(_user);
 
@@ -74,6 +70,8 @@ export const UserIntegration = () => {
   const mapUser = (formData) =>
     assign({}, formData, {
       id: user.id,
+      clientsIds: formData.clientsIds,
+      roleCode: formData.roleCode,
       firstName: formData.firstName.toLowerCase(),
       lastName: formData.lastName.toLowerCase(),
       email: formData.email.toLowerCase(),
@@ -90,6 +88,7 @@ export const UserIntegration = () => {
   return (
     <User
       user={user}
+      clients={clients}
       onSubmitSaveUser={onSubmitSaveUser}
       onGoBack={onGoBack}
       isSavingUser={postUserLoading || putUserLoading}
@@ -97,10 +96,12 @@ export const UserIntegration = () => {
   );
 };
 
-const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
+const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const schema = yup.object({
+    clientsIds: yup.array().min(1).required(),
+    roleCode: yup.string().required(),
     firstName: yup.string().required(),
     lastName: yup.string().required(),
     email: yup.string().email().required(),
@@ -126,6 +127,8 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
 
   const resetForm = () => {
     reset({
+      clientsIds: user?.clientsIds || [],
+      roleCode: user?.roleCode || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
       email: user?.email || "",
@@ -146,6 +149,47 @@ const User = ({ user, onSubmitSaveUser, onGoBack, isSavingUser }) => {
       <Col span={24}>
         <Form onSubmit={handleSubmit(submitSaveUser)}>
           <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Controller
+                name="clientsIds"
+                control={control}
+                defaultValue={[]}
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Clients (API)"
+                    mode="multiple"
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    options={clients.map((client) => ({
+                      label: capitalize(client.name),
+                      value: client.id,
+                    }))}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="roleCode"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Rol"
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    options={roles.map((role) => ({
+                      label: capitalize(role.roleName),
+                      value: role.roleCode,
+                    }))}
+                  />
+                )}
+              />
+            </Col>
             <Col span={24}>
               <Controller
                 name="firstName"
