@@ -57,6 +57,8 @@ interface GenericContact extends DefaultFirestoreProps {
   lastName: string;
   email: string;
   phone: Phone;
+  service?: string;
+  contactPreference?: string;
   searchData: string[];
   hostname: string;
   readonly id: string;

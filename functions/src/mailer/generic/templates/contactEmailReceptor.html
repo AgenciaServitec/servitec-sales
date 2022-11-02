@@ -498,6 +498,36 @@
                                         <div>{{contact.phone.number}}</div>
                                       </div>
 
+                                      {{#contact.service}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Servicio:
+                                        </div>
+                                        <div>{{contact.service}}</div>
+                                      </div>
+                                      {{/contact.service}}
+                                      {{#contact.contactPreference}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Preferencia de contácto:
+                                        </div>
+                                        <div>{{contact.contactPreference}}</div>
+                                      </div>
+                                      {{/contact.contactPreference}}
                                       {{#contact.issue}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"

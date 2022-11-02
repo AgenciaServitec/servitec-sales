@@ -98,8 +98,12 @@ const mapContact = (
     hostname: client.hostname,
     id: contactId,
     ...(contact?.issue && { issue: contact?.issue }),
-    message: contact.message,
+    ...(contact?.message && { message: contact.message }),
     phone: contact.phone,
+    ...(contact?.service && { service: contact.service }),
+    ...(contact?.contactPreference && {
+      contactPreference: contact.contactPreference,
+    }),
     status: "pending",
     termsAndConditions: contact?.termsAndConditions || true,
     createAt: now(),
