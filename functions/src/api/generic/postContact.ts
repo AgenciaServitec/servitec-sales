@@ -97,7 +97,7 @@ const mapContact = (
     email: contact.email.toLowerCase(),
     hostname: client.hostname,
     id: contactId,
-    issue: contact.issue,
+    ...(contact?.issue && { issue: contact?.issue }),
     message: contact.message,
     phone: contact.phone,
     status: "pending",
