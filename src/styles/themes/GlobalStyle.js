@@ -32,8 +32,10 @@ const global = css`
   .link-color {
     color: #00a1f6;
     cursor: pointer;
+    display: inline-block;
+
     &:hover {
-      opacity: 1;
+      color: #4994fd;
     }
   }
 `;

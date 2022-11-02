@@ -99,7 +99,7 @@ export const ContactInList = ({
                 </ContactPicture>
               }
               title={
-                <h2
+                <h3
                   className="link-color"
                   onClick={() => {
                     onSetContact(contact);
@@ -109,7 +109,7 @@ export const ContactInList = ({
                   {startCase(
                     capitalize(`${contact.firstName} ${contact.lastName}`)
                   )}
-                </h2>
+                </h3>
               }
               description={
                 <DescriptionWrapper>
