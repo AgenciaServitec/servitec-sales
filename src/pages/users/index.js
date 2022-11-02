@@ -11,6 +11,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
 import { useDevice } from "../../hooks";
+import { Link } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -27,7 +28,7 @@ export const Users = () => {
 
   const onAddUser = () => navigateTo("new");
 
-  const onEditUser = (client) => navigateTo(client.id);
+  const onEditUser = (user) => navigateTo(user.id);
 
   const onRemoveUser = async (user) =>
     await firestore
@@ -35,18 +36,18 @@ export const Users = () => {
       .doc(user.id)
       .set({ isDeleted: true }, { merge: true });
 
-  const onConfirmRemoveUser = (client) =>
+  const onConfirmRemoveUser = (user) =>
     modalConfirm({
       content: "El usuario se eliminara",
       onOk: async () => {
-        await onRemoveUser(client);
+        await onRemoveUser(user);
       },
     });
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Button type="primary" disabled={true} onClick={() => onAddUser()}>
+        <Button type="primary" onClick={() => onAddUser()}>
           Agregar usuario
         </Button>
       </Col>
@@ -78,7 +79,11 @@ export const Users = () => {
               ]}
             >
               <List.Item.Meta
-                title={<h3 className="link-color">{user.email}</h3>}
+                title={
+                  <Link to={`/users/${user.id}`}>
+                    <h3 className="link-color">{user.email}</h3>
+                  </Link>
+                }
                 description={
                   <>
                     <div>

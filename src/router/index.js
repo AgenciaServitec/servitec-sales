@@ -8,11 +8,11 @@ import {
   Login,
   Page403,
   Page404,
+  UserIntegration,
   Users,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
-import { Scripts } from "../pages/scripts";
 
 export const Router = () => (
   <Routes>
@@ -68,6 +68,17 @@ export const Router = () => (
         <PrivateRoute>
           <BaseLayout>
             <Users />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="/users/:userId"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <UserIntegration />
           </BaseLayout>
         </PrivateRoute>
       }
