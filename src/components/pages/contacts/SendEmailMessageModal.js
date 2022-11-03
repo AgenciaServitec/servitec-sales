@@ -49,13 +49,16 @@ export const SendEmailMessageModal = ({
     try {
       setSendingEmailMessage(true);
 
-      const response = await fetchSendEmailMessage(formData);
+      const emailMessageData = mapSendEmailMessage(formData);
+
+      const response = await fetchSendEmailMessage(emailMessageData);
 
       if (!response.ok) throw new Error(response.statusText);
 
       notification({ type: "success", title: "Enviado exitosamente" });
 
       setSendingEmailMessage(false);
+      onCLickIsVisibleSendEmailModal(false);
     } catch (e) {
       console.error("ErrorSendingEmailMessage:", e);
       notification({ type: "error" });
@@ -63,8 +66,13 @@ export const SendEmailMessageModal = ({
     }
   };
 
+  const mapSendEmailMessage = (formData) => ({
+    ...formData,
+    clientId: contact.clientId,
+  });
+
   const fetchSendEmailMessage = async (formData) =>
-    await fetch(`${apiUrl}/send-message`, {
+    await fetch(`${apiUrl}/email/send-message`, {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": null,

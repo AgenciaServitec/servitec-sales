@@ -48,6 +48,7 @@ app.post(
     body("contact.phone").exists(),
     body("contact.email").exists(),
     body("contact.hostname").exists(),
+    body("contact.hostname").exists(),
   ],
   validateRequest,
   PostContactGeneric

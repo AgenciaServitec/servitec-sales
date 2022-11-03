@@ -4,7 +4,7 @@ import { html, sendMail } from "../sendMail";
 interface Mail {
   email: string;
   message: string;
-  client: Client;
+  urlCompanyImage: string;
 }
 
 interface Props {
@@ -30,5 +30,5 @@ export const sendEmailMessage = async ({
 const mapMail = (emailMessage: EmailMessage, client: Client): Mail => ({
   email: emailMessage.email,
   message: emailMessage.message,
-  client: client,
+  urlCompanyImage: client.logo.thumbUrl,
 });
