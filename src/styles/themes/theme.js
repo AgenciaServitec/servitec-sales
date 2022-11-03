@@ -38,10 +38,9 @@ export const theme = {
     xxx_large: "1.8em",
   },
   colors: {
-    primary: "#007aea",
-    secondary: "#0c2a59",
-    tertiary: "#efce23",
-    quaternary: "#FF6C1A",
+    primary: "#00a1f6",
+    secondary: "#4994fd",
+    tertiary: "#0c2a59",
 
     success: "#56d66b",
     info: "#0795FF",

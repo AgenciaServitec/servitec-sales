@@ -16,7 +16,7 @@ import {
 } from "../../../components/ui";
 import Title from "antd/lib/typography/Title";
 import Text from "antd/lib/typography/Text";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faArrowCircleLeft,
@@ -25,10 +25,15 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import moment from "moment";
 import { orderBy } from "lodash";
+import { findColor } from "../../../utils";
+import { useGlobalData } from "../../../providers";
+import { NoFound } from "../../../images";
+import { darken } from "polished";
 
 export const Contact = () => {
   const { contactId } = useParams();
   const navigate = useNavigate();
+  const { clients } = useGlobalData();
 
   const [contact, loadingContact, errorContact] = useDocumentDataOnce(
     firestore.collection("contacts").doc(contactId)
@@ -47,6 +52,9 @@ export const Contact = () => {
   const onGoBack = () => navigate(-1);
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
+
+  const findClient = (clientId) =>
+    clients.find((client) => client.id === clientId);
 
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
 
@@ -72,7 +80,9 @@ export const Contact = () => {
         <Col xs={24} sm={24} md={8} />
         <Col xs={24} sm={24} md={8} align="end">
           <Title level={5}>{contact.email.toLowerCase()}</Title>
-          <Text>{contact.phoneNumber}</Text>
+          <Text>
+            {`${contact?.phone.countryCode} ${contact?.phone.number}` || ""}
+          </Text>
           <WrapperSocials>
             <ul>
               <li>
@@ -80,7 +90,10 @@ export const Contact = () => {
                   key={contact.id}
                   onClick={() =>
                     navigateWithBlankTo(
-                      `https://wa.me/+51${contact.phoneNumber}`
+                      `https://wa.me/${
+                        `${contact?.phone.countryCode}${contact?.phone.number}` ||
+                        ""
+                      }`
                     )
                   }
                   size={50}
@@ -103,7 +116,12 @@ export const Contact = () => {
                 <IconAction
                   key={contact.id}
                   onClick={() =>
-                    navigateWithBlankTo(`tel:${contact.phoneNumber}`)
+                    navigateWithBlankTo(
+                      `tel:${
+                        `${contact?.phone.countryCode}${contact?.phone.number}` ||
+                        ""
+                      }`
+                    )
                   }
                   size={45}
                   style={{ color: "#0583ea" }}
@@ -119,7 +137,14 @@ export const Contact = () => {
         <Col span={24}>
           <Timeline mode="alternate">
             {viewContacts().map((contact, index) => (
-              <Timeline.Item key={index} color={index % 2 ? "green" : "red"}>
+              <Timeline.Item
+                key={index}
+                dot={
+                  <ItemDot
+                    clientColors={findColor(contact.clientId, clients)}
+                  />
+                }
+              >
                 <WrapperTimeLineItem>
                   <ul>
                     <li>
@@ -131,18 +156,28 @@ export const Contact = () => {
                         </strong>
                       </h5>
                     </li>
+                    {contact?.issue && (
+                      <li>
+                        <h3>{contact.issue || ""}</h3>
+                      </li>
+                    )}
                     <li>
-                      <h3>{contact.issue || "-"}</h3>
+                      <h4>
+                        {`${contact?.phone.countryCode} ${contact?.phone.number}` ||
+                          ""}
+                      </h4>
                     </li>
-                    <li>
-                      <h4>{contact.phoneNumber || "-"}</h4>
-                    </li>
-                    <li>
-                      <p>{contact.message || "-"}</p>
-                    </li>
+                    {contact?.message && (
+                      <li>
+                        <p>{contact.message}</p>
+                      </li>
+                    )}
                     <li>
                       <Text strong>
-                        <TagHostname contact={contact} />
+                        <TagHostname
+                          hostname={contact.hostname}
+                          clientColors={findColor(contact.clientId, clients)}
+                        />
                       </Text>
                     </li>
                   </ul>
@@ -179,4 +214,13 @@ const WrapperTimeLineItem = styled.div`
       }
     }
   }
+`;
+
+const ItemDot = styled.div`
+  ${({ clientColors }) => css`
+    background: ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+    width: 1.1em;
+    height: 1.1em;
+    border-radius: 50%;
+  `}
 `;
