@@ -131,9 +131,11 @@ export const DrawerUserInformation = ({
               }
             />
           </Col>
-          <Col span={24}>
-            <DescriptionItem title="Asunto" content={contact?.issue || ""} />
-          </Col>
+          {contact?.issue && (
+            <Col span={24}>
+              <DescriptionItem title="Asunto" content={contact?.issue || ""} />
+            </Col>
+          )}
           <Col span={24}>
             <DescriptionItem title="Mensaje" content={contact?.message || ""} />
           </Col>
@@ -210,7 +212,7 @@ export const DrawerUserInformation = ({
           </Col>
         </Row>
         <Divider />
-        <Row gutter={[16, 0]}>
+        <Row gutter={[16, 16]}>
           <Col xs={24} sm={12}>
             <Button
               type="primary"
