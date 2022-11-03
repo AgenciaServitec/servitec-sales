@@ -68,20 +68,23 @@ export const UserIntegration = () => {
   };
 
   const mapUser = (formData) =>
-    assign({}, formData, {
-      id: user.id,
-      clientsIds: formData.clientsIds,
-      roleCode: formData.roleCode,
-      firstName: formData.firstName.toLowerCase(),
-      lastName: formData.lastName.toLowerCase(),
-      email: formData.email.toLowerCase(),
-      password: formData.password,
-      phone: {
-        number: formData.phoneNumber,
-        countryCode: formData.countryCode,
-      },
-      profileImage: formData?.profileImage || null,
-    });
+    assign(
+      {},
+      {
+        id: user.id,
+        clientsIds: formData.clientsIds,
+        roleCode: formData.roleCode,
+        firstName: formData.firstName.toLowerCase(),
+        lastName: formData.lastName.toLowerCase(),
+        email: formData.email.toLowerCase(),
+        password: formData.password,
+        phone: {
+          number: formData.phoneNumber,
+          countryCode: formData.countryCode,
+        },
+        ...(formData?.profileImage && { profileImage: formData.profileImage }),
+      }
+    );
 
   const onGoBack = () => navigate(-1);
 

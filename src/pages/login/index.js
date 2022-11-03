@@ -79,7 +79,6 @@ export const Login = () => {
             size="large"
             type="primary"
             loading={loginLoading}
-            disabled={loginLoading}
             htmlType="submit"
           >
             Iniciar sesión
