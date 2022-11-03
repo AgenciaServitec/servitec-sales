@@ -74,12 +74,11 @@ export const SendEmailMessageModal = ({
       body: JSON.stringify(formData),
     });
 
-  const onSubmitConfirmSendEmail = async (formData) => {
+  const onSubmitSendEmail = (formData) =>
     modalConfirm({
       content: "¿Seguro que quieres enviar?",
-      onOK: async () => await onSendEmail(formData),
+      onOk: () => onSendEmail(formData),
     });
-  };
 
   return (
     <Modal
@@ -87,7 +86,7 @@ export const SendEmailMessageModal = ({
       closable={onCLickIsVisibleSendEmailModal}
       onCancel={onCLickIsVisibleSendEmailModal}
     >
-      <Form layout="vertical" onSubmit={handleSubmit(onSubmitConfirmSendEmail)}>
+      <Form layout="vertical" onSubmit={handleSubmit(onSubmitSendEmail)}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Text>Enviar mensaje por email a:</Text>

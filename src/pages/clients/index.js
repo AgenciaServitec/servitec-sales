@@ -39,18 +39,17 @@ export const ClientsIntegration = () => {
 
   const onEditClient = (client) => navigateTo(client.id);
 
-  const onRemoveClient = async (client) =>
+  const onRemoveClient = async (client) => {
     await firestore
       .collection("clients")
       .doc(client.id)
       .set({ isDeleted: true }, { merge: true });
+  };
 
   const onConfirmRemoveClient = (client) =>
     modalConfirm({
       content: "El cliente se eliminara",
-      onOk: () => {
-        onRemoveClient(client);
-      },
+      onOk: () => onRemoveClient(client),
     });
 
   return (
