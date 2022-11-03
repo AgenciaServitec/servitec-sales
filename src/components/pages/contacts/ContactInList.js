@@ -13,6 +13,7 @@ import moment from "moment/moment";
 import { darken } from "polished";
 import styled, { css } from "styled-components";
 import { findColor } from "../../../utils";
+import { NoFound } from "../../../images";
 
 export const ContactInList = ({
   contacts,
@@ -26,6 +27,9 @@ export const ContactInList = ({
   // const onDeleteContact = async (contactId) => {
   //   await firestore.collection("contacts").doc(contactId).delete();
   // };
+
+  const findClient = (clientId) =>
+    clients.find((client) => client.id === clientId);
 
   return (
     <>
@@ -95,7 +99,14 @@ export const ContactInList = ({
                   }}
                   clientColors={findColor(contact?.clientId, clients)}
                 >
-                  {contact?.firstName && toUpper(contact.firstName.charAt(0))}
+                  <div className="item-client-logo">
+                    <img
+                      src={
+                        findClient(contact.clientId)?.logo?.thumbUrl || NoFound
+                      }
+                      alt="client logo"
+                    />
+                  </div>
                 </ContactPicture>
               }
               title={
@@ -178,13 +189,29 @@ const ContactPicture = styled.div`
     height: 6rem;
     border-radius: 50%;
     border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
-    color: ${({ clientColors }) => clientColors?.color || "#fff"};
-    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
+    color: ${clientColors?.color || "#fff"};
+    background: ${clientColors?.bg || "#c4c4c4"};
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 3.5rem;
     cursor: pointer;
+    .item-client-logo {
+      background: ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+      width: 80%;
+      height: auto;
+      margin-bottom: 0.3em;
+      padding: 0.2em 0.4em;
+      border-radius: 7em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 90%;
+        height: 100%;
+        object-fit: contain;
+        margin: auto;
+      }
+    }
   `}
 `;
 
