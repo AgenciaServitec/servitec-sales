@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { sendEmailMessage } from "../../mailer/email";
-import { defaultTo, toLower } from "lodash";
-import { environmentConfig, isProduction } from "../../config";
+import { isEmpty } from "lodash";
+import { fetchDocument, firestore } from "../../_firebase";
 
 interface Body {
   email: string;
   message: string;
+  clientId: string;
 }
 
 export const PostSendMessage = async (
@@ -14,14 +15,24 @@ export const PostSendMessage = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const { mailer } = environmentConfig;
-
     const { body: formData } = req;
+
+    console.log("「Add sendMessage」Initialize", {
+      params: req.params,
+      body: req.body,
+    });
+
+    const client: Client | undefined = await fetchClient(formData.clientId);
+
+    if (!client || isEmpty(client)) {
+      res.status(412).send("client_no_exists").end();
+      return;
+    }
 
     await sendEmailMessage({
       emailMessage: formData,
-      to: emailAddressesToSend(formData.email, mailer.generic.contact.to),
-      bcc: `${toLower(mailer.generic.contact.bcc)},${toLower(formData.email)}`,
+      client,
+      to: formData.email,
       subject: "Mensaje",
     });
 
@@ -32,12 +43,8 @@ export const PostSendMessage = async (
   }
 };
 
-const emailAddressesToSend = (
-  emailAddress: string,
-  emailAddressDefault: string
-): string => {
-  if (isProduction)
-    return defaultTo(toLower(emailAddress), toLower(emailAddressDefault));
-
-  return toLower(emailAddressDefault);
+const fetchClient = async (clientId: string): Promise<Client | undefined> => {
+  return await fetchDocument<Client>(
+    firestore.collection("clients").doc(clientId)
+  );
 };

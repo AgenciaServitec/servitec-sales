@@ -4,10 +4,12 @@ import { html, sendMail } from "../sendMail";
 interface Mail {
   email: string;
   message: string;
+  client: Client;
 }
 
 interface Props {
   emailMessage: EmailMessage;
+  client: Client;
   to: string;
   bcc?: string;
   subject: string;
@@ -15,16 +17,18 @@ interface Props {
 
 export const sendEmailMessage = async ({
   emailMessage,
+  client,
   to,
   subject = "Mensaje",
 }: Props): Promise<void> =>
   await sendMail({
     to: to,
     subject: subject,
-    html: html(template.emailMessage, mapMail(emailMessage)),
+    html: html(template.emailMessage, mapMail(emailMessage, client)),
   });
 
-const mapMail = (emailMessage: EmailMessage): Mail => ({
+const mapMail = (emailMessage: EmailMessage, client: Client): Mail => ({
   email: emailMessage.email,
   message: emailMessage.message,
+  client: client,
 });
