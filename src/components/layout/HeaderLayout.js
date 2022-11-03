@@ -38,6 +38,7 @@ const HeaderContainer = styled(Header)`
   z-index: 1000;
   display: grid;
   grid-template-columns: 1fr auto auto;
+  box-shadow: 0 1px 4px rgba(105, 105, 105, 0.24);
   overflow: hidden;
 
   .trigger {
@@ -56,6 +57,7 @@ const HeaderContainer = styled(Header)`
     h3 {
       margin: 0;
       font-size: 1em;
+
       ${mediaQuery.minTablet} {
         font-size: 1.2em;
       }
@@ -64,12 +66,14 @@ const HeaderContainer = styled(Header)`
 
   .user-avatar {
     padding: 0 1em;
+
     img {
       width: 2.2em;
       height: 2.2em;
       border-radius: 50%;
       margin: auto;
       object-fit: cover;
+
       ${mediaQuery.minTablet} {
         width: 3em;
         height: 3em;
