@@ -29,6 +29,8 @@ import { findColor } from "../../../utils";
 import { useGlobalData } from "../../../providers";
 import { NoFound } from "../../../images";
 import { darken } from "polished";
+import { theme } from "../../../styles";
+import { Space } from "antd";
 
 export const Contact = () => {
   const { contactId } = useParams();
@@ -62,23 +64,22 @@ export const Contact = () => {
 
   return (
     <>
-      <Row>
-        <Col span={24}>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={1}>
           <IconAction
             key={contact.id}
             onClick={() => onGoBack()}
             size={50}
-            style={{ color: "#008dd2" }}
+            style={{ color: theme.colors.primary }}
             icon={faArrowCircleLeft}
           />
         </Col>
-        <Col xs={24} sm={24} md={8}>
-          <Title level={3}>
+        <Col xs={24} sm={8}>
+          <Title level={3} style={{ margin: ".3em" }}>
             {`${contact.firstName} ${contact.lastName}`.toUpperCase()}
           </Title>
         </Col>
-        <Col xs={24} sm={24} md={8} />
-        <Col xs={24} sm={24} md={8} align="end">
+        <Col xs={24} sm={15} align="end">
           <Title level={5}>{contact.email.toLowerCase()}</Title>
           <Text>
             {`${contact?.phone.countryCode} ${contact?.phone.number}` || ""}
