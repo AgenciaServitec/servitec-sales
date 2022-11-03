@@ -12,6 +12,7 @@ import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
 import { useDevice } from "../../hooks";
 import { Link } from "react-router-dom";
+import { roles } from "../../data-list";
 
 const { Title, Text } = Typography;
 
@@ -29,6 +30,9 @@ export const Users = () => {
   const onAddUser = () => navigateTo("new");
 
   const onEditUser = (user) => navigateTo(user.id);
+
+  const findRole = (roleCode) =>
+    roles.find((role) => role.roleCode === roleCode);
 
   const onRemoveUser = async (user) =>
     await firestore
@@ -91,7 +95,10 @@ export const Users = () => {
                     </div>
                     <div>
                       <Text>
-                        Rol: <Tag color="blue">{`${user?.roleCode}`}</Tag>
+                        Rol:{" "}
+                        <Tag color="blue">{`${
+                          findRole(user?.roleCode)?.roleName || ""
+                        }`}</Tag>
                       </Text>
                     </div>
                   </>
