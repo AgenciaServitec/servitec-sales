@@ -1,22 +1,26 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Breadcrumb, Layout } from "antd";
+import LayoutAntd from "antd/lib/layout";
 import { DrawerLayout } from "./DrawerLayout";
 import { HeaderLayout } from "./HeaderLayout";
 import { FooterLayout } from "./FooterLayout";
 import { useNavigate } from "react-router";
+import { BreadcrumbLayout } from "./Breadcrumb";
+import { useAuthentication } from "../../providers";
 
-const { Content } = Layout;
+const { Content } = LayoutAntd;
 
 export const BaseLayout = ({ children }) => {
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
 
   const navigateTo = (url) => navigate(url);
 
   return (
     <LayoutContainer>
-      <Layout className="site-layout">
+      <LayoutAntd className="site-layout">
         <DrawerLayout
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}
@@ -25,51 +29,30 @@ export const BaseLayout = ({ children }) => {
         <HeaderLayout
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}
+          user={authUser}
         />
         <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Contacts</Breadcrumb.Item>
-          </Breadcrumb>
+          <BreadcrumbLayout user={authUser} />
           <div className="site-layout-background" style={{ padding: 24 }}>
             {children}
           </div>
         </Content>
         <FooterLayout />
-      </Layout>
+      </LayoutAntd>
     </LayoutContainer>
   );
 };
 
-const LayoutContainer = styled(Layout)`
+const LayoutContainer = styled(LayoutAntd)`
   min-width: 100vw;
   min-height: 100vh;
+  .site-layout-background {
+    background: #fff;
+  }
+
   .logo {
     height: 32px;
     margin: 16px;
     background: rgba(255, 255, 255, 0.3);
-  }
-
-  .trigger {
-    padding: 0 24px;
-    font-size: 18px;
-    line-height: 64px;
-    cursor: pointer;
-    transition: color 0.3s;
-  }
-
-  .trigger:hover {
-    color: #1890ff;
-  }
-
-  .site-layout .site-layout-background {
-    background: #fff;
-  }
-  .site-layout .header-layout {
-    background: #fff;
-    position: sticky;
-    top: 1px;
-    padding: 0;
-    z-index: 1000;
   }
 `;
