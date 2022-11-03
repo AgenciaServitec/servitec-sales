@@ -13,7 +13,6 @@ import {
 import { Divider } from "antd";
 import { useAuthentication, useGlobalData } from "../../providers";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
 import { useDevice } from "../../hooks";
 import { Link } from "react-router-dom";
