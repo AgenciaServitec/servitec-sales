@@ -4,22 +4,31 @@ import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
 import List from "antd/lib/list";
 import Tag from "antd/lib/tag";
-import { Button, IconAction, modalConfirm } from "../../components/ui";
+import {
+  Button,
+  IconAction,
+  modalConfirm,
+  notification,
+} from "../../components/ui";
 import { Divider } from "antd";
-import { useGlobalData } from "../../providers";
+import { useAuthentication, useGlobalData } from "../../providers";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { firestore } from "../../firebase";
 import { useNavigate } from "react-router";
 import { useDevice } from "../../hooks";
 import { Link } from "react-router-dom";
 import { roles } from "../../data-list";
+import { useApiUserPatch } from "../../api";
+import { assign } from "lodash";
 
 const { Title, Text } = Typography;
 
 export const Users = () => {
-  const { users } = useGlobalData();
   const { isMobile } = useDevice();
   const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+  const { users } = useGlobalData();
+  const { patchUser, patchUserResponse } = useApiUserPatch();
 
   const navigateTo = (userId) => {
     const url = `/users/${userId}`;
@@ -34,17 +43,27 @@ export const Users = () => {
   const findRole = (roleCode) =>
     roles.find((role) => role.roleCode === roleCode);
 
-  const onRemoveUser = async (user) =>
-    await firestore
-      .collection("users")
-      .doc(user.id)
-      .set({ isDeleted: true }, { merge: true });
+  const onDeleteUser = async (_user) => {
+    const user_ = assign({}, _user, { updateBy: authUser?.email });
+
+    await patchUser(user_);
+
+    if (!patchUserResponse.ok)
+      return notification({
+        type: "error",
+      });
+
+    notification({
+      type: "success",
+      title: "User deleted successfully!",
+    });
+  };
 
   const onConfirmRemoveUser = (user) =>
     modalConfirm({
       content: "El usuario se eliminara",
       onOk: async () => {
-        await onRemoveUser(user);
+        await onDeleteUser(user);
       },
     });
 
