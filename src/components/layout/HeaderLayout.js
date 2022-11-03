@@ -21,7 +21,7 @@ export const HeaderLayout = ({ isVisibleDrawer, setIsVisibleDrawer, user }) => {
         </span>
       </div>
       <div className="user-email">
-        <h3>{user.email}</h3>
+        <h3>{user?.email || ""}</h3>
       </div>
       <div className="user-avatar">
         <img src={user?.profileImage?.thumbUrl || AvatarNoFound} alt="user" />
