@@ -35,7 +35,7 @@ const defaultFilterOption = (inputValue, optionLabel) =>
   0;
 
 export const Select = ({
-  value,
+  value = undefined,
   required = false,
   error = false,
   disabled = false,
@@ -54,10 +54,12 @@ export const Select = ({
 }) => {
   const Container = ComponentContainer[variant];
 
+  const fixValue = value ? value : undefined;
+
   return (
     <Container
       required={required}
-      value={value}
+      value={fixValue}
       error={error}
       disabled={disabled}
       label={label}
@@ -65,16 +67,16 @@ export const Select = ({
     >
       {isMobile ? (
         <StyledSelectMobile
-          key={value}
+          key={fixValue}
           disabled={disabled}
           error={error}
           onChange={(event) => onChange && onChange(event.target.value)}
-          value={value}
-          defaultValue={value}
+          value={fixValue}
+          defaultValue={fixValue}
           placeholder={placeholder}
         >
           {placeholder && <option hidden>{placeholder}</option>}
-          {!value && <option hidden />}
+          {!fixValue && <option hidden />}
           {options.map((option) => (
             <option key={option.code} value={option.value}>
               {option.label}
@@ -86,7 +88,7 @@ export const Select = ({
           allowClear={disabled ? false : allowClear}
           bordered={false}
           disabled={disabled}
-          value={value}
+          value={fixValue}
           onChange={onChange}
           filterOption={(inputValue, option) =>
             filterOption(inputValue, option?.children)
