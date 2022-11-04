@@ -310,7 +310,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     name={name}
                     value={value}
                     filePath={`users/${user.id}`}
-                    resize="300x90"
+                    resize="400x400"
                     buttonText="Subir foto"
                     error={error(name)}
                     required={required(name)}

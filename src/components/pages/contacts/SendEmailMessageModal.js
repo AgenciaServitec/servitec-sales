@@ -84,7 +84,8 @@ export const SendEmailMessageModal = ({
 
   const onSubmitSendEmail = (formData) =>
     modalConfirm({
-      content: "¿Seguro que quieres enviar?",
+      title: "¿Seguro que quieres enviar?",
+      content: "se enviara el mensaje por via email",
       onOk: () => onSendEmail(formData),
     });
 

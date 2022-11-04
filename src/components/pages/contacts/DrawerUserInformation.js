@@ -17,15 +17,19 @@ import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
 import { capitalize } from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faCalendarAlt,
   faEnvelope,
+  faFileInvoice,
+  faPaperPlane,
   faPhone,
 } from "@fortawesome/free-solid-svg-icons";
 import { SendEmailMessageModal } from "./SendEmailMessageModal";
 import { SendEmailQuoteModal } from "./SendEmailQuoteModal";
 import { findColor } from "../../../utils";
+import Tabs from "antd/lib/tabs";
 
 export const DrawerUserInformation = ({
   contact,
@@ -162,49 +166,40 @@ export const DrawerUserInformation = ({
               }
             />
           </Col>
-        </Row>
-        <Divider />
-        <Row>
-          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+          <Col span={24} style={{ display: "flex", justifyContent: "start" }}>
             <IconAction
               onClick={() =>
                 onNavigateWithBlankTo(
                   `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
                 )
               }
-              size={65}
+              size={40}
               style={{ color: "#65d844" }}
               tooltipTitle="Whatsapp"
               icon={faWhatsapp}
             />
-          </Col>
-          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
             <IconAction
               onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
-              size={65}
+              size={40}
               tooltipTitle="Email"
               styled={{ color: (theme) => theme.colors.error }}
               icon={faEnvelope}
             />
-          </Col>
-          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
             <IconAction
               onClick={() =>
                 onNavigateWithBlankTo(
                   `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
                 )
               }
-              size={55}
+              size={40}
               style={{ color: "#0583ea" }}
               tooltipTitle="Teléfono"
               icon={faPhone}
             />
-          </Col>
-          <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
             <IconAction
               key={contact.id}
               onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
-              size={55}
+              size={40}
               style={{ color: "#e7c600" }}
               tooltipTitle="Historial"
               icon={faCalendarAlt}
@@ -213,23 +208,66 @@ export const DrawerUserInformation = ({
         </Row>
         <Divider />
         <Row gutter={[16, 16]}>
-          <Col xs={24} sm={12}>
-            <Button
-              type="primary"
-              block
-              onClick={() => onCLickIsVisibleSendEmailModal()}
-            >
-              Enviar mensaje
-            </Button>
-          </Col>
-          <Col xs={24} sm={12}>
-            <Button
-              type="primary"
-              block
-              onClick={() => onCLickIsVisibleQuotationEmailModal()}
-            >
-              Enviar cotizacion
-            </Button>
+          <Col span={24}>
+            <Tabs
+              defaultActiveKey="1"
+              type="card"
+              centered
+              items={[
+                {
+                  key: 1,
+                  label: (
+                    <span>
+                      <FontAwesomeIcon icon={faEnvelope} size="lg" /> &nbsp;
+                      EMAIL
+                    </span>
+                  ),
+                  children: (
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} sm={12}>
+                        <Button
+                          type="primary"
+                          block
+                          icon={
+                            <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+                          }
+                          onClick={() => onCLickIsVisibleSendEmailModal()}
+                        >
+                          &nbsp; Enviar mensaje
+                        </Button>
+                      </Col>
+                      <Col xs={24} sm={12}>
+                        <Button
+                          type="primary"
+                          block
+                          icon={
+                            <FontAwesomeIcon icon={faFileInvoice} size="lg" />
+                          }
+                          onClick={() => onCLickIsVisibleQuotationEmailModal()}
+                        >
+                          &nbsp; Enviar cotizacion
+                        </Button>
+                      </Col>
+                    </Row>
+                  ),
+                },
+                {
+                  key: 2,
+                  label: (
+                    <span>
+                      <FontAwesomeIcon icon={faWhatsapp} size="lg" /> &nbsp; WSP
+                    </span>
+                  ),
+                  children: (
+                    <Row>
+                      <Col>
+                        <h3>Esta seccion aun esta en desarrollo</h3>
+                      </Col>
+                    </Row>
+                  ),
+                },
+              ]}
+            />
           </Col>
         </Row>
         <Divider />
@@ -242,7 +280,7 @@ export const DrawerUserInformation = ({
               >
                 <Row gutter={[0, 10]}>
                   <Col span={24}>
-                    <Group label="¿El cliente fue atendido?">
+                    <Group label="¿El contacto fue atendido?">
                       <Switch
                         onClick={(e) => setStatusType(e)}
                         checkedChildren="Si"
