@@ -56,6 +56,7 @@ export const AuthenticationProvider = ({ children }) => {
       if (!user) throw new Error("User doesn't exists");
 
       setAuthUser(user);
+      setLoginLoading(false);
       setAuthenticating(false);
     } catch (error) {
       console.error("Login", error);
