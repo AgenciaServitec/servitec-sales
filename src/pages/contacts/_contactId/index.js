@@ -27,10 +27,8 @@ import moment from "moment";
 import { orderBy } from "lodash";
 import { findColor } from "../../../utils";
 import { useGlobalData } from "../../../providers";
-import { NoFound } from "../../../images";
 import { darken } from "polished";
 import { theme } from "../../../styles";
-import { Space } from "antd";
 
 export const Contact = () => {
   const { contactId } = useParams();
