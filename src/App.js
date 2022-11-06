@@ -5,6 +5,7 @@ import {
   AuthenticationProvider,
   GlobalDataProvider,
   ConfigsInitializer,
+  ContactsProvider,
 } from "./providers";
 
 const App = () => (
@@ -12,7 +13,9 @@ const App = () => (
     <ConfigsInitializer />
     <AuthenticationProvider>
       <GlobalDataProvider>
-        <Router />
+        <ContactsProvider>
+          <Router />
+        </ContactsProvider>
       </GlobalDataProvider>
     </AuthenticationProvider>
   </VersionProvider>

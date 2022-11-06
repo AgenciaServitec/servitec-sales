@@ -9,7 +9,7 @@ import SpaceAntd from "antd/lib/space";
 
 export const Form = ({ children, ...props }) => (
   <form noValidate autoComplete="off" {...props}>
-    <SpaceStyled size="large" direction="vertical">
+    <SpaceStyled size="middle" direction="vertical">
       {children}
     </SpaceStyled>
   </form>
@@ -17,5 +17,4 @@ export const Form = ({ children, ...props }) => (
 
 const SpaceStyled = styled(SpaceAntd)`
   width: 100%;
-  margin-top: 5px;
 `;
