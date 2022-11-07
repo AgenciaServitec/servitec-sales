@@ -40,7 +40,7 @@
     "ipInfoApi": "https://ipinfo.io/json?token=09c720dcbb804f"
   },
   "production": {
-    "version": "0.0.1",
+    "version": "0.0.2",
     "firebaseApp": {
       "apiKey": "AIzaSyC7Lga1OZpNAvRX-gIk2-ZJH2hG_EBFTHo",
       "authDomain": "sendingemails-348505.firebaseapp.com",
