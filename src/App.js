@@ -1,11 +1,10 @@
 import React from "react";
 import { Router } from "./router";
 import {
-  VersionProvider,
   AuthenticationProvider,
-  GlobalDataProvider,
   ConfigsInitializer,
-  ContactsProvider,
+  GlobalDataProvider,
+  VersionProvider,
 } from "./providers";
 
 const App = () => (
@@ -13,9 +12,9 @@ const App = () => (
     <ConfigsInitializer />
     <AuthenticationProvider>
       <GlobalDataProvider>
-        <ContactsProvider>
-          <Router />
-        </ContactsProvider>
+        {/*<ContactsProvider>*/}
+        <Router />
+        {/*</ContactsProvider>*/}
       </GlobalDataProvider>
     </AuthenticationProvider>
   </VersionProvider>

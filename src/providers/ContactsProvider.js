@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../firebase";
+import moment from "moment";
 
 const ContactsContext = createContext({
   contacts: [],
@@ -13,37 +14,28 @@ const ContactsContext = createContext({
 export const ContactsProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-
-  const [contacts, setContacts] = useState(null);
+  const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
 
   const onSetStartDate = (startDate) => setStartDate(startDate);
   const onSetEndDate = (endDate) => setEndDate(endDate);
 
-  useEffect(() => {
-    fetchContacts();
-  }, [startDate, endDate]);
-
-  const fetchContacts = () => {
-    const [contacts = [], contactsLoading, contactsError] = useCollectionData(
-      authUser
-        ? firestore
-            .collection("contacts")
-            .where("createAt", ">=", startDate)
-            .where("createAt", "<=", endDate)
-        : null
-    );
-
-    setContacts(contacts);
-  };
+  const [contacts = [], contactsLoading, contactsError] = useCollectionData(
+    authUser
+      ? firestore
+          .collection("contacts")
+          .where("createInString", ">=", startDate)
+          .where("createInString", "<=", endDate)
+      : null
+  );
 
   return (
     <ContactsContext.Provider
       value={{
-        contacts: contacts,
+        contacts,
         onSetStartDate,
         onSetEndDate,
+        contactsLoading,
       }}
     >
       {children}
