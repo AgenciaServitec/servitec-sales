@@ -240,6 +240,7 @@ export const DrawerUserInformation = ({
                         <Button
                           type="primary"
                           block
+                          disabled
                           icon={
                             <FontAwesomeIcon icon={faFileInvoice} size="lg" />
                           }
