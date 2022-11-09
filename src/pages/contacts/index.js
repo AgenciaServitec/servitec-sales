@@ -20,6 +20,7 @@ import { useAuthentication, useGlobalData } from "../../providers";
 import { formatWord, formatWords } from "../../utils";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
+import { DatePicker } from "../../components/ui";
 
 export const Contacts = () => {
   const { authUser } = useAuthentication();
@@ -71,14 +72,32 @@ export const Contacts = () => {
   const onResetContact = () => setSearchDataForm([]);
 
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
+  const handleStartDateChange = (value) => console.log("value->", value);
+  const handleEndDateChange = (value) => console.log("value->", value);
 
   return (
     <>
-      <Row gutter={[10, 10]}>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Title level={5}>
             Total contactos: {viewContacts()?.length || 0}
           </Title>
+        </Col>
+        <Col xs={24} sm={4}>
+          <DatePicker
+            /*label="Fecha inicio"*/
+            placeholder="Fecha inicio"
+            size="large"
+            onChange={handleStartDateChange}
+          />
+        </Col>
+        <Col xs={24} sm={4}>
+          <DatePicker
+            /*label="Fecha final"*/
+            placeholder="Fecha final"
+            size="large"
+            onChange={handleEndDateChange}
+          />
         </Col>
         <Col span={24}>
           <FiltersContact
@@ -90,8 +109,6 @@ export const Contacts = () => {
             authUser={authUser}
           />
         </Col>
-      </Row>
-      <Row>
         <Col span={24}>
           <Row gutter={[16, 15]}>
             <Col xs={24} sm={17} md={20}>

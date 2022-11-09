@@ -3,6 +3,7 @@ import { Router } from "./router";
 import {
   AuthenticationProvider,
   ConfigsInitializer,
+  ContactsProvider,
   GlobalDataProvider,
   VersionProvider,
 } from "./providers";
@@ -12,9 +13,9 @@ const App = () => (
     <ConfigsInitializer />
     <AuthenticationProvider>
       <GlobalDataProvider>
-        {/*<ContactsProvider>*/}
-        <Router />
-        {/*</ContactsProvider>*/}
+        <ContactsProvider>
+          <Router />
+        </ContactsProvider>
       </GlobalDataProvider>
     </AuthenticationProvider>
   </VersionProvider>

@@ -23,9 +23,12 @@ export const FiltersContact = ({
   );
 
   return (
-    <Row gutter={[16, 0]}>
-      <Col>
-        <Form.Item label="Código cliente">
+    <Row gutter={[16, 16]}>
+      <Col xs={24} sm={18} md={20}>
+        <div>
+          <label>Código cliente:</label>
+        </div>
+        <div>
           <Radio.Group value={clientId} onChange={handleClientCodeChange}>
             <Radio.Button value="all">Todos</Radio.Button>
             {viewClients.map((client, index) => (
@@ -34,15 +37,18 @@ export const FiltersContact = ({
               </Radio.Button>
             ))}
           </Radio.Group>
-        </Form.Item>
+        </div>
       </Col>
-      <Col>
-        <Form.Item label="Estado">
+      <Col xs={24} sm={6} md={4}>
+        <div>
+          <label>Estado:</label>
+        </div>
+        <div>
           <Radio.Group value={status} onChange={handleStatusChange}>
             <Radio.Button value="pending">Pendientes</Radio.Button>
             <Radio.Button value="attended">Atendidos</Radio.Button>
           </Radio.Group>
-        </Form.Item>
+        </div>
       </Col>
     </Row>
   );
