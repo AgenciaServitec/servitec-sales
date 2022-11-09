@@ -6,8 +6,8 @@ import moment from "moment";
 
 const ContactsContext = createContext({
   contacts: [],
-  onSetStartDate: () => null,
-  onSetEndDate: () => null,
+  onSetStartDate: (value = moment().format("YYYY-MM-DD")) => value,
+  onSetEndDate: (value = moment().format("YYYY-MM-DD")) => value,
   loadingContacts: false,
 });
 
@@ -17,22 +17,27 @@ export const ContactsProvider = ({ children }) => {
   const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
 
-  const onSetStartDate = (startDate) => setStartDate(startDate);
-  const onSetEndDate = (endDate) => setEndDate(endDate);
+  const onSetStartDate = (value) => setStartDate(value);
+  const onSetEndDate = (value) => setEndDate(value);
 
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     authUser
       ? firestore
           .collection("contacts")
-          .where("createInString", ">=", startDate)
-          .where("createInString", "<=", endDate)
+          .where("createAtInString", ">=", startDate)
+          .where("createAtInString", "<=", endDate)
       : null
   );
+
+  console.log("startDate->", startDate);
+  console.log("endDate->", endDate);
 
   return (
     <ContactsContext.Provider
       value={{
         contacts,
+        startDate: moment(startDate, "YYYY-MM-DD"),
+        endDate: moment(endDate, "YYYY-MM-DD"),
         onSetStartDate,
         onSetEndDate,
         contactsLoading,

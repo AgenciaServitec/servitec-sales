@@ -36,26 +36,35 @@ export const DatePicker = ({
   error,
   label,
   variant = "outlined",
+  size = "middle",
+  animation = false,
   ...props
 }) => {
   const Container = ComponentContainer[variant];
 
   return (
     <Container
+      label={label}
       value={value}
       required={required}
       disabled={disabled}
       error={error}
-      label={label}
+      animation={animation}
     >
       <Responsive.DesktopAndTable>
-        <DatePickerDesktop value={value} disabled={disabled} {...props} />
+        <DatePickerDesktop
+          value={value}
+          disabled={disabled}
+          size={size}
+          {...props}
+        />
       </Responsive.DesktopAndTable>
       <Responsive.Mobile>
         <DatePickerMobile
           value={value}
           label={label}
           disabled={disabled}
+          size={size}
           {...props}
         />
       </Responsive.Mobile>
@@ -63,11 +72,11 @@ export const DatePicker = ({
   );
 };
 
-const DatePickerDesktop = ({ id, value, ...props }) => (
+const DatePickerDesktop = ({ id, value, size, ...props }) => (
   <DatePickerAntd
     bordered={false}
     id={id}
-    size="large"
+    size={size}
     value={value}
     placeholder=""
     format="DD/MM/YYYY"
@@ -81,6 +90,7 @@ const DatePickerMobile = ({
   label,
   onChange,
   calendar,
+  size,
   ...props
 }) => {
   const [visiblePanel, setVisiblePanel] = useState(false);
@@ -94,7 +104,7 @@ const DatePickerMobile = ({
     <DatePickerAntd
       bordered={false}
       id={id}
-      size="large"
+      size={size}
       value={value}
       format="DD/MM/YYYY"
       placeholder=""

@@ -16,18 +16,21 @@ import {
   FiltersContact,
 } from "../../components/pages";
 import { useQueryString } from "../../hooks/useQueryString";
-import { useAuthentication, useGlobalData } from "../../providers";
+import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { formatWord, formatWords } from "../../utils";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
 import { DatePicker } from "../../components/ui";
+import moment from "moment";
 
 export const Contacts = () => {
-  const { authUser } = useAuthentication();
-  const { contacts, clients } = useGlobalData();
   const navigate = useNavigate();
-
   const { isMobile } = useDevice();
+
+  const { authUser } = useAuthentication();
+  const { startDate, endDate, onSetStartDate, onSetEndDate } = useContacts();
+  const { contacts, clients } = useGlobalData();
+
   const [play] = useSound(ContactSound);
 
   const [status, setStatus] = useQueryString("status", "pending");
@@ -40,7 +43,7 @@ export const Contacts = () => {
   const playToSound = () => play();
 
   useEffect(() => {
-    authUser && playToSound();
+    authUser && contacts && playToSound();
   }, [contacts]);
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
@@ -72,8 +75,10 @@ export const Contacts = () => {
   const onResetContact = () => setSearchDataForm([]);
 
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
-  const handleStartDateChange = (value) => console.log("value->", value);
-  const handleEndDateChange = (value) => console.log("value->", value);
+  const handleStartDateChange = (value) =>
+    onSetStartDate(moment(value).format("YYYY-MM-DD"));
+  const handleEndDateChange = (value) =>
+    onSetEndDate(moment(value).format("YYYY-MM-DD"));
 
   return (
     <>
@@ -83,19 +88,21 @@ export const Contacts = () => {
             Total contactos: {viewContacts()?.length || 0}
           </Title>
         </Col>
-        <Col xs={24} sm={4}>
+        <Col xs={24} sm={12} md={6}>
           <DatePicker
-            /*label="Fecha inicio"*/
-            placeholder="Fecha inicio"
-            size="large"
+            label="Fecha inicio"
+            animation
+            placeholder="Ingrese fecha"
+            value={startDate}
             onChange={handleStartDateChange}
           />
         </Col>
-        <Col xs={24} sm={4}>
+        <Col xs={24} sm={12} md={6}>
           <DatePicker
-            /*label="Fecha final"*/
-            placeholder="Fecha final"
-            size="large"
+            label="Fecha final"
+            animation
+            placeholder="Ingrese fecha"
+            value={endDate}
             onChange={handleEndDateChange}
           />
         </Col>
