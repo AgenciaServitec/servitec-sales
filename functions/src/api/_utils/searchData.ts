@@ -39,7 +39,7 @@ export const searchDataGeneric = (
     contact.email,
     contact?.hostname || "",
     contact.status,
-    moment(contact.createAt).format("DD/MM/YYYY"),
+    moment(contact.createAt).format("YYYY-MM-DD"),
   ]
     .filter((string) => string)
     .map((string) => string.toString());

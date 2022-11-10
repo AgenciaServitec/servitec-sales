@@ -6,6 +6,7 @@ import {
   sendMailContactReceptor,
 } from "../../mailer/generic";
 import { searchDataGeneric } from "../_utils";
+import moment from "moment/moment";
 
 interface Body {
   contact: GenericContact;
@@ -106,6 +107,7 @@ const mapContact = (
     }),
     status: "pending",
     termsAndConditions: contact?.termsAndConditions || true,
+    createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
     createAt: now(),
   });
 
