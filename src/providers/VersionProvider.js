@@ -49,10 +49,10 @@ export const useVersion = () => useContext(VersionContext);
 export const Version = () => (
   <VersionContainer>
     <div>
-      <h1>
+      <h2>
         Actualice para obtener la última versión de la aplicación.
         <br />
-      </h1>
+      </h2>
       <Button
         type="primary"
         size="large"
@@ -75,7 +75,6 @@ export const VersionContainer = styled.section`
   div {
     h1 {
       font-size: 3em;
-      color: ${({ theme }) => theme.colors.white};
     }
   }
 `;

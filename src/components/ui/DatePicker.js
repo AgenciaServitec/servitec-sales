@@ -30,7 +30,8 @@ import { Responsive } from "../../styles";
 // }
 
 export const DatePicker = ({
-  value,
+  value = undefined,
+  defaultValue = undefined,
   required,
   disabled,
   error,
@@ -54,6 +55,7 @@ export const DatePicker = ({
       <Responsive.DesktopAndTable>
         <DatePickerDesktop
           value={value}
+          defaultValue={defaultValue}
           disabled={disabled}
           size={size}
           {...props}
@@ -62,6 +64,7 @@ export const DatePicker = ({
       <Responsive.Mobile>
         <DatePickerMobile
           value={value}
+          defaultValue={defaultValue}
           label={label}
           disabled={disabled}
           size={size}
@@ -72,12 +75,13 @@ export const DatePicker = ({
   );
 };
 
-const DatePickerDesktop = ({ id, value, size, ...props }) => (
+const DatePickerDesktop = ({ id, value, defaultValue, size, ...props }) => (
   <DatePickerAntd
     bordered={false}
     id={id}
     size={size}
     value={value}
+    defaultValue={defaultValue}
     placeholder=""
     format="DD/MM/YYYY"
     {...props}
@@ -87,6 +91,7 @@ const DatePickerDesktop = ({ id, value, size, ...props }) => (
 const DatePickerMobile = ({
   id,
   value,
+  defaultValue,
   label,
   onChange,
   calendar,
@@ -106,6 +111,7 @@ const DatePickerMobile = ({
       id={id}
       size={size}
       value={value}
+      defaultValue={defaultValue}
       format="DD/MM/YYYY"
       placeholder=""
       open={visiblePanel}
@@ -120,7 +126,7 @@ const DatePickerMobile = ({
           centered
           onCancel={() => setVisiblePanel(false)}
         >
-          <Calendar defaultValue={value} {...calendar} />
+          <Calendar defaultValue={defaultValue} {...calendar} />
         </ModalMobileStyled>
       )}
       {...props}

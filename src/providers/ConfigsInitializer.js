@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/es";
-import "moment/locale/fr";
-import "moment/locale/nl";
+import esES from "antd/es/locale/es_ES";
 import { setLocale } from "yup";
 import { yup } from "../config";
+import { ConfigProvider } from "antd";
 
-export const ConfigsInitializer = () => {
+export const ConfigsInitializer = ({ children }) => {
+  const [locale] = useState(esES);
+
   moment.updateLocale("es", {
     week: {
       dow: 1,
@@ -19,5 +21,5 @@ export const ConfigsInitializer = () => {
     moment.locale("es");
   }, []);
 
-  return <React.Fragment />;
+  return <ConfigProvider locale={locale}>{children}</ConfigProvider>;
 };

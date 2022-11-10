@@ -10,14 +10,15 @@ import {
 
 const App = () => (
   <VersionProvider>
-    <ConfigsInitializer />
-    <AuthenticationProvider>
-      <GlobalDataProvider>
-        <ContactsProvider>
-          <Router />
-        </ContactsProvider>
-      </GlobalDataProvider>
-    </AuthenticationProvider>
+    <ConfigsInitializer>
+      <AuthenticationProvider>
+        <GlobalDataProvider>
+          <ContactsProvider>
+            <Router />
+          </ContactsProvider>
+        </GlobalDataProvider>
+      </AuthenticationProvider>
+    </ConfigsInitializer>
   </VersionProvider>
 );
 

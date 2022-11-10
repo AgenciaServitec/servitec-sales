@@ -40,7 +40,13 @@ const global = css`
   }
 `;
 
-const antd = {};
+const antd = {
+  spin: css`
+    .ant-spin-nested-loading > div > .ant-spin {
+      max-height: initial;
+    }
+  `,
+};
 
 export const GlobalStyle = createGlobalStyle`
   ${global}

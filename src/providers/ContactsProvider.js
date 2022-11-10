@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../firebase";
 import moment from "moment";
+import { notification } from "../components/ui";
 
 const ContactsContext = createContext({
   contacts: [],
@@ -14,7 +15,9 @@ const ContactsContext = createContext({
 export const ContactsProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
+  const [startDate, setStartDate] = useState(
+    moment().subtract(1, "week").format("YYYY-MM-DD")
+  );
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
 
   const onSetStartDate = (value) => setStartDate(value);
@@ -29,7 +32,9 @@ export const ContactsProvider = ({ children }) => {
       : null
   );
 
-  console.log("contactsError->", contactsError);
+  useEffect(() => {
+    contactsError && notification({ type: "error" });
+  }, [contactsError]);
 
   return (
     <ContactsContext.Provider

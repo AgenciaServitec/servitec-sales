@@ -6,6 +6,8 @@ import Select from "antd/lib/select";
 import Text from "antd/lib/typography/Text";
 import Button from "antd/lib/button";
 import Tabs from "antd/lib/tabs";
+import Spin from "antd/lib/spin";
+import Space from "antd/lib/space";
 import { includes, orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
@@ -28,8 +30,14 @@ export const Contacts = () => {
   const { isMobile } = useDevice();
 
   const { authUser } = useAuthentication();
-  const { contacts, startDate, endDate, onSetStartDate, onSetEndDate } =
-    useContacts();
+  const {
+    contacts,
+    loadingContacts,
+    startDate,
+    endDate,
+    onSetStartDate,
+    onSetEndDate,
+  } = useContacts();
   const { clients } = useGlobalData();
 
   const [play] = useSound(ContactSound);
@@ -94,7 +102,7 @@ export const Contacts = () => {
             label="Fecha inicio"
             animation
             placeholder="Ingrese fecha"
-            value={startDate}
+            defaultValue={startDate}
             onChange={handleStartDateChange}
           />
         </Col>
@@ -103,7 +111,7 @@ export const Contacts = () => {
             label="Fecha final"
             animation
             placeholder="Ingrese fecha"
-            value={endDate}
+            defaultValue={endDate}
             onChange={handleEndDateChange}
           />
         </Col>
@@ -120,28 +128,31 @@ export const Contacts = () => {
         <Col span={24}>
           <Row gutter={[16, 15]}>
             <Col xs={24} sm={17} md={20}>
-              <Select
-                placeholder="Ingrese datos de busqueda"
-                mode="tags"
-                size="large"
-                value={searchDataForm || null}
-                onChange={handleSearchDataFormChange}
-                style={{ width: "100%" }}
-              />
-              <br />
-              <div>
-                <Text>
-                  Puedes realizar la busqueda con los siguientes datos: nombres,
-                  apellidos, teléfono, email, f.creación, hostname, código
-                  cliente, status
-                </Text>
-              </div>
-              <div>
-                <Text keyboard>
-                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 2022-12-30,
-                  pending
-                </Text>
-              </div>
+              <Space direction="vertical">
+                <Select
+                  placeholder="Ingrese datos de busqueda"
+                  mode="tags"
+                  size="large"
+                  value={searchDataForm || null}
+                  onChange={handleSearchDataFormChange}
+                  style={{ width: "100%" }}
+                />
+                <div>
+                  <div>
+                    <Text>
+                      Puedes realizar la busqueda con los siguientes datos:
+                      nombres, apellidos, teléfono, email, f.creación, hostname,
+                      status
+                    </Text>
+                  </div>
+                  <div>
+                    <Text keyboard>
+                      Ejemplo: noel, moriano, 931136482, noel@gmail.com,
+                      2022-12-30, pending
+                    </Text>
+                  </div>
+                </div>
+              </Space>
             </Col>
             <Col xs={24} sm={7} md={4}>
               <Button
@@ -156,53 +167,55 @@ export const Contacts = () => {
           </Row>
         </Col>
       </Row>
-      <Row gutter={[16, 0]}>
-        <Col span={24}>
-          <Tabs
-            defaultActiveKey="1"
-            items={[
-              {
-                key: 1,
-                label: "BUBBLES",
-                children: (
-                  <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={24} md={19}>
-                      <ContactInBubbles
-                        contacts={viewContacts()}
-                        lastContact={lastContact}
-                        clients={clients}
-                        onOpenDrawerContact={onOpenDrawerContact}
-                        onSetContact={setContact}
-                      />
-                    </Col>
-                    <Col xs={24} sm={25} md={5}>
-                      <Title level={2}>
-                        Recepción de contactos en tiempo real de clientes y webs
-                        de servitec
-                      </Title>
-                    </Col>
-                  </Row>
-                ),
-              },
-              {
-                key: 2,
-                label: "LISTA",
-                children: (
-                  <ContactInList
-                    contacts={viewContacts()}
-                    isMobile={isMobile}
-                    clients={clients}
-                    onSetContact={setContact}
-                    onOpenDrawerContact={onOpenDrawerContact}
-                    onNavigateWithBlankTo={navigateWithBlankTo}
-                    onNavigateTo={navigateTo}
-                  />
-                ),
-              },
-            ]}
-          />
-        </Col>
-      </Row>
+      <Spin tip="Cargando..." spinning={!!loadingContacts}>
+        <Row gutter={[16, 0]}>
+          <Col span={24}>
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  key: 1,
+                  label: "BUBBLES",
+                  children: (
+                    <Row gutter={[16, 16]}>
+                      <Col xs={24} sm={24} md={19}>
+                        <ContactInBubbles
+                          contacts={viewContacts()}
+                          lastContact={lastContact}
+                          clients={clients}
+                          onOpenDrawerContact={onOpenDrawerContact}
+                          onSetContact={setContact}
+                        />
+                      </Col>
+                      <Col xs={24} sm={25} md={5}>
+                        <Title level={2}>
+                          Recepción de contactos en tiempo real de clientes y
+                          webs de servitec
+                        </Title>
+                      </Col>
+                    </Row>
+                  ),
+                },
+                {
+                  key: 2,
+                  label: "LISTA",
+                  children: (
+                    <ContactInList
+                      contacts={viewContacts()}
+                      isMobile={isMobile}
+                      clients={clients}
+                      onSetContact={setContact}
+                      onOpenDrawerContact={onOpenDrawerContact}
+                      onNavigateWithBlankTo={navigateWithBlankTo}
+                      onNavigateTo={navigateTo}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </Col>
+        </Row>
+      </Spin>
       <DrawerUserInformation
         contact={contact}
         clients={clients}
