@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { Button, notification } from "../../components/ui";
 import { useGlobalData } from "../../providers";
 import { assign } from "lodash";
-import { firestore, toTimestamp } from "../../firebase";
+import { firestore } from "../../firebase";
+import moment from "moment";
 
 export const Scripts = () => {
-  /*SCRIPT PARA ACTUALIZAR LOS CAMPOS DE LA COLLECCIÓN DE CONTACTS*/
+  return <></>;
+};
 
+/*const OneScript = () => {
+  /!*SCRIPT PARA ACTUALIZAR LOS CAMPOS DE LA COLLECCIÓN DE CONTACTS POR HOSTNAME*!/
   const { contacts, clients } = useGlobalData();
 
   const [loading, setLoading] = useState(false);
@@ -18,8 +22,8 @@ export const Scripts = () => {
 
   const client = clients.find((client) => client.hostname === hostname);
 
-  /*  console.log("contactsByHostname->", contactsByHostname);
-  console.log("client->", client);*/
+  /!*  console.log("contactsByHostname->", contactsByHostname);
+  console.log("client->", client);*!/
 
   const runScript = async () => {
     try {
@@ -66,7 +70,62 @@ export const Scripts = () => {
   return (
     <div>
       <Button type="primary" loading={loading}>
-        Script RUN
+        OneScript RUN
+      </Button>
+    </div>
+  );
+};*/
+
+const TwoScript = () => {
+  /*SCRIPT PARA ACTUALIZAR LOS CAMPOS DE LA COLLECCIÓN*/
+  const { contacts } = useGlobalData();
+
+  const [loading, setLoading] = useState(false);
+
+  console.log("contacts->", contacts);
+
+  const runScript = async () => {
+    try {
+      setLoading(true);
+
+      /*const contact = contacts.find(
+        (contact) => contact.id === "OZfKbsB1ZZHEWY75R5Ba"
+      );
+
+      console.log("contact->", contact);*/
+
+      contacts.map(async (contact) => {
+        const resultMap = mapContact(contact);
+
+        console.log("resultMap->", resultMap);
+
+        await firestore
+          .collection("contacts")
+          .doc(contact.id)
+          .set(resultMap, { merge: true });
+      });
+
+      console.log("COMPLETE SUCCESSFULL!");
+    } catch (e) {
+      notification({ type: "error" });
+      console.log("setDataToFirestore: ", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mapContact = (contact) =>
+    assign(
+      {},
+      {
+        createAtString: moment(contact.createAt.toDate()).format("YYYY-MM-DD"),
+      }
+    );
+
+  return (
+    <div>
+      <Button type="primary" loading={loading} onClick={() => runScript()}>
+        TwoScript RUN
       </Button>
     </div>
   );

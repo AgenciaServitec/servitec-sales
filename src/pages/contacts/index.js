@@ -28,8 +28,9 @@ export const Contacts = () => {
   const { isMobile } = useDevice();
 
   const { authUser } = useAuthentication();
-  const { startDate, endDate, onSetStartDate, onSetEndDate } = useContacts();
-  const { contacts, clients } = useGlobalData();
+  const { contacts, startDate, endDate, onSetStartDate, onSetEndDate } =
+    useContacts();
+  const { clients } = useGlobalData();
 
   const [play] = useSound(ContactSound);
 
@@ -137,8 +138,8 @@ export const Contacts = () => {
               </div>
               <div>
                 <Text keyboard>
-                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 01/12/2022,
-                  publicidad-google, pending
+                  Ejemplo: noel, moriano, 931136482, noel@gmail.com, 2022-12-30,
+                  pending
                 </Text>
               </div>
             </Col>

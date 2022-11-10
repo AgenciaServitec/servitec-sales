@@ -9,6 +9,10 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "createAtString",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "createAt",
           "order": "DESCENDING"
         }

@@ -24,13 +24,12 @@ export const ContactsProvider = ({ children }) => {
     authUser
       ? firestore
           .collection("contacts")
-          .where("createAtInString", ">=", startDate)
-          .where("createAtInString", "<=", endDate)
+          .where("createAtString", ">=", startDate)
+          .where("createAtString", "<=", endDate)
       : null
   );
 
-  console.log("startDate->", startDate);
-  console.log("endDate->", endDate);
+  console.log("contactsError->", contactsError);
 
   return (
     <ContactsContext.Provider

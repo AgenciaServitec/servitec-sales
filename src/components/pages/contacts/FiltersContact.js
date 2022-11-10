@@ -2,7 +2,7 @@ import React from "react";
 import { Form, Radio } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { includes, orderBy } from "lodash";
+import { capitalize, includes, orderBy } from "lodash";
 
 export const FiltersContact = ({
   onSetStatus,
@@ -33,7 +33,7 @@ export const FiltersContact = ({
             <Radio.Button value="all">Todos</Radio.Button>
             {viewClients.map((client, index) => (
               <Radio.Button key={index} value={client.id}>
-                {client.name}
+                {capitalize(client.name)}
               </Radio.Button>
             ))}
           </Radio.Group>
