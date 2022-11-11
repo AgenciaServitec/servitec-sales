@@ -128,7 +128,7 @@ export const Contacts = () => {
         <Col span={24}>
           <Row gutter={[16, 15]}>
             <Col xs={24} sm={17} md={20}>
-              <Space direction="vertical">
+              <Space direction="vertical" style={{ width: "100%" }}>
                 <Select
                   placeholder="Ingrese datos de busqueda"
                   mode="tags"
@@ -141,14 +141,13 @@ export const Contacts = () => {
                   <div>
                     <Text>
                       Puedes realizar la busqueda con los siguientes datos:
-                      nombres, apellidos, teléfono, email, f.creación, hostname,
-                      status
+                      nombres, apellidos, teléfono, email, f.creación, hostname
                     </Text>
                   </div>
                   <div>
                     <Text keyboard>
                       Ejemplo: noel, moriano, 931136482, noel@gmail.com,
-                      2022-12-30, pending
+                      2022-12-30
                     </Text>
                   </div>
                 </div>

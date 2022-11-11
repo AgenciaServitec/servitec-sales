@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Radio } from "antd";
+import { Radio } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { capitalize, includes, orderBy } from "lodash";
@@ -26,7 +26,7 @@ export const FiltersContact = ({
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={18} md={20}>
         <div>
-          <label>Código cliente:</label>
+          <label>Cliente:</label>
         </div>
         <div>
           <Radio.Group value={clientId} onChange={handleClientCodeChange}>
