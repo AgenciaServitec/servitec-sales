@@ -25,7 +25,7 @@ export const DrawerLayout = ({
   const items = [
     {
       label: "Home",
-      key: "1",
+      key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
       onClick: () => {
         navigateTo("/");
@@ -34,7 +34,7 @@ export const DrawerLayout = ({
     },
     {
       label: "Clientes",
-      key: "2",
+      key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
       onClick: () => {
         navigateTo("/clients");
@@ -43,7 +43,7 @@ export const DrawerLayout = ({
     },
     {
       label: "Usuarios",
-      key: "3",
+      key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
       onClick: () => {
         navigateTo("/users");
@@ -52,7 +52,7 @@ export const DrawerLayout = ({
     },
     {
       label: "Cerrar sesion",
-      key: "4",
+      key: "logout",
       icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
       onClick: async () => {
         await logout();
