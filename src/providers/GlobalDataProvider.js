@@ -14,18 +14,6 @@ const GlobalDataContext = createContext({
 export const GlobalDataProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  const [contacts = [], contactsLoading, contactsError] = useCollectionData(
-    authUser
-      ? firestore
-          .collection("contacts")
-          .where(
-            "searchData",
-            "array-contains-any",
-            authUser?.clientsIds || [""]
-          )
-      : null
-  );
-
   const [clients = [], clientsLoading, clientsError] = useCollectionData(
     authUser
       ? firestore.collection("clients").where("isDeleted", "==", false)
@@ -38,8 +26,8 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
-  const error = contactsError || clientsError || usersError;
-  const loading = contactsLoading || clientsLoading || usersLoading;
+  const error = clientsError || usersError;
+  const loading = clientsLoading || usersLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
@@ -50,7 +38,6 @@ export const GlobalDataProvider = ({ children }) => {
   return (
     <GlobalDataContext.Provider
       value={{
-        contacts: orderBy(contacts, (contact) => [contact.createAt], ["asc"]),
         clients: orderBy(clients, (client) => [client.createAt], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["asc"]),
       }}

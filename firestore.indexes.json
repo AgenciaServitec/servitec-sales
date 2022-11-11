@@ -5,16 +5,12 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
           "fieldPath": "createAtString",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "createAt",
-          "order": "DESCENDING"
+          "fieldPath": "searchData",
+          "arrayConfig": "CONTAINS"
         }
       ]
     }

@@ -29,6 +29,11 @@ export const ContactsProvider = ({ children }) => {
           .collection("contacts")
           .where("createAtString", ">=", startDate)
           .where("createAtString", "<=", endDate)
+          .where(
+            "searchData",
+            "array-contains-any",
+            authUser?.clientsIds || [""]
+          )
       : null
   );
 
