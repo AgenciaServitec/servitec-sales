@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { AvatarNoFound, Logo } from "../../images";
 import { mediaQuery } from "../../styles";
 import Space from "antd/lib/space";
+import { capitalize } from "lodash";
 
 const { Header } = Layout;
 
@@ -21,7 +22,7 @@ export const HeaderLayout = ({ isVisibleDrawer, setIsVisibleDrawer, user }) => {
       <div className="user-items">
         {user ? (
           <Space align="center">
-            <h4>{user?.firstName.split(" ")[0] || ""}</h4>
+            <h4>{capitalize(user?.firstName.split(" ")[0] || "")}</h4>
             <img
               onClick={() => setIsVisibleDrawer(!isVisibleDrawer)}
               src={user?.profileImage?.thumbUrl || AvatarNoFound}
