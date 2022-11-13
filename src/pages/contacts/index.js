@@ -49,13 +49,13 @@ export const Contacts = () => {
   const [searchDataForm, setSearchDataForm] = useState([]);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
+  const lastContact = orderBy(contacts, "createAt", "desc")[0];
+
   const playToSound = () => play();
 
   useEffect(() => {
-    authUser && contacts && playToSound();
+    authUser && lastContact?.status !== "attended" && playToSound();
   }, [contacts]);
-
-  const lastContact = orderBy(contacts, "createAt", "desc")[0];
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
