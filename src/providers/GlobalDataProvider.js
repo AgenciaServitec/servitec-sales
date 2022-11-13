@@ -6,7 +6,6 @@ import { notification, Spinner } from "../components/ui";
 import { orderBy } from "lodash";
 
 const GlobalDataContext = createContext({
-  contacts: [],
   clients: [],
   users: [],
 });
