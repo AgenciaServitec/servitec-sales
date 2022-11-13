@@ -24,6 +24,7 @@ export const BaseLayout = ({ children }) => {
         <DrawerLayout
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}
+          user={authUser}
           navigateTo={navigateTo}
         />
         <HeaderLayout

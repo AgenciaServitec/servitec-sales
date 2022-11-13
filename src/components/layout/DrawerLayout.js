@@ -15,6 +15,7 @@ import { mediaQuery } from "../../styles";
 export const DrawerLayout = ({
   isVisibleDrawer,
   setIsVisibleDrawer,
+  user,
   navigateTo,
 }) => {
   const { logout } = useAuthentication();
@@ -24,6 +25,7 @@ export const DrawerLayout = ({
       label: "Home",
       key: "home",
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
+      isVisible: true,
       onClick: () => {
         navigateTo("/");
         setIsVisibleDrawer(false);
@@ -33,6 +35,7 @@ export const DrawerLayout = ({
       label: "Clientes",
       key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
+      isVisible: user.roleCode === "super_admin",
       onClick: () => {
         navigateTo("/clients");
         setIsVisibleDrawer(false);
@@ -42,6 +45,7 @@ export const DrawerLayout = ({
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
+      isVisible: user.roleCode !== "marketing",
       onClick: () => {
         navigateTo("/users");
         setIsVisibleDrawer(false);
@@ -51,12 +55,15 @@ export const DrawerLayout = ({
       label: "Cerrar sesion",
       key: "logout",
       icon: <FontAwesomeIcon icon={faSignOutAlt} size="lg" />,
+      isVisible: true,
       onClick: async () => {
         await logout();
         setIsVisibleDrawer(false);
       },
     },
   ];
+
+  const filterByRoleCode = (items) => items.filter((item) => item.isVisible);
 
   return (
     <DrawerContainer
@@ -74,7 +81,11 @@ export const DrawerLayout = ({
       bodyStyle={{ padding: "0" }}
     >
       <div className="logo" />
-      <Menu defaultSelectedKeys={["1"]} mode="inline" items={items} />
+      <Menu
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+        items={filterByRoleCode(items)}
+      />
     </DrawerContainer>
   );
 };
