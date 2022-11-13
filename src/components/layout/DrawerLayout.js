@@ -2,11 +2,7 @@ import React from "react";
 import { Drawer, Menu } from "antd";
 import styled from "styled-components";
 import { version } from "../../firebase";
-import Title from "antd/lib/typography/Title";
 import { useAuthentication } from "../../providers";
-import { Logo } from "../../images";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 import {
   faHome,
   faLayerGroup,
@@ -14,6 +10,7 @@ import {
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { mediaQuery } from "../../styles";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
@@ -64,23 +61,15 @@ export const DrawerLayout = ({
   return (
     <DrawerContainer
       title={
-        <Row>
-          <Col span={6}>
-            <img src={Logo} width={50} alt="Sending emails logo" />
-          </Col>
-          <Col span={18}>
-            <Title level={3} style={{ margin: 0 }}>
-              Sending emails
-            </Title>
-            <h5>version: {version}</h5>
-          </Col>
-        </Row>
+        <div style={{ width: "100%", textAlign: "right" }}>
+          <h5>version: {version}</h5>
+        </div>
       }
-      placement="left"
+      placement="right"
       closable={true}
       onClose={() => setIsVisibleDrawer(!isVisibleDrawer)}
       open={isVisibleDrawer}
-      key="left"
+      key="right"
       className="drawer-content"
       bodyStyle={{ padding: "0" }}
     >
@@ -91,6 +80,10 @@ export const DrawerLayout = ({
 };
 
 const DrawerContainer = styled(Drawer)`
-  .drawer-content {
+  .ant-drawer-content-wrapper {
+    width: 100% !important;
+    ${mediaQuery.minTablet} {
+      width: 300px !important;
+    }
   }
 `;
