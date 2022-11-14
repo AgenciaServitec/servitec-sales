@@ -16,7 +16,7 @@ export const ContactsProvider = ({ children }) => {
   const { authUser } = useAuthentication();
 
   const [startDate, setStartDate] = useState(
-    moment().subtract(1, "week").format("YYYY-MM-DD")
+    moment().subtract(1, "month").format("YYYY-MM-DD")
   );
   const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
 

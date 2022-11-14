@@ -16,7 +16,7 @@ export const BaseLayout = ({ children }) => {
 
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
 
-  const navigateTo = (url) => navigate(url);
+  const onNavigateTo = (url) => navigate(url);
 
   return (
     <LayoutContainer>
@@ -25,9 +25,10 @@ export const BaseLayout = ({ children }) => {
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}
           user={authUser}
-          navigateTo={navigateTo}
+          onNavigateTo={onNavigateTo}
         />
         <HeaderLayout
+          onNavigateTo={onNavigateTo}
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}
           user={authUser}

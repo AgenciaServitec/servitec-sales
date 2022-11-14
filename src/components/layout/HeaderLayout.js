@@ -10,10 +10,15 @@ import { capitalize } from "lodash";
 
 const { Header } = Layout;
 
-export const HeaderLayout = ({ isVisibleDrawer, setIsVisibleDrawer, user }) => {
+export const HeaderLayout = ({
+  isVisibleDrawer,
+  setIsVisibleDrawer,
+  user,
+  onNavigateTo,
+}) => {
   return (
     <HeaderContainer>
-      <div className="item-logo">
+      <div className="item-logo" onClick={() => onNavigateTo("/")}>
         <Space align="center">
           <img src={Logo} width={35} alt="Sending emails logo" />
           <h3>Sending emails</h3>
@@ -58,6 +63,7 @@ const HeaderContainer = styled(Header)`
   .item-logo {
     display: flex;
     align-items: center;
+    cursor: pointer;
     h3 {
       margin: 0;
     }

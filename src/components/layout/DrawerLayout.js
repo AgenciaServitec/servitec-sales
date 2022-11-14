@@ -16,7 +16,7 @@ export const DrawerLayout = ({
   isVisibleDrawer,
   setIsVisibleDrawer,
   user,
-  navigateTo,
+  onNavigateTo,
 }) => {
   const { logout } = useAuthentication();
 
@@ -27,7 +27,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faHome} size="lg" />,
       isVisible: true,
       onClick: () => {
-        navigateTo("/");
+        onNavigateTo("/");
         setIsVisibleDrawer(false);
       },
     },
@@ -37,7 +37,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
       isVisible: user.roleCode === "super_admin",
       onClick: () => {
-        navigateTo("/clients");
+        onNavigateTo("/clients");
         setIsVisibleDrawer(false);
       },
     },
@@ -47,7 +47,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
       isVisible: user.roleCode !== "marketing",
       onClick: () => {
-        navigateTo("/users");
+        onNavigateTo("/users");
         setIsVisibleDrawer(false);
       },
     },
