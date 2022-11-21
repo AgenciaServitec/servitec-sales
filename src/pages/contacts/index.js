@@ -87,7 +87,7 @@ export const Contacts = () => {
   const handleStartDateChange = (value) =>
     onSetStartDate(moment(value).format("YYYY-MM-DD"));
   const handleEndDateChange = (value) =>
-    onSetEndDate(moment(value).format("YYYY-MM-DD"));
+    onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD"));
 
   return (
     <>

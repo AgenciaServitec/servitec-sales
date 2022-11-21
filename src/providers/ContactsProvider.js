@@ -8,7 +8,7 @@ import { notification } from "../components/ui";
 const ContactsContext = createContext({
   contacts: [],
   onSetStartDate: (value = moment().format("YYYY-MM-DD")) => value,
-  onSetEndDate: (value = moment().format("YYYY-MM-DD")) => value,
+  onSetEndDate: (value = moment().add(1, "hour").format("YYYY-MM-DD")) => value,
   loadingContacts: false,
 });
 
@@ -18,7 +18,9 @@ export const ContactsProvider = ({ children }) => {
   const [startDate, setStartDate] = useState(
     moment().subtract(1, "month").format("YYYY-MM-DD")
   );
-  const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(
+    moment().add(1, "hour").format("YYYY-MM-DD")
+  );
 
   const onSetStartDate = (value) => setStartDate(value);
   const onSetEndDate = (value) => setEndDate(value);
