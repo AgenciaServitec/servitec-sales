@@ -1,5 +1,6 @@
 import { template } from "./templates";
 import { html, sendMail } from "../sendMail";
+import { capitalize } from "lodash";
 
 interface Mail {
   email: string;
@@ -29,6 +30,6 @@ export const sendEmailMessage = async ({
 
 const mapMail = (emailMessage: EmailMessage, client: Client): Mail => ({
   email: emailMessage.email,
-  message: emailMessage.message,
+  message: capitalize(emailMessage.message),
   urlCompanyImage: client.logo.thumbUrl,
 });
