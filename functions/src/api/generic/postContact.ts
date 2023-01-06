@@ -107,6 +107,7 @@ const mapContact = (
     }),
     status: "pending",
     termsAndConditions: contact?.termsAndConditions || true,
+    isDeleted: false,
     createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
     createAt: now(),
   });

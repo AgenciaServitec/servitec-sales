@@ -44,6 +44,7 @@ interface GenericContact extends DefaultFirestoreProps {
   issue?: string;
   status: string;
   termsAndConditions: boolean;
+  isDeleted: boolean;
 }
 
 interface EmailMessage {
