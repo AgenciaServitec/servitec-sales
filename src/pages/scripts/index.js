@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Button, notification } from "../../components/ui";
-import { useGlobalData } from "../../providers";
+import { useContacts, useGlobalData } from "../../providers";
 import { assign } from "lodash";
 import { firestore } from "../../firebase";
-import moment from "moment";
 
 export const Scripts = () => {
   return <></>;
@@ -76,9 +75,9 @@ export const Scripts = () => {
   );
 };*/
 
-const TwoScript = () => {
+export const TwoScript = () => {
   /*SCRIPT PARA ACTUALIZAR LOS CAMPOS DE LA COLLECCIÓN*/
-  const { contacts } = useGlobalData();
+  const { contacts } = useContacts();
 
   const [loading, setLoading] = useState(false);
 
@@ -115,12 +114,9 @@ const TwoScript = () => {
   };
 
   const mapContact = (contact) =>
-    assign(
-      {},
-      {
-        createAtString: moment(contact.createAt.toDate()).format("YYYY-MM-DD"),
-      }
-    );
+    assign({}, contact, {
+      isDeleted: false,
+    });
 
   return (
     <div>
