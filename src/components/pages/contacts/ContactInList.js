@@ -6,14 +6,16 @@ import {
   faCalendarAlt,
   faEnvelope,
   faPhone,
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { capitalize, startCase, toUpper } from "lodash";
+import { capitalize, startCase } from "lodash";
 import Text from "antd/lib/typography/Text";
 import moment from "moment/moment";
 import { darken } from "polished";
 import styled, { css } from "styled-components";
 import { findColor } from "../../../utils";
 import { NoFound } from "../../../images";
+import { useAuthentication } from "../../../providers";
 
 export const ContactInList = ({
   contacts,
@@ -23,10 +25,9 @@ export const ContactInList = ({
   onOpenDrawerContact,
   onNavigateWithBlankTo,
   onNavigateTo,
+  onDeleteContact,
 }) => {
-  // const onDeleteContact = async (contactId) => {
-  //   await firestore.collection("contacts").doc(contactId).delete();
-  // };
+  const { authUser } = useAuthentication();
 
   const findClient = (clientId) =>
     clients.find((client) => client.id === clientId);
@@ -80,14 +81,16 @@ export const ContactInList = ({
                 tooltipTitle="Historial"
                 icon={faCalendarAlt}
               />,
-              // <IconAction
-              //   key={contact.id}
-              //   onClick={() => onDeleteContact(contact.id)}
-              //   size={55}
-              //   style={{ color: "#ff0b02" }}
-              //   tooltipTitle="Eliminar"
-              //   icon={faTrash}
-              // />,
+              authUser.roleCode === "super_admin" && (
+                <IconAction
+                  key={contact.id}
+                  onClick={() => onDeleteContact(contact.id)}
+                  size={55}
+                  style={{ color: "#ff0b02" }}
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                />
+              ),
             ]}
           >
             <List.Item.Meta

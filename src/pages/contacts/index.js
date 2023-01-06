@@ -20,6 +20,7 @@ import {
 import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { formatWord, formatWords } from "../../utils";
+import { firestore } from "../../firebase";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
 import { DatePicker } from "../../components/ui";
@@ -84,10 +85,18 @@ export const Contacts = () => {
   const onResetContact = () => setSearchDataForm([]);
 
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
+
   const handleStartDateChange = (value) =>
     onSetStartDate(moment(value).format("YYYY-MM-DD"));
+
   const handleEndDateChange = (value) =>
     onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD"));
+
+  const deleteContact = async (contactId) =>
+    await firestore
+      .collection("contacts")
+      .doc(contactId)
+      .update({ isDeleted: true });
 
   return (
     <>
@@ -207,6 +216,7 @@ export const Contacts = () => {
                       onOpenDrawerContact={onOpenDrawerContact}
                       onNavigateWithBlankTo={navigateWithBlankTo}
                       onNavigateTo={navigateTo}
+                      onDeleteContact={deleteContact}
                     />
                   ),
                 },

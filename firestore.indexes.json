@@ -5,16 +5,16 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "createAtString",
-          "order": "ASCENDING"
+          "fieldPath": "searchData",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "isDeleted",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "searchData",
-          "arrayConfig": "CONTAINS"
+          "fieldPath": "createAtString",
+          "order": "ASCENDING"
         }
       ]
     }
