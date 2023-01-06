@@ -29,6 +29,7 @@ export const ContactsProvider = ({ children }) => {
     authUser
       ? firestore
           .collection("contacts")
+          .where("isDeleted", "==", false)
           .where("createAtString", ">=", startDate)
           .where("createAtString", "<=", endDate)
           .where(

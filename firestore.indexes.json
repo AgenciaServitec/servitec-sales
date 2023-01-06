@@ -9,6 +9,10 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "isDeleted",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "searchData",
           "arrayConfig": "CONTAINS"
         }
