@@ -36,7 +36,6 @@ export const SendEmailMessageModal = ({
     reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
-
   const { required, error, errorMessage } = useFormUtils({ errors, schema });
 
   useEffect(() => {

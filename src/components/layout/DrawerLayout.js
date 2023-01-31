@@ -81,6 +81,7 @@ export const DrawerLayout = ({
       bodyStyle={{ padding: "0" }}
     >
       <div className="logo" />
+      <h1>{user}</h1>
       <Menu
         defaultSelectedKeys={["1"]}
         mode="inline"
