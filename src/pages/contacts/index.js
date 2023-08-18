@@ -87,16 +87,18 @@ export const Contacts = () => {
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
 
   const handleStartDateChange = (value) =>
-    onSetStartDate(moment(value).format("YYYY-MM-DD"));
+    onSetStartDate(moment(value).format("YYYY-MM-DD HH:mm"));
 
   const handleEndDateChange = (value) =>
-    onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD"));
+    onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD HH:mm"));
 
   const deleteContact = async (contactId) =>
     await firestore
       .collection("contacts")
       .doc(contactId)
       .update({ isDeleted: true });
+
+  console.log("loadingContacts", loadingContacts);
 
   return (
     <>
@@ -113,6 +115,7 @@ export const Contacts = () => {
             placeholder="Ingrese fecha"
             defaultValue={startDate}
             onChange={handleStartDateChange}
+            format="DD/MM/YYYY HH:mm"
           />
         </Col>
         <Col xs={24} sm={12} md={6}>
@@ -122,6 +125,7 @@ export const Contacts = () => {
             placeholder="Ingrese fecha"
             defaultValue={endDate}
             onChange={handleEndDateChange}
+            format="DD/MM/YYYY HH:mm"
           />
         </Col>
         <Col span={24}>
