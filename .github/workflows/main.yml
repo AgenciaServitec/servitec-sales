@@ -67,5 +67,5 @@ jobs:
         run: yarn prettier:check
       - name: Check Eslint
         run: yarn eslint:check
-      # - name: Check Type
-      #  run: yarn type:check
+      - name: Check Type
+        run: yarn type:check
