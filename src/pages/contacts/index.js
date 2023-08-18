@@ -98,8 +98,6 @@ export const Contacts = () => {
       .doc(contactId)
       .update({ isDeleted: true });
 
-  console.log("loadingContacts", loadingContacts);
-
   return (
     <>
       <Row gutter={[16, 16]}>
