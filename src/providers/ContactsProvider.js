@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
-import { fetchCollectionOnce, firestore } from "../firebase";
+import { firestore, querySnapshotToArray } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
 import { chunk } from "lodash";
@@ -56,7 +56,7 @@ export const ContactsProvider = ({ children }) => {
       existsAllOption
         ? clients.map((client) => client.id)
         : authUser?.clientsIds,
-      9
+      10
     ).map((clientsIdsChunk) =>
       queryRef
         .where("createAtString", ">=", startDate)
@@ -65,15 +65,13 @@ export const ContactsProvider = ({ children }) => {
         .where("isDeleted", "==", false)
     );
 
-    const contactsChunk = await Promise.all(
-      promises.map(async (promise) => {
-        return fetchCollectionOnce(promise);
+    await Promise.all(
+      promises.map((promise) => {
+        return promise.onSnapshot((querySnapshot) => {
+          setContacts(querySnapshotToArray(querySnapshot));
+        });
       })
     );
-
-    const contacts_ = contactsChunk.flatMap((contacts) => contacts);
-
-    setContacts(contacts_);
   };
 
   return (
