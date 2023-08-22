@@ -3,15 +3,7 @@ import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  InputPassword,
-  notification,
-  Select,
-} from "../../../components/ui";
+import { Button, Form, Input, InputNumber, InputPassword, notification, Select } from "../../../components/ui";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -19,7 +11,7 @@ import { useFormUtils } from "../../../hooks";
 import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
-import { assign, capitalize } from "lodash";
+import { assign, capitalize, concat } from "lodash";
 import { phoneCodes, roles } from "../../../data-list";
 import { useApiUserPost, useApiUserPut } from "../../../api";
 
@@ -67,12 +59,16 @@ export const UserIntegration = () => {
     if (!responseStatus) return notification({ type: "error" });
   };
 
-  const mapUser = (formData) =>
-    assign(
+  const mapUser = (formData) => {
+    const existsAllOption = formData.clientsIds.find((clientId)=> clientId === "all");
+
+    const clientsIds = existsAllOption ? ["all"] : formData.clientsIds;
+
+    return assign(
       {},
       {
         id: user.id,
-        clientsIds: formData.clientsIds,
+        clientsIds: clientsIds,
         roleCode: formData.roleCode,
         firstName: formData.firstName.toLowerCase(),
         lastName: formData.lastName.toLowerCase(),
@@ -80,11 +76,12 @@ export const UserIntegration = () => {
         password: formData.password,
         phone: {
           number: formData.phoneNumber,
-          countryCode: formData.countryCode,
+          countryCode: formData.countryCode
         },
-        ...(formData?.profileImage && { profileImage: formData.profileImage }),
+        ...(formData?.profileImage && { profileImage: formData.profileImage })
       }
     );
+  };
 
   const onGoBack = () => navigate(-1);
 
@@ -110,7 +107,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     email: yup.string().email().required(),
     password: yup.string().required(),
     countryCode: yup.string().required(),
-    phoneNumber: yup.number().required(),
+    phoneNumber: yup.number().required()
   });
 
   const {
@@ -118,8 +115,9 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     handleSubmit,
     control,
     reset,
+    watch
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema)
   });
 
   const { required, error } = useFormUtils({ errors, schema });
@@ -138,8 +136,26 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
       password: user?.password || "",
       countryCode: user?.phone?.countryCode || "+51",
       phoneNumber: user?.phone?.number || "",
-      profileImage: user?.profileImage || null,
+      profileImage: user?.profileImage || null
     });
+  };
+
+  const getClientsIdsOptions = () => {
+    const existsAllOption = (watch("clientsIds") || []).find((clientId) => clientId === "all");
+
+    if (!existsAllOption) return concat([
+      {
+        name: "Todos",
+        id: "all"
+      }
+    ], clients);
+
+      return [
+        {
+          name: "Todos",
+          id: "all"
+        }
+      ];
   };
 
   const submitSaveUser = (formData) => onSubmitSaveUser(formData);
@@ -165,9 +181,9 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     onChange={onChange}
                     error={error(name)}
                     required={required(name)}
-                    options={clients.map((client) => ({
+                    options={(getClientsIdsOptions() || []).map((client) => ({
                       label: capitalize(client.name),
-                      value: client.id,
+                      value: client.id
                     }))}
                   />
                 )}
@@ -187,7 +203,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     required={required(name)}
                     options={roles.map((role) => ({
                       label: capitalize(role.roleName),
-                      value: role.roleCode,
+                      value: role.roleCode
                     }))}
                   />
                 )}
@@ -276,7 +292,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                     options={phoneCodes.map((phoneCode) => ({
                       code: phoneCode.code,
                       label: `${phoneCode.name} (${phoneCode.dial_code})`,
-                      value: phoneCode.dial_code,
+                      value: phoneCode.dial_code
                     }))}
                   />
                 )}

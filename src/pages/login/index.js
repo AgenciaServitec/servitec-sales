@@ -8,8 +8,6 @@ import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
 import { useFormUtils } from "../../hooks";
 import Title from "antd/es/typography/Title";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
 
 export const Login = () => {
   const navigate = useNavigate();

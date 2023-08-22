@@ -65,11 +65,30 @@ export const Contacts = () => {
   const onOpenDrawerContact = () => setIsVisibleDrawerContact(true);
   const onCloseDrawerContact = () => setIsVisibleDrawerContact(false);
 
+  const existsAllOption = authUser?.clientsIds.find(
+    (clientId) => clientId === "all"
+  );
+
+  const clientsIds = clients.map((client) => client.id);
+
+  const viewClients = orderBy(
+    clients.filter((client) =>
+      includes(existsAllOption ? clientsIds : authUser?.clientsIds, client.id)
+    ),
+    ["name"],
+    ["asc"]
+  );
+
   const viewContacts = () => {
     const result = contacts
       .filter((contact) => contact.status === status)
       .filter((contact) =>
-        clientId === "all" ? true : contact.clientId === clientId
+        clientId === "all"
+          ? includes(
+              viewClients.map((client) => client.id),
+              contact.clientId
+            )
+          : contact.clientId === clientId
       )
       .filter((contact) =>
         searchDataForm.length >= 1
@@ -132,8 +151,7 @@ export const Contacts = () => {
             onSetClientId={setClientId}
             status={status}
             clientId={clientId}
-            clients={clients}
-            authUser={authUser}
+            clients={viewClients}
           />
         </Col>
         <Col span={24}>

@@ -2,7 +2,7 @@ import React from "react";
 import { Radio } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import { capitalize, includes, orderBy } from "lodash";
+import { capitalize } from "lodash";
 
 export const FiltersContact = ({
   onSetStatus,
@@ -10,17 +10,10 @@ export const FiltersContact = ({
   status,
   clientId,
   clients,
-  authUser,
 }) => {
   const handleStatusChange = (e) => onSetStatus(e.target.value);
 
   const handleClientCodeChange = (e) => onSetClientId(e.target.value);
-
-  const viewClients = orderBy(
-    clients.filter((client) => includes(authUser?.clientsIds, client.id)),
-    ["name"],
-    ["asc"]
-  );
 
   return (
     <Row gutter={[16, 16]}>
@@ -31,7 +24,7 @@ export const FiltersContact = ({
         <div>
           <Radio.Group value={clientId} onChange={handleClientCodeChange}>
             <Radio.Button value="all">Todos</Radio.Button>
-            {viewClients.map((client, index) => (
+            {clients.map((client, index) => (
               <Radio.Button key={index} value={client.id}>
                 {capitalize(client.name)}
               </Radio.Button>

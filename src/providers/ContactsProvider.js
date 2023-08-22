@@ -4,16 +4,19 @@ import { fetchCollectionOnce, firestore } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
 import { chunk } from "lodash";
+import { useGlobalData } from "./GlobalDataProvider";
 
 const ContactsContext = createContext({
   contacts: [],
   onSetStartDate: (value = moment().format("YYYY-MM-DD")) => value,
   onSetEndDate: (value = moment().add(1, "hour").format("YYYY-MM-DD")) => value,
-  loadingContacts: true,
+  loadingContacts: true
 });
 
 export const ContactsProvider = ({ children }) => {
   const { authUser } = useAuthentication();
+  const { clients } = useGlobalData();
+
   const [contacts, setContacts] = useState([]);
 
   const [loadingContacts, setLoadingContacts] = useState(true);
@@ -45,7 +48,9 @@ export const ContactsProvider = ({ children }) => {
   const fetchContact = async () => {
     const queryRef = firestore.collection("contacts");
 
-    const promises = chunk(authUser?.clientsIds, 9).map((clientsIdsChunk) =>
+    const existsAllOption = (authUser?.clientsIds || []).find((clientId) => clientId === "all");
+
+    const promises = chunk(existsAllOption ? clients.map((client) => client.id) : authUser?.clientsIds, 9).map((clientsIdsChunk) =>
       queryRef
         .where("createAtString", ">=", startDate)
         .where("createAtString", "<=", endDate)
@@ -72,7 +77,7 @@ export const ContactsProvider = ({ children }) => {
         endDate: moment(endDate, "YYYY-MM-DD"),
         onSetStartDate,
         onSetEndDate,
-        loadingContacts,
+        loadingContacts
       }}
     >
       {children}
