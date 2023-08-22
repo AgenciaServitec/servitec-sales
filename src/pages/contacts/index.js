@@ -23,7 +23,7 @@ import { formatWord, formatWords } from "../../utils";
 import { firestore } from "../../firebase";
 import useSound from "use-sound";
 import { ContactSound } from "../../multimedia";
-import { DatePicker } from "../../components/ui";
+import { DatePicker, modalConfirm } from "../../components/ui";
 import moment from "moment";
 
 export const Contacts = () => {
@@ -110,6 +110,13 @@ export const Contacts = () => {
 
   const handleEndDateChange = (value) =>
     onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD HH:mm"));
+
+  const confirmDeleteContact = (contactId) =>
+    modalConfirm({
+      title: "¿Seguro que quieres eliminar?",
+      content: "se eliminara el contacto",
+      onOk: () => deleteContact(contactId),
+    });
 
   const deleteContact = async (contactId) =>
     await firestore
@@ -236,7 +243,7 @@ export const Contacts = () => {
                       onOpenDrawerContact={onOpenDrawerContact}
                       onNavigateWithBlankTo={navigateWithBlankTo}
                       onNavigateTo={navigateTo}
-                      onDeleteContact={deleteContact}
+                      onConfirmDeleteContact={confirmDeleteContact}
                     />
                   ),
                 },

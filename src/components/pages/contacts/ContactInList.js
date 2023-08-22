@@ -25,7 +25,7 @@ export const ContactInList = ({
   onOpenDrawerContact,
   onNavigateWithBlankTo,
   onNavigateTo,
-  onDeleteContact,
+  onConfirmDeleteContact,
 }) => {
   const { authUser } = useAuthentication();
 
@@ -84,7 +84,7 @@ export const ContactInList = ({
               authUser.roleCode === "super_admin" && (
                 <IconAction
                   key={contact.id}
-                  onClick={() => onDeleteContact(contact.id)}
+                  onClick={() => onConfirmDeleteContact(contact.id)}
                   size={55}
                   style={{ color: "#ff0b02" }}
                   tooltipTitle="Eliminar"
