@@ -52,12 +52,6 @@ export const Contacts = () => {
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
 
-  const playToSound = () => play();
-
-  useEffect(() => {
-    authUser && lastContact?.status !== "attended" && playToSound();
-  }, [contacts]);
-
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
   const navigateTo = (url) => navigate(url);

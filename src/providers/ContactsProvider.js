@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useAuthentication } from "./AuthenticationProvider";
-import { firestore, querySnapshotToArray } from "../firebase";
+import { firestore } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
-import { chunk } from "lodash";
+import { chunk, uniqBy } from "lodash";
 import { useGlobalData } from "./GlobalDataProvider";
+import useSound from "use-sound";
+import { ContactSound } from "../multimedia";
 
 const ContactsContext = createContext({
   contacts: [],
@@ -16,6 +18,8 @@ const ContactsContext = createContext({
 export const ContactsProvider = ({ children }) => {
   const { authUser } = useAuthentication();
   const { clients } = useGlobalData();
+
+  const [play] = useSound(ContactSound);
 
   const [contacts, setContacts] = useState([]);
 
@@ -31,18 +35,18 @@ export const ContactsProvider = ({ children }) => {
   const onSetStartDate = (value) => setStartDate(value);
   const onSetEndDate = (value) => setEndDate(value);
 
+  const playToSound = () => play();
+
   useEffect(() => {
-    (async () => {
-      try {
-        setLoadingContacts(true);
-        await fetchContact();
-      } catch (error) {
-        notification({ type: "error" });
-        console.log("Error in fetchContact->", error);
-      } finally {
-        setLoadingContacts(false);
-      }
-    })();
+    try {
+      setLoadingContacts(true);
+      fetchContact();
+    } catch (error) {
+      notification({ type: "error" });
+      console.log("Error in fetchContact->", error);
+    } finally {
+      setLoadingContacts(false);
+    }
   }, [startDate, endDate]);
 
   const fetchContact = async () => {
@@ -52,7 +56,7 @@ export const ContactsProvider = ({ children }) => {
       (clientId) => clientId === "all"
     );
 
-    const promises = chunk(
+    chunk(
       existsAllOption
         ? clients.map((client) => client.id)
         : authUser?.clientsIds,
@@ -63,14 +67,19 @@ export const ContactsProvider = ({ children }) => {
         .where("createAtString", "<=", endDate)
         .where("searchData", "array-contains-any", clientsIdsChunk)
         .where("isDeleted", "==", false)
-    );
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              playToSound();
+            }
+          });
 
-    await Promise.all(
-      promises.map((promise) => {
-        return promise.onSnapshot((querySnapshot) => {
-          setContacts(querySnapshotToArray(querySnapshot));
-        });
-      })
+          querySnapshot.forEach((doc) => {
+            setContacts((prevContacts) =>
+              uniqBy([...prevContacts, doc.data()], "id")
+            );
+          });
+        })
     );
   };
 
