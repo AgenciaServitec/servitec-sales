@@ -3,7 +3,6 @@ import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Select from "antd/lib/select";
-import Text from "antd/lib/typography/Text";
 import Button from "antd/lib/button";
 import Tabs from "antd/lib/tabs";
 import Spin from "antd/lib/spin";
