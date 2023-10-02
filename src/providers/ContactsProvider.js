@@ -3,15 +3,13 @@ import { useAuthentication } from "./AuthenticationProvider";
 import { firestore } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
-import { chunk, uniqBy } from "lodash";
+import { chunk, merge } from "lodash";
 import { useGlobalData } from "./GlobalDataProvider";
 import useSound from "use-sound";
 import { ContactSound } from "../multimedia";
 
 const ContactsContext = createContext({
   contacts: [],
-  onSetStartDate: (value = moment().format("YYYY-MM-DD")) => value,
-  onSetEndDate: (value = moment().add(1, "hour").format("YYYY-MM-DD")) => value,
   loadingContacts: true,
 });
 
@@ -22,34 +20,23 @@ export const ContactsProvider = ({ children }) => {
   const [play] = useSound(ContactSound);
 
   const [contacts, setContacts] = useState([]);
-
   const [loadingContacts, setLoadingContacts] = useState(true);
-
-  const [startDate, setStartDate] = useState(
-    moment().subtract(1, "month").format("YYYY-MM-DD")
-  );
-  const [endDate, setEndDate] = useState(
-    moment().add(6, "hour").format("YYYY-MM-DD")
-  );
-
-  const onSetStartDate = (value) => setStartDate(value);
-  const onSetEndDate = (value) => setEndDate(value);
 
   const playToSound = () => play();
 
   useEffect(() => {
     try {
       setLoadingContacts(true);
-      fetchContact();
+      fetchContacts();
     } catch (error) {
       notification({ type: "error" });
-      console.log("Error in fetchContact->", error);
+      console.log("Error in fetchContacts->", error);
     } finally {
       setLoadingContacts(false);
     }
-  }, [startDate, endDate]);
+  }, []);
 
-  const fetchContact = async () => {
+  const fetchContacts = () => {
     const queryRef = firestore.collection("contacts");
 
     const existsAllOption = (authUser?.clientsIds || []).find(
@@ -61,36 +48,47 @@ export const ContactsProvider = ({ children }) => {
         ? clients.map((client) => client.id)
         : authUser?.clientsIds,
       10
-    ).map((clientsIdsChunk) =>
-      queryRef
-        .where("createAtString", ">=", startDate)
-        .where("createAtString", "<=", endDate)
+    ).map((clientsIdsChunk) => {
+      const unsubscribe = queryRef
+        .where(
+          "createAtString",
+          ">=",
+          moment().subtract(3, "month").format("YYYY-MM-DD")
+        )
+        .where("createAtString", "<=", moment().format("YYYY-MM-DD"))
         .where("searchData", "array-contains-any", clientsIdsChunk)
         .where("isDeleted", "==", false)
-        .onSnapshot((querySnapshot) => {
-          querySnapshot.docChanges().forEach((change) => {
-            if (change.type === "added") {
+        .onSnapshot((snapshot) => {
+          const newData = [];
+
+          snapshot.forEach((doc) => {
+            const currentDateWithSubtract1Minute = moment().subtract(
+              7,
+              "seconds"
+            );
+
+            if (
+              moment(doc?.data()?.createAt.toDate()).isBetween(
+                currentDateWithSubtract1Minute
+              )
+            ) {
               playToSound();
             }
+
+            newData.push({ id: doc.id, ...doc.data() });
           });
 
-          querySnapshot.forEach((doc) => {
-            setContacts((prevContacts) =>
-              uniqBy([...prevContacts, doc.data()], "id")
-            );
-          });
-        })
-    );
+          setContacts(merge(newData, contacts));
+        });
+
+      return () => unsubscribe();
+    });
   };
 
   return (
     <ContactsContext.Provider
       value={{
-        contacts,
-        startDate: moment(startDate, "YYYY-MM-DD"),
-        endDate: moment(endDate, "YYYY-MM-DD"),
-        onSetStartDate,
-        onSetEndDate,
+        contacts: contacts,
         loadingContacts,
       }}
     >

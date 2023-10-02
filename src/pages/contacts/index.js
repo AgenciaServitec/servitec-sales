@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -21,27 +21,15 @@ import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { formatWord, formatWords } from "../../utils";
 import { firestore } from "../../firebase";
-import useSound from "use-sound";
-import { ContactSound } from "../../multimedia";
-import { DatePicker, modalConfirm } from "../../components/ui";
-import moment from "moment";
+import { modalConfirm } from "../../components/ui";
 
 export const Contacts = () => {
   const navigate = useNavigate();
   const { isMobile } = useDevice();
 
   const { authUser } = useAuthentication();
-  const {
-    contacts,
-    loadingContacts,
-    startDate,
-    endDate,
-    onSetStartDate,
-    onSetEndDate,
-  } = useContacts();
+  const { contacts, loadingContacts } = useContacts();
   const { clients } = useGlobalData();
-
-  const [play] = useSound(ContactSound);
 
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientId, setClientId] = useQueryString("clientId", "all");
@@ -73,8 +61,8 @@ export const Contacts = () => {
     ["asc"]
   );
 
-  const viewContacts = () => {
-    const result = contacts
+  const viewContacts = orderBy(
+    contacts
       .filter((contact) => contact.status === status)
       .filter((contact) =>
         clientId === "all"
@@ -90,20 +78,14 @@ export const Contacts = () => {
               includes(formatWords(searchDataForm), formatWord(word))
             )
           : true
-      );
-
-    return orderBy(result, ["createAt"], ["desc"]);
-  };
+      ),
+    ["createAt"],
+    ["desc"]
+  );
 
   const onResetContact = () => setSearchDataForm([]);
 
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
-
-  const handleStartDateChange = (value) =>
-    onSetStartDate(moment(value).format("YYYY-MM-DD HH:mm"));
-
-  const handleEndDateChange = (value) =>
-    onSetEndDate(moment(value).add(1, "hour").format("YYYY-MM-DD HH:mm"));
 
   const confirmDeleteContact = (contactId) =>
     modalConfirm({
@@ -122,29 +104,7 @@ export const Contacts = () => {
     <>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={5}>
-            Total contactos: {viewContacts()?.length || 0}
-          </Title>
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <DatePicker
-            label="Fecha inicio"
-            animation
-            placeholder="Ingrese fecha"
-            defaultValue={startDate}
-            onChange={handleStartDateChange}
-            format="DD/MM/YYYY HH:mm"
-          />
-        </Col>
-        <Col xs={24} sm={12} md={6}>
-          <DatePicker
-            label="Fecha final"
-            animation
-            placeholder="Ingrese fecha"
-            defaultValue={endDate}
-            onChange={handleEndDateChange}
-            format="DD/MM/YYYY HH:mm"
-          />
+          <Title level={5}>Total contactos: {viewContacts?.length || 0}</Title>
         </Col>
         <Col span={24}>
           <FiltersContact
@@ -200,7 +160,7 @@ export const Contacts = () => {
         <Row gutter={[16, 0]}>
           <Col span={24}>
             <Tabs
-              defaultActiveKey="1"
+              defaultActiveKey="2"
               items={[
                 {
                   key: 1,
@@ -209,7 +169,8 @@ export const Contacts = () => {
                     <Row gutter={[16, 16]}>
                       <Col xs={24} sm={24} md={19}>
                         <ContactInBubbles
-                          contacts={viewContacts()}
+                          key={viewContacts?.length || 0}
+                          contacts={viewContacts}
                           lastContact={lastContact}
                           clients={clients}
                           onOpenDrawerContact={onOpenDrawerContact}
@@ -230,7 +191,8 @@ export const Contacts = () => {
                   label: "LISTA",
                   children: (
                     <ContactInList
-                      contacts={viewContacts()}
+                      key={viewContacts?.length || 0}
+                      contacts={viewContacts}
                       isMobile={isMobile}
                       clients={clients}
                       onSetContact={setContact}
