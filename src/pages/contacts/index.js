@@ -83,7 +83,11 @@ export const Contacts = () => {
     ["desc"]
   );
 
-  const onResetContact = () => setSearchDataForm([]);
+  const onResetContact = () => {
+    setStatus("pending");
+    setClientId("all");
+    setSearchDataForm([]);
+  };
 
   const handleSearchDataFormChange = (value) => setSearchDataForm(value);
 
@@ -120,27 +124,13 @@ export const Contacts = () => {
             <Col xs={24} sm={17} md={20}>
               <Space direction="vertical" style={{ width: "100%" }}>
                 <Select
-                  placeholder="Ingrese datos de busqueda"
+                  placeholder="Ingrese datos de busqueda (Ejemplo: noel, moriano, 931136482, noel@gmail.com, 2022-12-30)"
                   mode="tags"
                   size="large"
                   value={searchDataForm || null}
                   onChange={handleSearchDataFormChange}
                   style={{ width: "100%" }}
                 />
-                <div>
-                  <div>
-                    <Text>
-                      Puedes realizar la busqueda con los siguientes datos:
-                      nombres, apellidos, teléfono, email, f.creación, hostname
-                    </Text>
-                  </div>
-                  <div>
-                    <Text keyboard>
-                      Ejemplo: noel, moriano, 931136482, noel@gmail.com,
-                      2022-12-30
-                    </Text>
-                  </div>
-                </div>
               </Space>
             </Col>
             <Col xs={24} sm={7} md={4}>

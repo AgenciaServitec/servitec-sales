@@ -3,6 +3,7 @@ import { Radio } from "antd";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import { capitalize } from "lodash";
+import styled from "styled-components";
 
 export const FiltersContact = ({
   onSetStatus,
@@ -21,7 +22,7 @@ export const FiltersContact = ({
         <div>
           <label>Cliente:</label>
         </div>
-        <div>
+        <WrapperScrollX>
           <Radio.Group value={clientId} onChange={handleClientCodeChange}>
             <Radio.Button value="all">Todos</Radio.Button>
             {clients.map((client, index) => (
@@ -30,7 +31,7 @@ export const FiltersContact = ({
               </Radio.Button>
             ))}
           </Radio.Group>
-        </div>
+        </WrapperScrollX>
       </Col>
       <Col xs={24} sm={6} md={4}>
         <div>
@@ -46,3 +47,12 @@ export const FiltersContact = ({
     </Row>
   );
 };
+
+const WrapperScrollX = styled.div`
+  .ant-radio-group {
+    width: 100%;
+    max-width: 100%;
+    overflow: auto;
+    display: flex;
+  }
+`;
