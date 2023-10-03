@@ -3,7 +3,7 @@
     "node-mailer": {
       "port": 465,
       "host": "smtp.gmail.com",
-      "from": "Email de contacto",
+      "from": "Servitec Sales <noreply@servitecsales.com>",
       "user": "nmoriano26@gmail.com",
       "pass": "mbnpgrdavwtxkljc"
     }

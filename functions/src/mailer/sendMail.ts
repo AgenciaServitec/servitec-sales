@@ -6,8 +6,6 @@ import Mail from "nodemailer/lib/mailer";
 const { host, from, pass, user, port } = environmentConfig["node-mailer"];
 
 export const sendMail = async (mailOptions: Mail.Options): Promise<void> => {
-  mailOptions.from = `${from} <${user}>`;
-
   const transporter = nodemailer.createTransport({
     port,
     host,
@@ -17,7 +15,7 @@ export const sendMail = async (mailOptions: Mail.Options): Promise<void> => {
     },
   });
 
-  await transporter.sendMail(mailOptions);
+  await transporter.sendMail({ ...mailOptions, from });
 };
 
 export const html = (template: string, view: unknown): string =>

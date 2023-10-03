@@ -20,8 +20,8 @@ export const HeaderLayout = ({
     <HeaderContainer>
       <div className="item-logo" onClick={() => onNavigateTo("/")}>
         <Space align="center">
-          <img src={Logo} width={35} alt="Sending emails logo" />
-          <h3>Sending emails</h3>
+          <img src={Logo} width={35} alt="Servitec Sales logo" />
+          <h3>Servitec Sales</h3>
         </Space>
       </div>
       <div className="user-items">
