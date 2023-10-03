@@ -39,7 +39,7 @@ export const Login = () => {
     <Container>
       <div className="wrapper-login">
         <div className="title-login">
-          <Title level={2}>Iniciar sesión</Title>
+          <Title level={2}>Servitec Sales</Title>
         </div>
         <Form onSubmit={handleSubmit(onSubmitLogin)}>
           <Controller
