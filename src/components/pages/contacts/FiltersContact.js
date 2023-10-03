@@ -27,7 +27,7 @@ export const FiltersContact = ({
             <Radio.Button value="all">Todos</Radio.Button>
             {clients.map((client, index) => (
               <Radio.Button key={index} value={client.id}>
-                {capitalize(client.name)}
+                <div>{capitalize(client.name)}</div>
               </Radio.Button>
             ))}
           </Radio.Group>
@@ -54,5 +54,11 @@ const WrapperScrollX = styled.div`
     max-width: 100%;
     overflow: auto;
     display: flex;
+    .ant-radio-button-wrapper {
+      span {
+        display: block;
+        white-space: nowrap;
+      }
+    }
   }
 `;

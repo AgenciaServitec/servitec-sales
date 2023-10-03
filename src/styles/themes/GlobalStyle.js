@@ -38,6 +38,31 @@ const global = css`
       color: #4994fd;
     }
   }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  &:hover {
+    ::-webkit-scrollbar-thumb {
+      background: #444;
+    }
+  }
+
+  /* Handle on hover */
+  &:hover {
+    ::-webkit-scrollbar-thumb:hover {
+      background: #444;
+    }
+  }
 `;
 
 const antd = {
