@@ -55,7 +55,11 @@ export const ContactsProvider = ({ children }) => {
           ">=",
           moment().subtract(3, "month").format("YYYY-MM-DD")
         )
-        .where("createAtString", "<=", moment().format("YYYY-MM-DD"))
+        .where(
+          "createAtString",
+          "<=",
+          moment().add(1, "hour").format("YYYY-MM-DD")
+        )
         .where("searchData", "array-contains-any", clientsIdsChunk)
         .where("isDeleted", "==", false)
         .onSnapshot((snapshot) => {
