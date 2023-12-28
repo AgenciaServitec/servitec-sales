@@ -35,6 +35,7 @@
         "ignoreVoid": true,
         "ignoreIIFE": true
       }
-    ]
+    ],
+    "prettier/prettier": "off" // Deshabilitar la regla de Prettier para este archivo
   }
 }
