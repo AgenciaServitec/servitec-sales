@@ -50,7 +50,7 @@
       "appId": "1:528330562982:web:bce7ad727e137f3a6f4367"
     },
     "buckets": {},
-    "apiUrl": "https://us-central1-sendingemails-348505.cloudfunctions.net/api",
+    "apiUrl": "https://apiv2-zqojs65rya-uc.a.run.app",
     "ipInfoApi": "https://ipinfo.io/json?token=09c720dcbb804f"
   }
 }
