@@ -13,7 +13,7 @@ interface Body {
 export const patchUser = async (
   req: Request<Params, unknown, Body, unknown>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const {
     params: { userId },
@@ -40,7 +40,7 @@ export const patchUser = async (
 
 const deleteUserFirestore = async (
   userId: string,
-  user: Partial<User>
+  user: Partial<User>,
 ): Promise<void> => {
   const { assignDeleteProps } = defaultFirestoreProps();
 

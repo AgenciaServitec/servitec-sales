@@ -15,7 +15,7 @@ interface Body {
 export const PostContact = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { body: formData } = req;
@@ -68,7 +68,7 @@ export const PostContact = async (
 
 const fetchClient = async (hostname: string): Promise<Client | undefined> => {
   const clients = await fetchCollection<Client>(
-    firestore.collection("clients").where("hostname", "==", hostname)
+    firestore.collection("clients").where("hostname", "==", hostname),
   );
 
   return clients[0];
@@ -76,7 +76,7 @@ const fetchClient = async (hostname: string): Promise<Client | undefined> => {
 
 const fetchSetContact = async (
   contact: GenericContact,
-  client: Client
+  client: Client,
 ): Promise<void> => {
   const contactId = firestore.collection("contacts").doc().id;
 
@@ -89,7 +89,7 @@ const fetchSetContact = async (
 const mapContact = (
   contactId: string,
   contact: GenericContact,
-  client: Client
+  client: Client,
 ): OmitDefaultFirestoreProps<GenericContact> => {
   const contact_ = merge(contact, {
     clientId: client.id,

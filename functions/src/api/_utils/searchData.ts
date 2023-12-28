@@ -27,7 +27,7 @@ import moment from "moment";
 // };
 
 export const searchDataGeneric = (
-  contact: Omit<GenericContact, "searchData">
+  contact: Omit<GenericContact, "searchData">,
 ): string[] => {
   return [
     contact.id,

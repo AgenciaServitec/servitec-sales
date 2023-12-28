@@ -23,7 +23,7 @@ app.post(
     body("roleCode").exists(),
     body("updateBy").exists(),
   ],
-  postUser
+  postUser,
 );
 
 app.put(
@@ -35,7 +35,7 @@ app.put(
     body("roleCode").exists(),
     body("updateBy").exists(),
   ],
-  putUser
+  putUser,
 );
 
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
@@ -50,14 +50,14 @@ app.post(
     body("contact.hostname").exists(),
   ],
   validateRequest,
-  PostContactGeneric
+  PostContactGeneric,
 );
 
 app.post(
   "/email/send-message",
   [body("email").exists(), body("message").exists()],
   validateRequest,
-  PostSendMessage
+  PostSendMessage,
 );
 
 app.use(errorHandler);

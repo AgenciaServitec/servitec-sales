@@ -17,7 +17,7 @@ export const mapApiImage = (image: _Image): Image => ({
 });
 
 export const searchName = (
-  names: (string | null | number | undefined)[]
+  names: (string | null | number | undefined)[],
 ): string[] =>
   names
     .filter((name) => name)
@@ -26,5 +26,5 @@ export const searchName = (
         .trim()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/\p{Diacritic}/gu, "")
+        .replace(/\p{Diacritic}/gu, ""),
     );

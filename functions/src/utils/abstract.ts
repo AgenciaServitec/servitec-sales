@@ -4,5 +4,5 @@ export const uniq = (strings: string[]): string[] =>
       .trim()
       .toLowerCase()
       .normalize("NFD")
-      .replace(/\p{Diacritic}/gu, "")
+      .replace(/\p{Diacritic}/gu, ""),
   );
