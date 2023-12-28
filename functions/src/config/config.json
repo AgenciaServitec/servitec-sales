@@ -1,11 +1,11 @@
 {
   "common": {
     "node-mailer": {
-      "port": 465,
+      "port": 587,
       "host": "smtp.gmail.com",
       "from": "Servitec Sales <noreply@servitecsales.com>",
-      "user": "nmoriano26@gmail.com",
-      "pass": "mbnpgrdavwtxkljc"
+      "user": "servitecperu266@gmail.com",
+      "pass": "pimj xirj ucys supz"
     }
   },
   "development": {
@@ -15,8 +15,8 @@
     "mailer": {
       "generic": {
         "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "servitec266@gmail.com"
         }
       }
     }
@@ -28,8 +28,8 @@
     "mailer": {
       "generic": {
         "contact": {
-          "bcc": "beto1perk@gmail.com",
-          "to": "nmoriano26@gmail.com"
+          "bcc": "beto1perk@gmail.com,nmoriano26@gmail.com",
+          "to": "servitec266@gmail.com"
         }
       }
     }
