@@ -28,12 +28,14 @@
     "camelcase": "off",
     "new-cap": "off",
     "require-jsdoc": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-floating-promises": [
       "error",
       {
         "ignoreVoid": true,
         "ignoreIIFE": true
       }
-    ]
+    ],
+    "prettier/prettier": "off" // Deshabilitar la regla de Prettier para este archivo
   }
 }

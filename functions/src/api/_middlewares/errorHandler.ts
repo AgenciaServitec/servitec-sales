@@ -6,7 +6,7 @@ export const errorHandler: ErrorRequestHandler = (
   req,
   res,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next // next is required to detect "ErrorRequestHandler"
+  next, // next is required to detect "ErrorRequestHandler"
 ): void => {
   const { body, query, params, headers, path } = req;
 

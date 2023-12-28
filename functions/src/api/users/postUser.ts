@@ -15,7 +15,7 @@ interface Params {
 export const postUser = async (
   req: Request<Params, unknown, User, unknown>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const {
     params: { userId },
@@ -67,7 +67,7 @@ const isEmailExists = async (email: string): Promise<boolean> => {
     firestore
       .collection("users")
       .where("isDeleted", "==", false)
-      .where("email", "==", email)
+      .where("email", "==", email),
   );
 
   return !isEmpty(users);
@@ -75,7 +75,7 @@ const isEmailExists = async (email: string): Promise<boolean> => {
 
 const isUserExists = async (userId: string): Promise<boolean> => {
   const user = await fetchDocument<User>(
-    firestore.collection("users").doc(userId)
+    firestore.collection("users").doc(userId),
   );
 
   return !isEmpty(user);

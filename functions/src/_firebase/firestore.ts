@@ -27,7 +27,7 @@ export const toTimestamp = ({
 type Document<T> = { id: string } & T;
 
 export const querySnapshotToArray = <T>(
-  querySnapshot: FirestoreQuerySnapshot
+  querySnapshot: FirestoreQuerySnapshot,
 ): Document<T>[] => {
   const documents: Document<T>[] = [];
 
@@ -40,7 +40,7 @@ export const querySnapshotToArray = <T>(
 };
 
 export const fetchCollection = async <T>(
-  query: FirestoreQuery
+  query: FirestoreQuery,
 ): Promise<Document<T>[]> => {
   const querySnapshot = await query.get();
 
@@ -48,7 +48,7 @@ export const fetchCollection = async <T>(
 };
 
 export const fetchDocument = async <T>(
-  query: FirestoreDocumentReference
+  query: FirestoreDocumentReference,
 ): Promise<T | undefined> => {
   const documentSnapshot =
     (await query.get()) as admin.firestore.DocumentSnapshot<T>;
@@ -58,7 +58,7 @@ export const fetchDocument = async <T>(
 
 export const executeIfNotAlreadyTriggered = (
   eventId: string,
-  callback: () => void
+  callback: () => void,
 ): Promise<void> => {
   const eventIdRef = admin
     .firestore()
@@ -70,7 +70,7 @@ export const executeIfNotAlreadyTriggered = (
 
     if (documentSnapshot.exists) {
       throw Error(
-        "Trying to send double event! Error from Google Firestore (still in Beta release)"
+        "Trying to send double event! Error from Google Firestore (still in Beta release)",
       );
     } else {
       transaction.set(eventIdRef, {});

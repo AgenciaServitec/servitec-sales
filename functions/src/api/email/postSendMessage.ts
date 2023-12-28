@@ -12,7 +12,7 @@ interface Body {
 export const PostSendMessage = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { body: formData } = req;
@@ -45,6 +45,6 @@ export const PostSendMessage = async (
 
 const fetchClient = async (clientId: string): Promise<Client | undefined> => {
   return await fetchDocument<Client>(
-    firestore.collection("clients").doc(clientId)
+    firestore.collection("clients").doc(clientId),
   );
 };

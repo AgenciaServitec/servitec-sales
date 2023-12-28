@@ -9,7 +9,7 @@ export const validateRequest = async (
     Record<string, unknown>
   >,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   const errors = validationResult(req);
 

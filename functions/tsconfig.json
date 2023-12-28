@@ -6,15 +6,16 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
-    "target": "es2017",
+    "target": "es6",
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "types": ["node", "long"],
     "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types", "./src/@types"],
+    "typeRoots": ["node_modules/@types"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
   "compileOnSave": true,
-  "include": ["src", "global.d.ts"]
+  "include": ["src"]
 }
