@@ -15,7 +15,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^13.1.9",
     "antd": "^4.23.6",
-    "firebase": "^8.2.7",
+    "firebase": "^10.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "polished": "^4.2.2",
