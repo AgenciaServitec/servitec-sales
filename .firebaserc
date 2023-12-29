@@ -2,5 +2,27 @@
   "projects": {
     "default": "sendingemails-348505",
     "dev": "sendingemails-dev-351600"
+  },
+  "targets": {
+    "sendingemails-348505": {
+      "hosting": {
+        "app": [
+          "sendingemails-348505"
+        ],
+        "api": [
+          "api-servitecsales"
+        ]
+      }
+    },
+    "sendingemails-dev-351600": {
+      "hosting": {
+        "app": [
+          "sendingemails-dev-351600"
+        ],
+        "api": [
+          "api-servitecsales-dev"
+        ]
+      }
+    }
   }
 }

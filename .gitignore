@@ -1,15 +1,14 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-yarn.lock
-package-lock.json
+**/node_modules
 
 # testing
 /coverage
 
 # production
-/build
+**/build
+**/lib
 
 # misc
 .DS_Store
@@ -18,21 +17,11 @@ package-lock.json
 .env.test.local
 .env.production.local
 
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-/.idea
-/functions/node_modules
-/functions/package-lock.json
-/functions/yarn.lock
-/functions/*.log
-/functions/lib
+**/*.log
+**/package-lock.json
 
 *.iml
 .idea
 .firebase
-.firebase-debug.log
-**/*.css
 /.eslintcache
-/cypress/videos/
+/src/react-app-env.d.ts
