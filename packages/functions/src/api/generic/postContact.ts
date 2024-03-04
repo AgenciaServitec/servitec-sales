@@ -109,7 +109,16 @@ const mapContact = (
     termsAndConditions: contact?.termsAndConditions || true,
     isDeleted: false,
     createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
+    degree: contact.degree,
+    dni: contact.dni,
+    cip: contact.cip,
+    situation: contact.situation,
+    departament: contact.departament,
+    province: contact.province,
+    district: contact.district,
+    suggestionComplaint: contact.suggestionComplaint,
     createAt: now(),
+
   });
 
   return assign({}, contact_, {

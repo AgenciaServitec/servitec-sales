@@ -536,6 +536,127 @@
                                         <div>{{contact.contactPreference}}</div>
                                       </div>
                                       {{/contact.contactPreference}}
+
+                                      {{#contact.degree}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Grado:
+                                        </div>
+                                        <div>{{contact.degree}}</div>
+                                      </div>
+                                      {{/contact.degree}}
+                                      {{#contact.dni}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          DNI:
+                                        </div>
+                                        <div>{{contact.dni}}</div>
+                                      </div>
+                                      {{/contact.dni}}
+                                      {{#contact.cip}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          CIP:
+                                        </div>
+                                        <div>{{contact.cip}}</div>
+                                      </div>
+                                      {{/contact.cip}}
+                                      {{#contact.situation}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Situación:
+                                        </div>
+                                        <div>{{contact.situation}}</div>
+                                      </div>
+                                      {{/contact.situation}}
+                                      {{#contact.departament}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Departamento:
+                                        </div>
+                                        <div>{{contact.departament}}</div>
+                                      </div>
+                                      {{/contact.departament}}
+                                      {{#contact.province}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Provincia:
+                                        </div>
+                                        <div>{{contact.province}}</div>
+                                      </div>
+                                      {{/contact.province}}
+                                      {{#contact.district}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Distrito:
+                                        </div>
+                                        <div>{{contact.district}}</div>
+                                      </div>
+                                      {{/contact.district}}
+                                      {{#contact.suggestionComplaint}}
+                                      <div
+                                        style="margin-bottom: 7px; width: 100%"
+                                      >
+                                        <div
+                                          style="
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                          "
+                                        >
+                                          Sugerencia/Reclamo:
+                                        </div>
+                                        <div>{{contact.suggestionComplaint}}</div>
+                                      </div>
+                                      {{/contact.suggestionComplaint}}
                                       {{#contact.issue}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
@@ -564,7 +685,9 @@
                                         </div>
                                         <div>{{contact.message}}</div>
                                       </div>
-                                      {{/contact.message}} {{#contact.hostname}}
+                                      {{/contact.message}} 
+                                      
+                                      {{#contact.hostname}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
                                       >
@@ -579,6 +702,7 @@
                                         <div>{{contact.hostname}}</div>
                                       </div>
                                       {{/contact.hostname}}
+
                                     </div>
                                   </div>
                                 </td>

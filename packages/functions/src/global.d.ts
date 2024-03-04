@@ -28,7 +28,18 @@ interface Phone {
   operator?: string;
 }
 
-interface GenericContact extends DefaultFirestoreProps {
+interface CobieneMilPe {
+  degree?: string,
+  dni?: string,
+  cip?: string,
+  situation?: string,
+  departament?: string,
+  province?: string,
+  district?: string,
+  suggestionComplaint?: string,
+}
+
+interface GenericContact extends DefaultFirestoreProps, CobieneMilPe{
   clientId: string;
   createAt: FirebaseFirestore.Timestamp;
   firstName: string;
