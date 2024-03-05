@@ -1,4 +1,4 @@
-# SENDING EMAILS
+# SERVITEC SALES
 
 Esta App web se encarga de enviar y guardar los datos de los usuarios que se pusieron en contacto desde una web client, podemos visualizar los datos del usuario en tiempo real desde el dashboard y poder ponernos en contácto con el usuario de una manera mas rapida.
 
