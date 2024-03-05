@@ -1,16 +1,15 @@
 {
-  "name": "functions",
   "engines": {
     "node": "18"
   },
-  "description": "Cloud Functions for Firebase",
   "main": "lib/index.js",
+  "description": "Cloud Functions for Firebase",
   "private": true,
   "scripts": {
     "copyfiles": "copyfiles -u 1 src/**/*.html lib/",
     "serve": "yarn build && firebase emulators:start --only functions",
     "shell": "yarn build && firebase functions:shell",
-    "build": "yarn  tsc && yarn copyfiles",
+    "build": "yarn tsc && yarn copyfiles",
     "deploy": "firebase deploy --only functions",
     "start": "yarn shell",
     "logs": "firebase functions:log",

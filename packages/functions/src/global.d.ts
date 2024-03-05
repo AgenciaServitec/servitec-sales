@@ -29,14 +29,14 @@ interface Phone {
 }
 
 interface CobieneMilPe {
-  degree?: string,
-  dni?: string,
-  cip?: string,
-  situation?: string,
-  departament?: string,
-  province?: string,
-  district?: string,
-  suggestionComplaint?: string,
+  degree?: string;
+  dni?: string;
+  cip?: string;
+  situation?: string;
+  departament?: string;
+  province?: string;
+  district?: string;
+  suggestionComplaint?: string;
 }
 
 interface GenericContact extends DefaultFirestoreProps, CobieneMilPe{
