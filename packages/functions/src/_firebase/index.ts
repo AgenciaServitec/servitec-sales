@@ -8,6 +8,8 @@ export const firestore = admin.firestore();
 export const storage = admin.storage();
 export const auth = admin.auth();
 
+firestore.settings({ ignoreUndefinedProperties: true });
+
 const projectId = process.env.GCLOUD_PROJECT;
 
 export const bucketAtFunction = projectId + ".appspot.com";
