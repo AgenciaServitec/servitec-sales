@@ -71,7 +71,7 @@ export const SendEmailMessageModal = ({
   });
 
   const fetchSendEmailMessage = async (formData) =>
-    await fetch(`${apiUrl}/email/send-message`, {
+    await fetch(`${apiUrl}/emails/send-message`, {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": null,
