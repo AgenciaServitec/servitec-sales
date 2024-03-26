@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
-import { validateRequest, errorHandler } from "./_middlewares";
+import { errorHandler, validateRequest } from "./_middlewares";
 import { body } from "express-validator";
-import { PostSendMessage, PostContact, PostClaim, PostRequest } from "./emails";
+import { PostClaim, PostContact, PostRequest, PostSendMessage } from "./emails";
 import { patchUser, postUser, putUser } from "./users";
 
 const app: express.Application = express();
@@ -47,7 +47,7 @@ app.post(
     body("contact.hostname").exists(),
   ],
   validateRequest,
-  PostContactGeneric,
+  PostContact,
 );
 
 app.post(
