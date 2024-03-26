@@ -11,6 +11,14 @@
 
 type RoleCode = "super_admin" | "client_admin";
 
+interface Image {
+  name: string;
+  status?: string;
+  thumbUrl: string;
+  uid: string;
+  url: string;
+}
+
 interface User extends DefaultFirestoreProps {
   readonly id: string;
   clientsIds: string[];
@@ -28,54 +36,14 @@ interface Phone {
   operator?: string;
 }
 
-interface CobieneMilPe {
-  degree?: string;
-  dni?: string;
-  cip?: string;
-  situation?: string;
-  departament?: string;
-  province?: string;
-  district?: string;
-  suggestionComplaint?: string;
-}
-
-interface GenericContact extends DefaultFirestoreProps, CobieneMilPe{
-  clientId: string;
-  createAt: FirebaseFirestore.Timestamp;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: Phone;
-  service?: string;
-  contactPreference?: string;
-  searchData: string[];
-  hostname: string;
-  readonly id: string;
-  message?: string;
-  issue?: string;
-  status: string;
-  termsAndConditions: boolean;
-  isDeleted: boolean;
-}
-
 interface EmailMessage {
   email: string;
   message: string;
 }
 
-interface Image {
-  name: string;
-  status?: string;
-  thumbUrl: string;
-  uid: string;
-  url: string;
-}
-
 interface Client {
-  bgColor: string;
-  createAt: FirebaseFirestore.Timestamp;
-  hostname: string;
   readonly id: string;
+  bgColor: string;
   isDeleted: boolean;
   logo: Image;
   name: string;
@@ -83,6 +51,50 @@ interface Client {
   receptorEmail: string;
   receptorEmailsCopy: string;
   textColor: string;
-  updateAt: FirebaseFirestore.Timestamp;
+  hostname: string;
   updateBy: string;
+  updateAt: FirebaseFirestore.Timestamp;
+  createAt: FirebaseFirestore.Timestamp;
+}
+
+interface Contact extends DefaultFirestoreProps {
+  readonly id: string;
+  clientId: string;
+  fullName?: string;
+  firstName?: string;
+  lastName?: string;
+  email: string;
+  phone: Phone;
+  searchData: string[];
+  hostname: string;
+  message?: string;
+  issue?: string;
+  status: string;
+  type: string;
+  termsAndConditions: boolean;
+  updateBy?: string;
+}
+
+interface EmailContact extends Contact {
+  service?: string;
+  contactPreference?: string;
+}
+
+interface EmailClaim extends Contact {
+  degree?: string;
+  dni?: string;
+  cip?: string;
+  situation?: string;
+  department?: string;
+  province?: string;
+  district?: string;
+  suggestionComplaint?: string;
+}
+
+interface EmailRequest extends Contact {
+  plan?: {
+    id: string;
+    name: string;
+    price: string;
+  };
 }

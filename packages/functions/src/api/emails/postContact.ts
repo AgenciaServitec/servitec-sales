@@ -4,12 +4,12 @@ import { assign, capitalize, isEmpty, merge, toLower } from "lodash";
 import {
   sendMailContactEmisor,
   sendMailContactReceptor,
-} from "../../mailer/generic";
-import { searchDataGeneric } from "../_utils";
+} from "../../mailer/common";
+import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
 
 interface Body {
-  contact: GenericContact;
+  contact: EmailContact;
 }
 
 export const PostContact = async (
@@ -20,7 +20,7 @@ export const PostContact = async (
   try {
     const { body: formData } = req;
 
-    console.log("「Contact generic Initialize」", {
+    console.log("「Contact email Initialize」", {
       body: req.body,
     });
 
@@ -75,7 +75,7 @@ const fetchClient = async (hostname: string): Promise<Client | undefined> => {
 };
 
 const fetchSetContact = async (
-  contact: GenericContact,
+  contact: EmailContact,
   client: Client,
 ): Promise<void> => {
   const contactId = firestore.collection("contacts").doc().id;
@@ -88,16 +88,17 @@ const fetchSetContact = async (
 
 const mapContact = (
   contactId: string,
-  contact: GenericContact,
+  contact: EmailContact,
   client: Client,
-): OmitDefaultFirestoreProps<GenericContact> => {
+): OmitDefaultFirestoreProps<EmailContact> => {
   const contact_ = merge(contact, {
-    clientId: client.id,
-    firstName: contact.firstName.toLowerCase(),
-    lastName: contact.lastName.toLowerCase(),
-    email: contact.email.toLowerCase(),
-    hostname: client.hostname,
     id: contactId,
+    clientId: client.id,
+    hostname: client.hostname,
+    fullName: (contact?.fullName || "").toLowerCase(),
+    firstName: (contact?.firstName || "").toLowerCase(),
+    lastName: (contact?.lastName || "").toLowerCase(),
+    email: contact.email.toLowerCase(),
     ...(contact?.issue && { issue: contact?.issue }),
     ...(contact?.message && { message: contact.message }),
     phone: contact.phone,
@@ -105,23 +106,15 @@ const mapContact = (
     ...(contact?.contactPreference && {
       contactPreference: contact.contactPreference,
     }),
-    status: "pending",
     termsAndConditions: contact?.termsAndConditions || true,
-    isDeleted: false,
     createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
-    degree: contact.degree,
-    dni: contact.dni,
-    cip: contact.cip,
-    situation: contact.situation,
-    departament: contact.departament,
-    province: contact.province,
-    district: contact.district,
-    suggestionComplaint: contact.suggestionComplaint,
+    isDeleted: false,
+    status: "pending",
+    type: "contact",
     createAt: now(),
-
   });
 
   return assign({}, contact_, {
-    searchData: searchDataGeneric(contact_),
+    searchData: searchDataEmail(contact_),
   });
 };

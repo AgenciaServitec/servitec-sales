@@ -1,5 +1,4 @@
 import moment from "moment";
-
 // interface Props extends ContactCommon {
 //   contactId: string;
 //   createAt: FirestoreTimestamp;
@@ -26,14 +25,15 @@ import moment from "moment";
 //   return uniq(strings);
 // };
 
-export const searchDataGeneric = (
-  contact: Omit<GenericContact, "searchData">,
+export const searchDataEmail = (
+  contact: Omit<EmailContact, "searchData">,
 ): string[] => {
   return [
     contact.id,
     contact.clientId,
-    ...contact.firstName.split(" "),
-    ...contact.lastName.split(" "),
+    ...(contact?.fullName || "").split(" "),
+    ...(contact?.firstName || "").split(" "),
+    ...(contact?.lastName || "").split(" "),
     `${contact?.phone?.countryCode}${contact?.phone?.number}`.trim(),
     contact?.phone?.number,
     contact.email,

@@ -536,7 +536,6 @@
                                         <div>{{contact.contactPreference}}</div>
                                       </div>
                                       {{/contact.contactPreference}}
-
                                       {{#contact.degree}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
@@ -551,8 +550,7 @@
                                         </div>
                                         <div>{{contact.degree}}</div>
                                       </div>
-                                      {{/contact.degree}}
-                                      {{#contact.dni}}
+                                      {{/contact.degree}} {{#contact.dni}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
                                       >
@@ -566,8 +564,7 @@
                                         </div>
                                         <div>{{contact.dni}}</div>
                                       </div>
-                                      {{/contact.dni}}
-                                      {{#contact.cip}}
+                                      {{/contact.dni}} {{#contact.cip}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
                                       >
@@ -581,8 +578,7 @@
                                         </div>
                                         <div>{{contact.cip}}</div>
                                       </div>
-                                      {{/contact.cip}}
-                                      {{#contact.situation}}
+                                      {{/contact.cip}} {{#contact.situation}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
                                       >
@@ -654,7 +650,9 @@
                                         >
                                           Sugerencia/Reclamo:
                                         </div>
-                                        <div>{{contact.suggestionComplaint}}</div>
+                                        <div>
+                                          {{contact.suggestionComplaint}}
+                                        </div>
                                       </div>
                                       {{/contact.suggestionComplaint}}
                                       {{#contact.issue}}
@@ -685,9 +683,7 @@
                                         </div>
                                         <div>{{contact.message}}</div>
                                       </div>
-                                      {{/contact.message}} 
-                                      
-                                      {{#contact.hostname}}
+                                      {{/contact.message}} {{#contact.hostname}}
                                       <div
                                         style="margin-bottom: 7px; width: 100%"
                                       >
@@ -702,7 +698,6 @@
                                         <div>{{contact.hostname}}</div>
                                       </div>
                                       {{/contact.hostname}}
-
                                     </div>
                                   </div>
                                 </td>

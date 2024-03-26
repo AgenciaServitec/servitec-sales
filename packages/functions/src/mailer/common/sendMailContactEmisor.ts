@@ -3,11 +3,11 @@ import { html, sendMail } from "../sendMail";
 import { assign, capitalize } from "lodash";
 
 interface Mail {
-  contact: GenericContact;
+  contact: EmailContact;
 }
 
 interface Props {
-  contact: GenericContact;
+  contact: EmailContact;
   client: Client;
   to: string;
   bcc?: string;
@@ -26,7 +26,7 @@ export const sendMailContactEmisor = async ({
     html: html(template.contactEmailEmisor, mapMail(contact, client)),
   });
 
-const mapMail = (contact: GenericContact, client: Client): Mail => ({
+const mapMail = (contact: EmailContact, client: Client): Mail => ({
   contact: assign({}, contact, {
     firstName: capitalize(contact.firstName),
     urlCompanyImage:
