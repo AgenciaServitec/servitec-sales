@@ -64,9 +64,9 @@ app.post(
 app.post(
   "/emails/claim",
   [
-    body("contact.phone").exists(),
-    body("contact.email").exists(),
-    body("contact.hostname").exists(),
+    body("claim.phone").exists(),
+    body("claim.email").exists(),
+    body("claim.hostname").exists(),
   ],
   validateRequest,
   PostClaim,
@@ -75,9 +75,9 @@ app.post(
 app.post(
   "/emails/request",
   [
-    body("contact.phone").exists(),
-    body("contact.email").exists(),
-    body("contact.hostname").exists(),
+    body("request.phone").exists(),
+    body("request.email").exists(),
+    body("request.hostname").exists(),
   ],
   validateRequest,
   PostRequest,

@@ -42,7 +42,9 @@ export const PostRequest = async (
       client: client,
       to: client.receptorEmail,
       bcc: client.receptorEmailsCopy,
-      subject: request?.issue ? capitalize(request.issue) : "Reclamo recibido",
+      subject: request?.issue
+        ? capitalize(request.issue)
+        : "Solicitud recibido",
     });
 
     await Promise.all([p0, p1]);
