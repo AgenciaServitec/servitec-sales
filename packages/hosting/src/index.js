@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "antd/dist/antd.min.css";
-import "./styles/fonts/index.css";
 import { ScrollTop } from "./ScrollTop";
 import { ThemeProvider } from "styled-components";
 import { BrowserRouter } from "react-router-dom";
