@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
-import Select from "antd/lib/select";
 import Button from "antd/lib/button";
 import Tabs from "antd/lib/tabs";
 import Spin from "antd/lib/spin";
-import Space from "antd/lib/space";
 import { includes, orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
@@ -18,9 +16,8 @@ import {
 } from "../../components/pages";
 import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useContacts, useGlobalData } from "../../providers";
-import { formatWord, formatWords } from "../../utils";
 import { firestore } from "../../firebase";
-import { modalConfirm } from "../../components/ui";
+import { modalConfirm, RadioGroup } from "../../components/ui";
 
 export const Contacts = () => {
   const navigate = useNavigate();
@@ -32,9 +29,9 @@ export const Contacts = () => {
 
   const [status, setStatus] = useQueryString("status", "pending");
   const [clientId, setClientId] = useQueryString("clientId", "all");
+  const [type, setType] = useQueryString("type", "all");
 
   const [contact, setContact] = useState(null);
-  const [searchDataForm, setSearchDataForm] = useState([]);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
   const lastContact = orderBy(contacts, "createAt", "desc")[0];
@@ -71,13 +68,7 @@ export const Contacts = () => {
             )
           : contact.clientId === clientId
       )
-      .filter((contact) =>
-        searchDataForm.length >= 1
-          ? contact.searchData.some((word) =>
-              includes(formatWords(searchDataForm), formatWord(word))
-            )
-          : true
-      ),
+      .filter((contact) => (type !== "all" ? contact.type === type : true)),
     ["createAt"],
     ["desc"]
   );
@@ -85,10 +76,8 @@ export const Contacts = () => {
   const onResetContact = () => {
     setStatus("pending");
     setClientId("all");
-    setSearchDataForm([]);
+    setType("all");
   };
-
-  const handleSearchDataFormChange = (value) => setSearchDataForm(value);
 
   const confirmDeleteContact = (contactId) =>
     modalConfirm({
@@ -121,26 +110,39 @@ export const Contacts = () => {
         <Col span={24}>
           <Row gutter={[16, 15]}>
             <Col xs={24} sm={17} md={20}>
-              <Space direction="vertical" style={{ width: "100%" }}>
-                <Select
-                  placeholder="Ingrese datos de busqueda (Ejemplo: noel, moriano, 931136482, noel@gmail.com, 2022-12-30)"
-                  mode="tags"
-                  size="large"
-                  value={searchDataForm || null}
-                  onChange={handleSearchDataFormChange}
-                  style={{ width: "100%" }}
-                />
-              </Space>
+              <div>
+                <label>Tipo:</label>
+              </div>
+              <RadioGroup
+                variant="filled"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                options={[
+                  { label: "Todos", value: "all" },
+                  { label: "Contacto", value: "contact" },
+                  { label: "Solicitudes", value: "request" },
+                  { label: "Reclamos", value: "claim" },
+                ]}
+              />
             </Col>
             <Col xs={24} sm={7} md={4}>
-              <Button
-                type="default"
-                size="large"
-                block
-                onClick={() => onResetContact()}
+              <div
+                style={{
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "end",
+                  paddingBottom: ".4em",
+                }}
               >
-                Resetear
-              </Button>
+                <Button
+                  type="default"
+                  size="large"
+                  block
+                  onClick={() => onResetContact()}
+                >
+                  Resetear
+                </Button>
+              </div>
             </Col>
           </Row>
         </Col>
