@@ -1,10 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useAuthentication } from "./AuthenticationProvider";
-import { firestore } from "../firebase";
+import { firestore, querySnapshotToArray } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
-import { chunk, merge } from "lodash";
-import { useGlobalData } from "./GlobalDataProvider";
 import useSound from "use-sound";
 import { ContactSound } from "../multimedia";
 
@@ -14,9 +11,6 @@ const ContactsContext = createContext({
 });
 
 export const ContactsProvider = ({ children }) => {
-  const { authUser } = useAuthentication();
-  const { clients } = useGlobalData();
-
   const [play] = useSound(ContactSound);
 
   const [contacts, setContacts] = useState([]);
@@ -30,7 +24,7 @@ export const ContactsProvider = ({ children }) => {
       fetchContacts();
     } catch (error) {
       notification({ type: "error" });
-      console.log("Error in fetchContacts->", error);
+      console.log("Error in fetchContacts: ", error);
     } finally {
       setLoadingContacts(false);
     }
@@ -39,54 +33,29 @@ export const ContactsProvider = ({ children }) => {
   const fetchContacts = () => {
     const queryRef = firestore.collection("contacts");
 
-    const existsAllOption = (authUser?.clientsIds || []).find(
-      (clientId) => clientId === "all"
-    );
+    const unsubscribe = queryRef
+      .where(
+        "createAtString",
+        ">=",
+        moment().subtract(1, "month").format("YYYY-MM-DD")
+      )
+      .where(
+        "createAtString",
+        "<=",
+        moment().add(1, "hour").format("YYYY-MM-DD")
+      )
+      .where("isDeleted", "==", false)
+      .onSnapshot((snapshot) => {
+        const newContacts = querySnapshotToArray(snapshot);
 
-    chunk(
-      existsAllOption
-        ? clients.map((client) => client.id)
-        : authUser?.clientsIds,
-      10
-    ).map((clientsIdsChunk) => {
-      const unsubscribe = queryRef
-        .where(
-          "createAtString",
-          ">=",
-          moment().subtract(3, "month").format("YYYY-MM-DD")
-        )
-        .where(
-          "createAtString",
-          "<=",
-          moment().add(1, "hour").format("YYYY-MM-DD")
-        )
-        .where("searchData", "array-contains-any", clientsIdsChunk)
-        .where("isDeleted", "==", false)
-        .onSnapshot((snapshot) => {
-          const newData = [];
+        if (newContacts.length > contacts.length) {
+          playToSound();
+        }
 
-          snapshot.forEach((doc) => {
-            const currentDateWithSubtract1Minute = moment().subtract(
-              7,
-              "seconds"
-            );
+        setContacts(querySnapshotToArray(snapshot));
+      });
 
-            if (
-              moment(doc?.data()?.createAt.toDate()).isBetween(
-                currentDateWithSubtract1Minute
-              )
-            ) {
-              playToSound();
-            }
-
-            newData.push({ id: doc.id, ...doc.data() });
-          });
-
-          setContacts(merge(newData, contacts));
-        });
-
-      return () => unsubscribe();
-    });
+    return () => unsubscribe();
   };
 
   return (

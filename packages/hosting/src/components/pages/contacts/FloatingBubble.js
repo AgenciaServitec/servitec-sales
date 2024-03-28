@@ -4,6 +4,7 @@ import { capitalize } from "lodash";
 import { darken } from "polished";
 import { keyframes } from "../../../styles";
 import { NoFound } from "../../../images";
+import Tag from "antd/lib/tag";
 
 export const FloatingBubble = ({
   contact,
@@ -17,6 +18,21 @@ export const FloatingBubble = ({
   const clientColors = {
     color: client?.textColor || "#fff",
     bg: client?.bgColor || "#c4c4c4",
+  };
+
+  const contactType = {
+    contact: {
+      text: "Contacto",
+      color: "orange",
+    },
+    request: {
+      text: "Solicitud",
+      color: "green",
+    },
+    claim: {
+      text: "Reclamo",
+      color: "red",
+    },
   };
 
   return (
@@ -34,6 +50,11 @@ export const FloatingBubble = ({
           alt="logo agencia servitec"
         />
       </ItemLogo>
+      {contact?.type && (
+        <TagItem color={contactType[contact.type].color}>
+          {contactType[contact.type].text}
+        </TagItem>
+      )}
       <span className="item-full-name">{`${capitalize(
         contact.firstName
       )} ${capitalize(contact.lastName)}`}</span>
@@ -43,6 +64,12 @@ export const FloatingBubble = ({
     </Container>
   );
 };
+
+const TagItem = styled(Tag)`
+  border-radius: 0.5em;
+  padding: 0 3px;
+  margin: 0;
+`;
 
 const Container = styled.div`
   ${({ clientColors, isLastContact }) => css`

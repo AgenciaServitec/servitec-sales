@@ -5,10 +5,6 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "searchData",
-          "arrayConfig": "CONTAINS"
-        },
-        {
           "fieldPath": "isDeleted",
           "order": "ASCENDING"
         },
