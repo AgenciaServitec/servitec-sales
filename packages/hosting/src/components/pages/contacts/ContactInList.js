@@ -16,6 +16,7 @@ import styled, { css } from "styled-components";
 import { findColor } from "../../../utils";
 import { NoFound } from "../../../images";
 import { useAuthentication } from "../../../providers";
+import Tag from "antd/lib/tag";
 
 export const ContactInList = ({
   contacts,
@@ -31,6 +32,21 @@ export const ContactInList = ({
 
   const findClient = (clientId) =>
     clients.find((client) => client.id === clientId);
+
+  const contactType = {
+    contact: {
+      text: "Contacto",
+      color: "orange",
+    },
+    request: {
+      text: "Solicitud",
+      color: "green",
+    },
+    claim: {
+      text: "Reclamo",
+      color: "red",
+    },
+  };
 
   return (
     <>
@@ -157,6 +173,14 @@ export const ContactInList = ({
                       <Text strong>{contact.message}</Text>
                     </div>
                   )}
+                  {contact?.type && (
+                    <div className="item">
+                      <Text className="item-text">Tipo: </Text>
+                      <TagItem color={contactType[contact.type].color}>
+                        {contactType[contact.type].text}
+                      </TagItem>
+                    </div>
+                  )}
                   {contact?.createAt && (
                     <div className="item">
                       <Text className="item-text">F. creación: </Text>
@@ -185,6 +209,12 @@ export const ContactInList = ({
     </>
   );
 };
+
+const TagItem = styled(Tag)`
+  border-radius: 0.5em;
+  padding: 0 3px;
+  margin: 0;
+`;
 
 const ContactPicture = styled.div`
   ${({ clientColors }) => css`
