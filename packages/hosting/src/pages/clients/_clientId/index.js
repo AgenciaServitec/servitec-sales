@@ -4,6 +4,7 @@ import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
 import {
+  ComponentContainer,
   Button,
   Form,
   Input,
@@ -20,6 +21,7 @@ import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import { phoneCodes } from "../../../data-list";
+import { Checkbox } from "antd";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
@@ -45,6 +47,8 @@ export const ClientIntegration = () => {
   const onSubmitSaveClient = async (formData) => {
     try {
       setSavingClient(true);
+
+      console.log({ formData });
 
       await firestore
         .collection("clients")
@@ -78,6 +82,15 @@ export const ClientIntegration = () => {
         number: formData.phoneNumber,
         countryCode: formData.countryCode,
       },
+      smtpConfig: formData.customSMTP
+        ? {
+            service: formData.smtpConfig?.service || "",
+            auth: {
+              user: formData.smtpConfig?.user || "",
+              pass: formData.smtpConfig?.pass || "",
+            },
+          }
+        : undefined,
     });
 
   const onGoBack = () => navigate(-1);
@@ -105,6 +118,14 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     phoneNumber: yup.number(),
     bgColor: yup.string().required(),
     textColor: yup.string().required(),
+    customSMTP: yup.boolean().required(),
+    smtpConfig: yup
+      .object({
+        service: yup.string().notRequired(),
+        user: yup.string().notRequired(),
+        pass: yup.string().notRequired(),
+      })
+      .notRequired(),
   });
 
   const {
@@ -112,6 +133,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     handleSubmit,
     control,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -133,6 +155,12 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       phoneNumber: client?.phone?.number || "",
       bgColor: client?.bgColor || "",
       textColor: client?.textColor || "",
+      customSMTP: !!client?.smtpConfig,
+      smtpConfig: {
+        service: client?.smtpConfig?.service || "",
+        user: client?.smtpConfig?.auth.user || "",
+        pass: client?.smtpConfig?.auth.pass || "",
+      },
     });
   };
 
@@ -313,6 +341,80 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
+          </Row>
+          <Row>
+            <Col span={24}>
+              <Controller
+                name="customSMTP"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Checkbox
+                    name={name}
+                    checked={value}
+                    onChange={(checked) => onChange(checked)}
+                    error={error(name)}
+                  >
+                    Custom SMTP
+                  </Checkbox>
+                )}
+              />
+            </Col>
+            {watch("customSMTP") && (
+              <Col span={24}>
+                <ComponentContainer.group label="Config SMTP">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="smtpConfig.service"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Service"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="smtpConfig.user"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="User"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Controller
+                        name="smtpConfig.pass"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Pass"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
+              </Col>
+            )}
           </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>
