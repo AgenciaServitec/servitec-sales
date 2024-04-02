@@ -48,8 +48,6 @@ export const ClientIntegration = () => {
     try {
       setSavingClient(true);
 
-      console.log({ formData });
-
       await firestore
         .collection("clients")
         .doc(client.id)
@@ -71,28 +69,30 @@ export const ClientIntegration = () => {
     }
   };
 
-  const mapClient = (client, formData) =>
-    assign({}, formData, {
-      id: client.id,
-      name: formData.name.toLowerCase(),
-      receptorEmail: formData.receptorEmail.toLowerCase(),
-      receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
-      hostname: formData.hostname.toLowerCase(),
-      theme: formData.hostname.split(".")[0],
-      phone: {
-        number: formData.phoneNumber,
-        countryCode: formData.countryCode,
-      },
-      smtpConfig: formData.customSMTP
-        ? {
-            service: formData.smtpConfig?.service || "",
-            auth: {
-              user: formData.smtpConfig?.user || "",
-              pass: formData.smtpConfig?.pass || "",
-            },
-          }
-        : undefined,
-    });
+  const mapClient = (client, formData) => ({
+    id: client.id,
+    name: formData.name.toLowerCase(),
+    receptorEmail: formData.receptorEmail.toLowerCase(),
+    receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
+    hostname: formData.hostname.toLowerCase(),
+    theme:
+      formData.hostname.split(".").length > 2
+        ? formData.hostname.split(".")[1]
+        : formData.hostname.split(".")[0],
+    phone: {
+      number: formData.phoneNumber,
+      countryCode: formData.countryCode,
+    },
+    smtpConfig: formData.customSMTP
+      ? {
+          service: formData.smtpConfig?.service || "",
+          auth: {
+            user: formData.smtpConfig?.user || "",
+            pass: formData.smtpConfig?.pass || "",
+          },
+        }
+      : null,
+  });
 
   const onGoBack = () => navigate(-1);
 
@@ -119,7 +119,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     phoneNumber: yup.number(),
     bgColor: yup.string().required(),
     textColor: yup.string().required(),
-    customSMTP: yup.boolean().required(),
+    customSMTP: yup.boolean(),
     smtpConfig: yup
       .object({
         service: yup.string().notRequired(),
