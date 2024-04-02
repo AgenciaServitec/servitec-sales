@@ -2,7 +2,7 @@ import { Templates } from "../index";
 
 export const createSubject = <T extends ObjectType>(
   template: Templates,
-  view: T
+  view: T,
 ): string => {
   switch (template) {
     case Templates.RESERVATION_CREATED:

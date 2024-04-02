@@ -1,8 +1,14 @@
 import { capitalize, toLower } from "lodash";
 
 export interface ClaimMustacheView {
+  title: string;
   theme: string;
-  client: { name: string; clientLogo: string };
+  client: {
+    name: string;
+    clientLogo: string;
+    textColor: string;
+    bgColor: string;
+  };
   claim: {
     fullName?: string;
     email?: string;
@@ -17,6 +23,7 @@ export interface ClaimMustacheView {
     province?: string;
     district?: string;
     suggestionComplaint?: string;
+    isVisibleClaim: boolean;
   };
 }
 
@@ -25,8 +32,14 @@ export const mapTemplateClaimMailMustache = (
   client: Client,
 ): ClaimMustacheView => {
   return {
+    title: "Reclamo",
     theme: client.theme,
-    client: { name: client.name, clientLogo: client.logo.thumbUrl },
+    client: {
+      name: client.name,
+      clientLogo: client.logo.thumbUrl,
+      textColor: client.textColor,
+      bgColor: client.bgColor,
+    },
     claim: {
       fullName: contact?.fullName
         ? contact.fullName
@@ -43,6 +56,7 @@ export const mapTemplateClaimMailMustache = (
       province: contact.province,
       district: contact.district,
       suggestionComplaint: contact.suggestionComplaint,
+      isVisibleClaim: contact.type === "claim",
     },
   };
 };

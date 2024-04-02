@@ -1,4 +1,4 @@
-import { auth, firestore } from "../../_firebase";
+import { auth, firestore } from "../../firebase";
 import { defaultFirestoreProps } from "../../utils";
 import { NextFunction, Request, Response } from "express";
 

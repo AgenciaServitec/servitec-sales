@@ -21,6 +21,6 @@ export const sendEmailMessageToEmisor = async ({
   await sendMail(client, {
     to: emailMessage.email,
     subject: createSubject(Templates.EMAIL_CONTACT, view),
-    html: createBody(Templates.EMAIL_CONTACT, view.theme, view),
+    html: createBody(Templates.EMAIL_CONTACT, "common", view),
   });
 };

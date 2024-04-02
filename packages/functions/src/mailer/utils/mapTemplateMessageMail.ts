@@ -2,7 +2,12 @@ import { capitalize } from "lodash";
 
 export interface MessageMustacheView {
   theme: string;
-  client: { name: string; clientLogo: string };
+  client: {
+    name: string;
+    logoUrl: string;
+    textColor: string;
+    bgColor: string;
+  };
   message: string;
 }
 
@@ -12,7 +17,12 @@ export const mapTemplateMessageMailMustache = (
 ): MessageMustacheView => {
   return {
     theme: client.theme,
-    client: { name: client.name, clientLogo: client.logo.thumbUrl },
+    client: {
+      name: client.name,
+      logoUrl: client.logo.thumbUrl,
+      textColor: client.textColor,
+      bgColor: client.bgColor,
+    },
     message: capitalize(emailMessage.message),
   };
 };

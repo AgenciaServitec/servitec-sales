@@ -1,40 +1,54 @@
 import { capitalize, toLower } from "lodash";
 
 export interface RequestMustacheView {
+  title: string;
   theme: string;
-  client: { name: string; clientLogo: string };
+  client: {
+    name: string;
+    clientLogo: string;
+    textColor: string;
+    bgColor: string;
+  };
   request: {
-    fullName?: string;
-    email?: string;
-    phoneNumber?: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
     message?: string;
-    plan?: string;
+    plan?: {
+      name: string;
+      price: string;
+    };
+    isVisibleRequest: boolean;
   };
 }
 
 export const mapTemplateRequestMailMustache = (
-  contact: EmailContact,
+  contact: EmailRequest,
   client: Client,
 ): RequestMustacheView => {
   return {
+    title: "Solicitud",
     theme: client.theme,
-    client: { name: client.name, clientLogo: client.logo.thumbUrl },
+    client: {
+      name: client.name,
+      clientLogo: client.logo.thumbUrl,
+      textColor: client.textColor,
+      bgColor: client.bgColor,
+    },
     request: {
       fullName: contact?.fullName
         ? contact.fullName
         : `${capitalize(contact.firstName)} ${capitalize(contact.lastName)}`,
       email: toLower(contact.email),
       phoneNumber: `${contact.phone.countryCode} ${contact.phone.number}`,
-      ...(contact.issue && {
-        issue: capitalize(contact.issue),
+      message: contact.message,
+      ...(contact?.plan && {
+        plan: {
+          name: contact.plan.name,
+          price: contact.plan.price,
+        },
       }),
-      ...(contact.message && {
-        message: contact.message,
-      }),
-      ...(contact?.service && { service: contact.service }),
-      ...(contact?.contactPreference && {
-        contactPreference: contact.contactPreference,
-      }),
+      isVisibleRequest: contact.type === "request",
     },
   };
 };
