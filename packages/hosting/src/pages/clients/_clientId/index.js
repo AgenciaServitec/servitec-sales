@@ -77,8 +77,8 @@ export const ClientIntegration = () => {
       name: formData.name.toLowerCase(),
       receptorEmail: formData.receptorEmail.toLowerCase(),
       receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
-      customDomain: formData.customDomain.toLowerCase(),
-      theme: formData.customDomain.split(".")[0],
+      hostname: formData.hostname.toLowerCase(),
+      theme: formData.hostname.split(".")[0],
       phone: {
         number: formData.phoneNumber,
         countryCode: formData.countryCode,
@@ -114,7 +114,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     logo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
-    customDomain: yup.string().required(),
+    hostname: yup.string().required(),
     countryCode: yup.string(),
     phoneNumber: yup.number(),
     bgColor: yup.string().required(),
@@ -151,7 +151,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       logo: client?.logo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
-      customDomain: client?.customDomain || "",
+      hostname: client?.hostname || "",
       countryCode: client?.phone?.countryCode || "+51",
       phoneNumber: client?.phone?.number || "",
       bgColor: client?.bgColor || "",
@@ -325,11 +325,11 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
             </Col>
             <Col span={24}>
               <Controller
-                name="customDomain"
+                name="hostname"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Dominio"
+                    label="Hostname"
                     prefix="https://"
                     animation={false}
                     onChange={onChange}
