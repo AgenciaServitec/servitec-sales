@@ -77,7 +77,8 @@ export const ClientIntegration = () => {
       name: formData.name.toLowerCase(),
       receptorEmail: formData.receptorEmail.toLowerCase(),
       receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
-      hostname: formData.hostname.toLowerCase(),
+      customDomain: formData.customDomain.toLowerCase(),
+      theme: formData.customDomain.split(".")[0],
       phone: {
         number: formData.phoneNumber,
         countryCode: formData.countryCode,
@@ -113,7 +114,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     logo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
-    hostname: yup.string().required(),
+    customDomain: yup.string().required(),
     countryCode: yup.string(),
     phoneNumber: yup.number(),
     bgColor: yup.string().required(),
@@ -150,7 +151,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       logo: client?.logo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
-      hostname: client?.hostname || "",
+      customDomain: client?.customDomain || "",
       countryCode: client?.phone?.countryCode || "+51",
       phoneNumber: client?.phone?.number || "",
       bgColor: client?.bgColor || "",
@@ -237,7 +238,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Copia email receptores, separardos por comas (,)"
+                    label="Emails BCC separados por comas (,)"
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -247,24 +248,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
-            <Col span={24}>
-              <Controller
-                name="hostname"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Client hostname"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-
             <Col xs={24} sm={6} md={6}>
               <Controller
                 name="countryCode"
@@ -272,7 +255,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label="Código"
+                    label="Prefijo"
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -302,7 +285,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
-
             <Col xs={24} sm={12}>
               <Controller
                 name="bgColor"
@@ -341,8 +323,26 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
+            <Col span={24}>
+              <Controller
+                name="customDomain"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Dominio"
+                    prefix="https://"
+                    animation={false}
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
           </Row>
-          <Row>
+          <Row gutter={[16, 16]}>
             <Col span={24}>
               <Controller
                 name="customSMTP"
@@ -379,7 +379,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                         )}
                       />
                     </Col>
-                    <Col span={24}>
+                    <Col xs={24} sm={24} md={12}>
                       <Controller
                         name="smtpConfig.user"
                         control={control}
@@ -395,7 +395,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                         )}
                       />
                     </Col>
-                    <Col span={24}>
+                    <Col xs={24} sm={24} md={12}>
                       <Controller
                         name="smtpConfig.pass"
                         control={control}
