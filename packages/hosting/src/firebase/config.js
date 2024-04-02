@@ -21,6 +21,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 const storage = firebase.storage();
 
+firestore.settings({ ignoreUndefinedProperties: true });
 // firestore.enablePersistence().then(() => console.log("Persistence enabled"));
 
 const buckets = {
