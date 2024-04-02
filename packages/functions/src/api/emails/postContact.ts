@@ -1,12 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { fetchCollection, firestore, now } from "../../_firebase";
-import { assign, capitalize, isEmpty, merge, toLower } from "lodash";
-import {
-  sendMailContactEmisor,
-  sendMailContactReceptor,
-} from "../../mailer/common";
+import { firestore } from "../../firebase";
+import { assign, isEmpty, merge } from "lodash";
 import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
+import { fetchCollection, now } from "../../firebase/firestore";
+import { sendMailContactToReceptor } from "../../mailer";
 
 interface Body {
   contact: EmailContact;
@@ -40,24 +38,11 @@ export const PostContact = async (
 
     const p0 = fetchSetContact(contact, client);
 
-    const p1 = sendMailContactReceptor({
+    const p1 = sendMailContactToReceptor({
       contact: contact,
-      client: client,
-      to: client.receptorEmail,
-      bcc: client.receptorEmailsCopy,
-      subject: contact?.issue ? capitalize(contact.issue) : "Contacto recibido",
     });
 
-    const p2 = sendMailContactEmisor({
-      contact: contact,
-      client: client,
-      to: toLower(contact.email),
-      subject: `Gracias por contáctarnos ${
-        contact.firstName && capitalize(contact.firstName)
-      }`,
-    });
-
-    await Promise.all([p0, p1, p2]);
+    await Promise.all([p0, p1]);
 
     res.sendStatus(200).end();
   } catch (error) {
