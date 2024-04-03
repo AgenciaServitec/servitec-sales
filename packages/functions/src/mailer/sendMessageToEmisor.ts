@@ -20,7 +20,7 @@ export const sendEmailMessageToEmisor = async ({
 
   await sendMail(client, {
     to: emailMessage.email,
-    subject: createSubject(Templates.EMAIL_CONTACT, view),
-    html: createBody(Templates.EMAIL_CONTACT, "common", view),
+    subject: createSubject(Templates.EMAIL_MESSAGE, view),
+    html: createBody(Templates.EMAIL_MESSAGE, "common", view),
   });
 };

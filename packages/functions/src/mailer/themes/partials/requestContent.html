@@ -61,6 +61,7 @@
                       <div
                         align="center"
                         style="
+                          width: 100%;
                           font-family:
                             Arial,
                             Helvetica Neue,
@@ -71,39 +72,46 @@
                         <div
                           style="
                             box-sizing: border-box;
-                            color: #20415a;
+                            color: #071621;
                             text-align: left;
-                            font-size: 13px;
+                            font-size: 15px;
                             font-weight: 700;
                           "
                         >
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Nombres y apellidos:
                             </div>
                             <div>{{request.fullName}}</div>
                           </div>
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Email:
                             </div>
                             <div>{{request.email}}</div>
                           </div>
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Teléfono:
                             </div>
                             <div>{{request.phoneNumber}}</div>
                           </div>
-                          {{#request.message}}
+                          {{#request.plan}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
+                              Plan:
+                            </div>
+                            <div>{{request.plan.name}}</div>
+                          </div>
+                          {{/request.plan}} {{#request.message}}
+                          <div style="margin-bottom: 7px; width: 100%">
+                            <div style="font-size: 13px; font-weight: 500">
                               Mensaje:
                             </div>
                             <pre
                               style="
                                 text-align: left;
-                                font-size: 18px;
+                                font-size: 13px;
                                 white-space: pre-line;
                               "
                             >
@@ -112,6 +120,16 @@
                             >
                           </div>
                           {{/request.message}}
+                          <div style="margin-bottom: 7px; width: 100%">
+                            <div style="font-size: 13px; font-weight: 500">
+                              Hostname:
+                            </div>
+                            <a
+                              href="https://{{client.hostname}}"
+                              target="_blank"
+                              >{{client.hostname}}</a
+                            >
+                          </div>
                         </div>
                       </div>
                     </td>

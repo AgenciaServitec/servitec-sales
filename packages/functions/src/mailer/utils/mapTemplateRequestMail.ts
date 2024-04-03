@@ -1,13 +1,13 @@
 import { capitalize, toLower } from "lodash";
 
 export interface RequestMustacheView {
-  title: string;
   theme: string;
   client: {
     name: string;
     clientLogo: string;
     textColor: string;
     bgColor: string;
+    hostname: string;
   };
   request: {
     fullName: string;
@@ -18,7 +18,6 @@ export interface RequestMustacheView {
       name: string;
       price: string;
     };
-    isVisibleRequest: boolean;
   };
 }
 
@@ -27,13 +26,13 @@ export const mapTemplateRequestMailMustache = (
   client: Client,
 ): RequestMustacheView => {
   return {
-    title: "Solicitud",
     theme: client.theme,
     client: {
       name: client.name,
       clientLogo: client.logo.thumbUrl,
       textColor: client.textColor,
       bgColor: client.bgColor,
+      hostname: client.hostname,
     },
     request: {
       fullName: contact?.fullName
@@ -48,7 +47,6 @@ export const mapTemplateRequestMailMustache = (
           price: contact.plan.price,
         },
       }),
-      isVisibleRequest: contact.type === "request",
     },
   };
 };

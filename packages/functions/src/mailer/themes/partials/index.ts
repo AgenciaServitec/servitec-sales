@@ -6,7 +6,10 @@ const onReadFileSync = (partialPath: string) =>
 
 export const partials = {
   contactContentPartial: onReadFileSync("./contactContent.html"),
+  requestContentPartial: onReadFileSync("./requestContent.html"),
   claimContentPartial: onReadFileSync("./claimContent.html"),
+  headPartial: onReadFileSync("./head.html"),
+  headerPartial: onReadFileSync("./header.html"),
   dividerPartial: onReadFileSync("./divider.html"),
   spacePartial: onReadFileSync("./space.html"),
 };

@@ -1,13 +1,13 @@
 import { capitalize, toLower } from "lodash";
 
 export interface ClaimMustacheView {
-  title: string;
   theme: string;
   client: {
     name: string;
     clientLogo: string;
     textColor: string;
     bgColor: string;
+    hostname: string;
   };
   claim: {
     fullName?: string;
@@ -23,7 +23,6 @@ export interface ClaimMustacheView {
     province?: string;
     district?: string;
     suggestionComplaint?: string;
-    isVisibleClaim: boolean;
   };
 }
 
@@ -32,13 +31,13 @@ export const mapTemplateClaimMailMustache = (
   client: Client,
 ): ClaimMustacheView => {
   return {
-    title: "Reclamo",
     theme: client.theme,
     client: {
       name: client.name,
       clientLogo: client.logo.thumbUrl,
       textColor: client.textColor,
       bgColor: client.bgColor,
+      hostname: client.hostname,
     },
     claim: {
       fullName: contact?.fullName
@@ -56,7 +55,6 @@ export const mapTemplateClaimMailMustache = (
       province: contact.province,
       district: contact.district,
       suggestionComplaint: contact.suggestionComplaint,
-      isVisibleClaim: contact.type === "claim",
     },
   };
 };

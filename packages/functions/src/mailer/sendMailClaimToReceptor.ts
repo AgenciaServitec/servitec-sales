@@ -24,7 +24,7 @@ export const sendMailClaimToReceptor = async ({
   const view = mapTemplateClaimMailMustache(claim, client);
 
   await sendMail(client, {
-    to: claim.email,
+    to: client.receptorEmail,
     bcc: client.receptorEmailsCopy,
     subject: createSubject(Templates.EMAIL_CLAIM, view),
     html: createBody(Templates.EMAIL_CLAIM, "common", view),

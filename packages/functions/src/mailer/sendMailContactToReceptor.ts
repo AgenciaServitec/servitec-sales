@@ -24,10 +24,10 @@ export const sendMailContactToReceptor = async ({
   const view = mapTemplateContactMailMustache(contact, client);
 
   await sendMail(client, {
-    to: contact.email,
+    to: client.receptorEmail,
     bcc: client.receptorEmailsCopy,
-    subject: createSubject(Templates.EMAIL_CLAIM, view),
-    html: createBody(Templates.EMAIL_CLAIM, "common", view),
+    subject: createSubject(Templates.EMAIL_CONTACT, view),
+    html: createBody(Templates.EMAIL_CONTACT, "common", view),
   });
 };
 

@@ -61,6 +61,7 @@
                       <div
                         align="center"
                         style="
+                          width: 100%;
                           font-family:
                             Arial,
                             Helvetica Neue,
@@ -71,101 +72,104 @@
                         <div
                           style="
                             box-sizing: border-box;
-                            color: #20415a;
+                            color: #071621;
                             text-align: left;
-                            font-size: 13px;
+                            font-size: 15px;
                             font-weight: 700;
                           "
                         >
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Nombres y apellidos:
                             </div>
                             <div>{{claim.fullName}}</div>
                           </div>
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Email:
                             </div>
                             <div>{{claim.email}}</div>
                           </div>
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Teléfono:
                             </div>
                             <div>{{claim.phoneNumber}}</div>
                           </div>
                           {{#claim.issue}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Asunto:
                             </div>
                             <strong> {{{claim.issue}}} </strong>
                           </div>
                           {{/claim.issue}} {{#claim.degree}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Grado:
                             </div>
                             <div>{{claim.degree}}</div>
                           </div>
                           {{/claim.degree}} {{#claim.dni}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               DNI:
                             </div>
                             <div>{{claim.dni}}</div>
                           </div>
                           {{/claim.dni}} {{#claim.cip}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               CIP:
                             </div>
                             <div>{{claim.cip}}</div>
                           </div>
                           {{/claim.cip}} {{#claim.situation}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Situación:
                             </div>
                             <div>{{claim.situation}}</div>
                           </div>
                           {{/claim.situation}} {{#claim.departament}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Departamento:
                             </div>
                             <div>{{claim.departament}}</div>
                           </div>
                           {{/claim.departament}} {{#claim.province}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Provincia:
                             </div>
                             <div>{{claim.province}}</div>
                           </div>
                           {{/claim.province}} {{#claim.district}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Distrito:
                             </div>
                             <div>{{claim.district}}</div>
                           </div>
                           {{/claim.district}} {{#claim.suggestionComplaint}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
-                              Sugerencia/Reclamo:
+                            <div style="font-size: 13px; font-weight: 500">
+                              Reclamo:
                             </div>
                             <div>{{claim.suggestionComplaint}}</div>
                           </div>
-                          {{/claim.suggestionComplaint}} {{#claim.hostname}}
+                          {{/claim.suggestionComplaint}}
                           <div style="margin-bottom: 7px; width: 100%">
-                            <div style="font-size: 12px; font-weight: 500">
+                            <div style="font-size: 13px; font-weight: 500">
                               Hostname:
                             </div>
-                            <div>{{claim.hostname}}</div>
+                            <a
+                              href="https://{{client.hostname}}"
+                              target="_blank"
+                              >{{client.hostname}}</a
+                            >
                           </div>
-                          {{/claim.hostname}}
                         </div>
                       </div>
                     </td>

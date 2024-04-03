@@ -10,9 +10,7 @@ export const sendMail = async (
     operator.smtpConfig || currentConfig["node-mailer"],
   ).sendMail({
     ...mailOptions,
-    from: `${operator.name} <${
-      operator?.smtpConfig?.auth?.user ||
-      currentConfig["node-mailer"].auth?.user
-    }>`,
+    from: `no-reply@${operator.hostname}`,
+    replyTo: `${operator.name} <no-reply@${operator.hostname}>`,
   });
 };
