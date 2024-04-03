@@ -24,5 +24,13 @@
         ]
       }
     }
+  },
+  "etags": {
+    "sendingemails-348505": {
+      "extensionInstances": {
+        "storage-resize-images": "02650bfeae41e7f9d1f284c5a45a870e5a5bbb1c106713d06bccc720215fa213",
+        "storage-resize-users": "bee4844f8237d6a10ba474dbc50cebb2122bbb554631bdfe71dd99e701c0cc6c"
+      }
+    }
   }
 }
