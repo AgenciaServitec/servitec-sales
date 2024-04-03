@@ -9,7 +9,7 @@ const hostName = window.location.hostname;
 
 const hostsProduction = ["sendingemails-348505.web.app"];
 
-const currentEnvironment = !includes(hostsProduction, hostName)
+const currentEnvironment = includes(hostsProduction, hostName)
   ? "production"
   : "development";
 
@@ -22,7 +22,7 @@ const firestore = firebase.firestore();
 const storage = firebase.storage();
 
 firestore.settings({ ignoreUndefinedProperties: true });
-// firestore.enablePersistence().then(() => console.log("Persistence enabled"));
+firestore.enablePersistence().then(() => console.log("Persistence enabled"));
 
 const buckets = {
   default: storage,
