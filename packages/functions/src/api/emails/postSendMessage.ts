@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { sendEmailMessage } from "../../mailer/email";
 import { isEmpty } from "lodash";
-import { fetchDocument, firestore } from "../../_firebase";
+import { firestore } from "../../firebase";
+import { fetchDocument } from "../../firebase/firestore";
+import { sendEmailMessageToEmisor } from "../../mailer";
 
 interface Body {
   email: string;
@@ -29,11 +30,8 @@ export const PostSendMessage = async (
       return;
     }
 
-    await sendEmailMessage({
+    await sendEmailMessageToEmisor({
       emailMessage: formData,
-      client,
-      to: formData.email,
-      subject: "Mensaje",
     });
 
     res.sendStatus(200).end();

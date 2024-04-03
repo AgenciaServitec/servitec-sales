@@ -9,6 +9,16 @@
 //   message?: string;
 // }
 
+type OmitDefaultFirestoreProps<T> = Omit<T, keyof DefaultFirestoreProps>;
+type Timestamp = FirebaseFirestore.Timestamp;
+
+interface DefaultFirestoreProps {
+  createAt: Timestamp;
+  updateAt: Timestamp;
+  updateBy: string;
+  isDeleted: boolean;
+}
+
 type RoleCode = "super_admin" | "client_admin";
 
 interface Image {
@@ -39,6 +49,7 @@ interface Phone {
 interface EmailMessage {
   email: string;
   message: string;
+  clientId: string;
 }
 
 interface Client {
@@ -52,9 +63,19 @@ interface Client {
   receptorEmailsCopy: string;
   textColor: string;
   hostname: string;
+  theme: string;
+  smtpConfig?: SmtpConfig;
   updateBy: string;
   updateAt: FirebaseFirestore.Timestamp;
   createAt: FirebaseFirestore.Timestamp;
+}
+
+interface SmtpConfig {
+  service: string;
+  auth: {
+    user: string;
+    pass: string;
+  };
 }
 
 interface Contact extends DefaultFirestoreProps {

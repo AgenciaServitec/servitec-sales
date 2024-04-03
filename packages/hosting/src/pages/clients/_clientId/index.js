@@ -4,6 +4,7 @@ import Col from "antd/lib/col";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
 import {
+  ComponentContainer,
   Button,
   Form,
   Input,
@@ -20,6 +21,7 @@ import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { assign } from "lodash";
 import { phoneCodes } from "../../../data-list";
+import { Checkbox } from "antd";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
@@ -67,18 +69,30 @@ export const ClientIntegration = () => {
     }
   };
 
-  const mapClient = (client, formData) =>
-    assign({}, formData, {
-      id: client.id,
-      name: formData.name.toLowerCase(),
-      receptorEmail: formData.receptorEmail.toLowerCase(),
-      receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
-      hostname: formData.hostname.toLowerCase(),
-      phone: {
-        number: formData.phoneNumber,
-        countryCode: formData.countryCode,
-      },
-    });
+  const mapClient = (client, formData) => ({
+    id: client.id,
+    name: formData.name.toLowerCase(),
+    receptorEmail: formData.receptorEmail.toLowerCase(),
+    receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
+    hostname: formData.hostname.toLowerCase(),
+    theme:
+      formData.hostname.split(".").length > 2
+        ? formData.hostname.split(".")[1]
+        : formData.hostname.split(".")[0],
+    phone: {
+      number: formData.phoneNumber,
+      countryCode: formData.countryCode,
+    },
+    smtpConfig: formData.customSMTP
+      ? {
+          service: formData.smtpConfig?.service || "",
+          auth: {
+            user: formData.smtpConfig?.user || "",
+            pass: formData.smtpConfig?.pass || "",
+          },
+        }
+      : null,
+  });
 
   const onGoBack = () => navigate(-1);
 
@@ -105,6 +119,14 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     phoneNumber: yup.number(),
     bgColor: yup.string().required(),
     textColor: yup.string().required(),
+    customSMTP: yup.boolean(),
+    smtpConfig: yup
+      .object({
+        service: yup.string().notRequired(),
+        user: yup.string().notRequired(),
+        pass: yup.string().notRequired(),
+      })
+      .notRequired(),
   });
 
   const {
@@ -112,6 +134,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
     handleSubmit,
     control,
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -133,6 +156,12 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
       phoneNumber: client?.phone?.number || "",
       bgColor: client?.bgColor || "",
       textColor: client?.textColor || "",
+      customSMTP: !!client?.smtpConfig,
+      smtpConfig: {
+        service: client?.smtpConfig?.service || "",
+        user: client?.smtpConfig?.auth.user || "",
+        pass: client?.smtpConfig?.auth.pass || "",
+      },
     });
   };
 
@@ -209,7 +238,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 defaultValue=""
                 render={({ field: { onChange, value, name } }) => (
                   <Input
-                    label="Copia email receptores, separardos por comas (,)"
+                    label="Emails BCC separados por comas (,)"
                     name={name}
                     value={value}
                     onChange={onChange}
@@ -219,24 +248,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
-            <Col span={24}>
-              <Controller
-                name="hostname"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Client hostname"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    error={error(name)}
-                    required={required(name)}
-                  />
-                )}
-              />
-            </Col>
-
             <Col xs={24} sm={6} md={6}>
               <Controller
                 name="countryCode"
@@ -244,7 +255,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
                   <Select
-                    label="Código"
+                    label="Prefijo"
                     value={value}
                     onChange={onChange}
                     error={error(name)}
@@ -274,7 +285,6 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
-
             <Col xs={24} sm={12}>
               <Controller
                 name="bgColor"
@@ -313,6 +323,98 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
+            <Col span={24}>
+              <Controller
+                name="hostname"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="Hostname"
+                    prefix="https://"
+                    animation={false}
+                    onChange={onChange}
+                    value={value}
+                    name={name}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <Controller
+                name="customSMTP"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Checkbox
+                    name={name}
+                    checked={value}
+                    onChange={(checked) => onChange(checked)}
+                    error={error(name)}
+                  >
+                    Custom SMTP
+                  </Checkbox>
+                )}
+              />
+            </Col>
+            {watch("customSMTP") && (
+              <Col span={24}>
+                <ComponentContainer.group label="Config SMTP">
+                  <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                      <Controller
+                        name="smtpConfig.service"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Service"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={12}>
+                      <Controller
+                        name="smtpConfig.user"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="User"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={12}>
+                      <Controller
+                        name="smtpConfig.pass"
+                        control={control}
+                        render={({ field: { onChange, value, name } }) => (
+                          <Input
+                            label="Pass"
+                            value={value}
+                            onChange={onChange}
+                            error={error(name)}
+                            required={required(name)}
+                            autoFocus
+                          />
+                        )}
+                      />
+                    </Col>
+                  </Row>
+                </ComponentContainer.group>
+              </Col>
+            )}
           </Row>
           <Row justify="end" gutter={[16, 16]}>
             <Col xs={24} sm={6} md={4}>

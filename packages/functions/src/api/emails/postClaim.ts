@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import { fetchCollection, firestore, now } from "../../_firebase";
-import { assign, capitalize, isEmpty, merge } from "lodash";
-import { sendMailContactReceptor } from "../../mailer/common";
+import { firestore } from "../../firebase";
+import { assign, isEmpty, merge } from "lodash";
 import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
+import { fetchCollection, now } from "../../firebase/firestore";
+import { sendMailClaimToReceptor } from "../../mailer";
 
 interface Body {
   claim: EmailClaim;
@@ -37,12 +38,8 @@ export const PostClaim = async (
 
     const p0 = fetchSetClaimInContacts(claim, client);
 
-    const p1 = sendMailContactReceptor({
-      contact: claim,
-      client: client,
-      to: client.receptorEmail,
-      bcc: client.receptorEmailsCopy,
-      subject: claim?.issue ? capitalize(claim.issue) : "Reclamo recibido",
+    const p1 = sendMailClaimToReceptor({
+      claim,
     });
 
     await Promise.all([p0, p1]);

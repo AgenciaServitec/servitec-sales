@@ -35,7 +35,7 @@ export const DrawerLayout = ({
       label: "Clientes",
       key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
-      isVisible: user.roleCode === "super_admin",
+      isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/clients");
         setIsVisibleDrawer(false);
@@ -45,7 +45,7 @@ export const DrawerLayout = ({
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-      isVisible: user.roleCode !== "marketing",
+      isVisible: user?.roleCode !== "marketing",
       onClick: () => {
         onNavigateTo("/users");
         setIsVisibleDrawer(false);

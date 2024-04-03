@@ -15,7 +15,7 @@
     "logs": "firebase functions:log",
     "eslint:check": "eslint src",
     "prettier:check": "prettier . --check",
-    "prettier:format": "prettier . --write",
+    "prettier:write": "prettier . --write",
     "type:check": "tsc --noEmit"
   },
   "dependencies": {

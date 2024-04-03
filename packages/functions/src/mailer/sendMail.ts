@@ -1,22 +1,16 @@
-import mustache from "mustache";
-import nodemailer from "nodemailer";
-import { environmentConfig } from "../config";
+import { createTransport } from "nodemailer";
+import { currentConfig } from "../config";
 import Mail from "nodemailer/lib/mailer";
 
-const { host, from, pass, user, port } = environmentConfig["node-mailer"];
-
-export const sendMail = async (mailOptions: Mail.Options): Promise<void> => {
-  const transporter = nodemailer.createTransport({
-    port,
-    host,
-    auth: {
-      user,
-      pass,
-    },
+export const sendMail = async (
+  operator: Client,
+  mailOptions: Mail.Options,
+): Promise<void> => {
+  await createTransport(
+    operator.smtpConfig || currentConfig["node-mailer"],
+  ).sendMail({
+    ...mailOptions,
+    from: `no-reply@${operator.hostname}`,
+    replyTo: `${operator.name} <no-reply@${operator.hostname}>`,
   });
-
-  await transporter.sendMail({ ...mailOptions, from });
 };
-
-export const html = (template: string, view: unknown): string =>
-  mustache.render(template, view);

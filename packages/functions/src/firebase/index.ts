@@ -1,5 +1,3 @@
-export * from "./firestore";
-
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
@@ -10,8 +8,5 @@ export const auth = admin.auth();
 
 firestore.settings({ ignoreUndefinedProperties: true });
 
-const projectId = process.env.GCLOUD_PROJECT;
-
-export const bucketAtFunction = projectId + ".appspot.com";
-export const firestoreFieldValue = admin.firestore.FieldValue;
 export const firestoreTimestamp = admin.firestore.Timestamp;
+export const firestoreFieldValue = admin.firestore.FieldValue;
