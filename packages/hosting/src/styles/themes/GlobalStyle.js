@@ -1,4 +1,5 @@
 import { createGlobalStyle, css } from "styled-components";
+import "@fontsource-variable/montserrat";
 
 const global = css`
   * {
@@ -9,6 +10,7 @@ const global = css`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Montserrat Variable", sans-serif;
     color: ${({ theme }) => theme.colors.body};
   }
 
