@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Button, Form, Input, InputPassword } from "../../components/ui";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,6 +8,8 @@ import { useAuthentication } from "../../providers";
 import { useNavigate } from "react-router";
 import { useFormUtils } from "../../hooks";
 import Title from "antd/es/typography/Title";
+import { ImageLogin, LoginBackground } from "../../images";
+import { mediaQuery } from "../../styles";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -37,113 +39,150 @@ export const Login = () => {
 
   return (
     <Container>
-      <div className="wrapper-login">
-        <div className="title-login">
-          <Title level={2}>Servitec Sales</Title>
+      <div className="content">
+        <div className="wrapper-background">
+          <div className="wrapper-background__title">
+            <h2>Servitec Sales</h2>
+          </div>
+          <img src={ImageLogin} />
         </div>
-        <Form onSubmit={handleSubmit(onSubmitLogin)}>
-          <Controller
-            name="email"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value, name } }) => (
-              <Input
-                label="Usuario"
-                onChange={onChange}
-                value={value}
-                name={name}
-                error={error(name)}
-                helperText={errorMessage(name)}
-                required={required(name)}
-              />
-            )}
-          />
-          <Controller
-            name="password"
-            control={control}
-            defaultValue=""
-            render={({ field: { onChange, value, name } }) => (
-              <InputPassword
-                label="Contraseña"
-                onChange={onChange}
-                value={value}
-                name={name}
-                error={error(name)}
-                helperText={errorMessage(name)}
-                required={required(name)}
-              />
-            )}
-          />
-          <Button
-            block
-            size="large"
-            type="primary"
-            loading={loginLoading}
-            htmlType="submit"
-          >
-            Iniciar sesión
-          </Button>
-        </Form>
+        <div className="wrapper-login">
+          <div className="title-login">
+            <Title level={2}>Iniciar Sesión</Title>
+          </div>
+          <Form onSubmit={handleSubmit(onSubmitLogin)}>
+            <Controller
+              name="email"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <Input
+                  label="Usuario"
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              defaultValue=""
+              render={({ field: { onChange, value, name } }) => (
+                <InputPassword
+                  label="Contraseña"
+                  onChange={onChange}
+                  value={value}
+                  name={name}
+                  error={error(name)}
+                  helperText={errorMessage(name)}
+                  required={required(name)}
+                />
+              )}
+            />
+            <Button
+              block
+              size="large"
+              type="primary"
+              loading={loginLoading}
+              htmlType="submit"
+            >
+              Iniciar sesión
+            </Button>
+          </Form>
+        </div>
       </div>
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-blend-mode: multiply;
-  background: rgb(0, 213, 255);
-  background: radial-gradient(
-    circle,
-    rgba(0, 213, 255, 1) 4%,
-    rgb(0, 130, 218) 100%
-  );
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-
-  .wrapper-login {
-    width: 38em;
-    height: auto;
-    padding: 1.7rem;
-    border-radius: 1em;
-    background: ${({ theme }) => theme.colors.white};
-    color: ${({ theme }) => theme.colors.primary};
-    margin: 1em;
-
-    .title-login {
-      text-align: center;
-
-      h2 {
-        color: inherit;
-      }
-    }
-
-    .item-text {
-      text-align: left;
-      margin: 1em auto;
-    }
-
-    .content-button {
+  ${({ theme }) => css`
+    width: 100%;
+    min-height: 100vh;
+    background-image: url(${LoginBackground});
+    background-size: cover;
+    background-position: center center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .content {
+      width: 90%;
+      min-height: 90vh;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
-
-      .item-icon {
-        margin-right: 0.5em;
-        font-size: 1.5em;
+      flex-direction: column;
+      border-radius: 1em;
+      overflow: hidden;
+      ${mediaQuery.minTablet} {
+        flex-direction: row;
+      }
+      ${mediaQuery.minDesktop} {
+        width: 60%;
       }
     }
-  }
+    .wrapper-background {
+      flex: 1 1 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 1.5em;
+      background-color: #fff;
+      ${mediaQuery.minDesktop} {
+        padding: 5em 2em 5em;
+      }
+      &__title {
+        color: ${theme.colors.white};
+        h2 {
+          font-size: 2.5em;
+          font-weight: bold;
+        }
+      }
+      img {
+        width: 90%;
+        ${mediaQuery.minDesktop} {
+          width: 100%;
+        }
+      }
+    }
+    .wrapper-login {
+      flex: 1 1 0;
+      padding: 1.5em;
+      background-color: rgba(255, 255, 255, 0.4);
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      ${mediaQuery.minDesktop} {
+        padding: 2em;
+      }
+      .title-login {
+        h2 {
+          text-align: center;
+          color: inherit;
+          font-size: 2.5em;
+          font-weight: 700;
+        }
+      }
+      .ant-space-item {
+        > div {
+          border-radius: 0;
+          border: none;
+          border-bottom: 3px solid ${theme.colors.primary};
+          background-color: transparent;
+          &:focus-within {
+            box-shadow: 0 0 0 0 transparent;
+          }
+        }
+        .kLGhUR .item-wrapper:focus-within + .item-label,
+        .kLGhUR .item-wrapper:-webkit-autofill + .item-label {
+          background-color: transparent;
+        }
+      }
+    }
+  `}
 `;
