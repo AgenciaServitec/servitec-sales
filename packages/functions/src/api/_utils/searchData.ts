@@ -26,7 +26,7 @@ import moment from "moment";
 // };
 
 export const searchDataEmail = (
-  contact: Omit<EmailContact, "searchData">,
+  contact: Omit<EmailContact, "searchData"| "updateAt">,
 ): string[] => {
   return [
     contact.id,

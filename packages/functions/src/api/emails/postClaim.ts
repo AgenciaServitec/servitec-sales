@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { firestore } from "../../firebase";
-import { assign, isEmpty, merge } from "lodash";
+import { assign, isEmpty } from "lodash";
 import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
 import { fetchCollection, now } from "../../firebase/firestore";
@@ -76,7 +76,7 @@ const mapContact = (
   claim: EmailClaim,
   client: Client,
 ): OmitDefaultFirestoreProps<EmailClaim> => {
-  const contact_ = merge(claim, {
+  const contact_ = {
     id: contactId,
     clientId: client.id,
     hostname: client.hostname,
@@ -101,7 +101,7 @@ const mapContact = (
     status: "pending",
     type: "claim",
     createAt: now(),
-  });
+  };
 
   return assign({}, contact_, {
     searchData: searchDataEmail(contact_),
