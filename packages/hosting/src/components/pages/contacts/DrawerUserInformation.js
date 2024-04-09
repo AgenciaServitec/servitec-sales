@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Col, Divider, Drawer, Row, Switch } from "antd";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   Button,
   Form,
@@ -16,7 +16,6 @@ import * as yup from "yup";
 import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
-import { capitalize } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -30,6 +29,9 @@ import { SendEmailMessageModal } from "./SendEmailMessageModal";
 import { SendEmailQuoteModal } from "./SendEmailQuoteModal";
 import { findColor } from "../../../utils";
 import Tabs from "antd/lib/tabs";
+import { ClaimInformation } from "../../../pages/contacts/ClaimInformation";
+import { RequestInformation } from "../../../pages/contacts/RequestInformation";
+import { ContactInformation } from "../../../pages/contacts/ContactInformation";
 
 export const DrawerUserInformation = ({
   contact,
@@ -97,6 +99,25 @@ export const DrawerUserInformation = ({
   const onCLickIsVisibleQuotationEmailModal = () =>
     setIsVisibleQuotationEmailModal(!isVisibleQuotationEmailModal);
 
+  const showContact = (contact) => {
+    switch (contact.type) {
+      case "contact":
+        return <ContactInformation contact={contact} />;
+      case "request":
+        return <RequestInformation request={contact} />;
+      case "claim":
+        return <ClaimInformation claim={contact} />;
+      default:
+        return <ContactInformation contact={contact} />;
+    }
+  };
+
+  const colorByContactType = {
+    contact: { color: "#d46b08", bg: "#fff7e6" },
+    request: { color: "#389e0d", bg: "#f6ffed" },
+    claim: { color: "#cf1322", bg: "#fff1f0" },
+  };
+
   return (
     <>
       <ContainerDrawer
@@ -111,101 +132,76 @@ export const DrawerUserInformation = ({
           paddingBottom: 80,
         }}
       >
-        <Row gutter={[0, 7]}>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Nombres"
-              content={capitalize(contact?.firstName) || ""}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Apellidos"
-              content={capitalize(contact?.lastName) || ""}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem title="Email" content={contact?.email || ""} />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Teléfono"
-              content={
-                `${contact?.phone.countryCode} ${contact?.phone.number}` || ""
-              }
-            />
-          </Col>
-          {contact?.issue && (
-            <Col span={24}>
-              <DescriptionItem title="Asunto" content={contact?.issue || ""} />
+        <InformationWrapper
+          contactType={contact.type}
+          colorByContactType={colorByContactType}
+        >
+          <Row gutter={[0, 7]}>
+            {showContact(contact)}
+            <Col xs={24} sm={12}>
+              <DescriptionItem
+                title="Hostname"
+                content={
+                  contact?.hostname ? (
+                    <TagHostname
+                      hostname={contact.hostname}
+                      clientColors={findColor(contact.clientId, clients)}
+                    />
+                  ) : null
+                }
+              />
             </Col>
-          )}
-          <Col span={24}>
-            <DescriptionItem title="Mensaje" content={contact?.message || ""} />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Hostname"
-              content={
-                contact?.hostname ? (
-                  <TagHostname
-                    hostname={contact.hostname}
-                    clientColors={findColor(contact.clientId, clients)}
-                  />
-                ) : null
-              }
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Fecha creación"
-              content={
-                moment(contact?.createAt.toDate()).format(
-                  "DD/MM/YYYY HH:mm A"
-                ) || ""
-              }
-            />
-          </Col>
-          <Col span={24} style={{ display: "flex", justifyContent: "start" }}>
-            <IconAction
-              onClick={() =>
-                onNavigateWithBlankTo(
-                  `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
-                )
-              }
-              size={40}
-              style={{ color: "#65d844" }}
-              tooltipTitle="Whatsapp"
-              icon={faWhatsapp}
-            />
-            <IconAction
-              onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
-              size={40}
-              tooltipTitle="Email"
-              styled={{ color: (theme) => theme.colors.error }}
-              icon={faEnvelope}
-            />
-            <IconAction
-              onClick={() =>
-                onNavigateWithBlankTo(
-                  `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
-                )
-              }
-              size={40}
-              style={{ color: "#0583ea" }}
-              tooltipTitle="Teléfono"
-              icon={faPhone}
-            />
-            <IconAction
-              key={contact.id}
-              onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
-              size={40}
-              style={{ color: "#e7c600" }}
-              tooltipTitle="Historial"
-              icon={faCalendarAlt}
-            />
-          </Col>
-        </Row>
+            <Col xs={24} sm={12}>
+              <DescriptionItem
+                title="Fecha creación"
+                content={
+                  moment(contact?.createAt.toDate()).format(
+                    "DD/MM/YYYY HH:mm A"
+                  ) || ""
+                }
+              />
+            </Col>
+            <Col span={24} style={{ display: "flex", justifyContent: "start" }}>
+              <IconAction
+                onClick={() =>
+                  onNavigateWithBlankTo(
+                    `https://wa.me/${contact?.phone?.countryCode}${contact?.phone?.number}`
+                  )
+                }
+                size={40}
+                style={{ color: "#65d844" }}
+                tooltipTitle="Whatsapp"
+                icon={faWhatsapp}
+              />
+              <IconAction
+                onClick={() => onNavigateWithBlankTo(`mailto:${contact.email}`)}
+                size={40}
+                tooltipTitle="Email"
+                styled={{ color: (theme) => theme.colors.error }}
+                icon={faEnvelope}
+              />
+              <IconAction
+                onClick={() =>
+                  onNavigateWithBlankTo(
+                    `tel:${contact?.phone?.countryCode}${contact?.phone?.number}`
+                  )
+                }
+                size={40}
+                style={{ color: "#0583ea" }}
+                tooltipTitle="Teléfono"
+                icon={faPhone}
+              />
+              <IconAction
+                key={contact.id}
+                onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
+                size={40}
+                style={{ color: "#e7c600" }}
+                tooltipTitle="Historial"
+                icon={faCalendarAlt}
+              />
+            </Col>
+          </Row>
+        </InformationWrapper>
         <Divider />
         <Row gutter={[16, 16]}>
           <Col span={24}>
@@ -374,6 +370,15 @@ const ContainerDrawer = styled(Drawer)`
     color: rgba(0, 0, 0, 0.65);
     font-size: 0.9em;
   }
+`;
+
+const InformationWrapper = styled.div`
+  ${({ contactType, colorByContactType }) => css`
+    border-radius: 0.5em;
+    padding: 0.7em;
+    background-color: ${colorByContactType[contactType]?.bg || ""};
+    border: 1px solid ${colorByContactType[contactType]?.color || ""};
+  `}
 `;
 
 const DescriptionItem = ({ title, content }) => (
