@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Col, Divider, Drawer, Row, Switch } from "antd";
 import styled, { css } from "styled-components";
-import { lighten, rgba } from "polished";
 import {
   Button,
   Form,
@@ -17,7 +16,6 @@ import * as yup from "yup";
 import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
-import { capitalize } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {

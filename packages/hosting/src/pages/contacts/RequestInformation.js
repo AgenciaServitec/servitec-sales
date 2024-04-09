@@ -1,6 +1,5 @@
 import React from "react";
 import { Col } from "antd";
-import { capitalize } from "lodash";
 import { ShowFullName } from "../../components/pages";
 
 export const RequestInformation = ({ request }) => (
