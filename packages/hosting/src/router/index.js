@@ -3,8 +3,8 @@ import { Route, Routes } from "react-router-dom";
 import {
   ClientIntegration,
   ClientsIntegration,
-  Contact,
-  Contacts,
+  Email,
+  Emails,
   Login,
   Page403,
   Page404,
@@ -23,18 +23,18 @@ export const Router = () => (
       element={
         <PrivateRoute>
           <BaseLayout>
-            <Contacts />
+            <Emails />
           </BaseLayout>
         </PrivateRoute>
       }
     />
     <Route
       exact
-      path="/contacts/:contactId"
+      path="/emails/:emailId"
       element={
         <PrivateRoute>
           <BaseLayout>
-            <Contact />
+            <Email />
           </BaseLayout>
         </PrivateRoute>
       }
