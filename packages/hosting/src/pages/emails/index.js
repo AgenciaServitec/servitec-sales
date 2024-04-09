@@ -19,7 +19,7 @@ import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { firestore } from "../../firebase";
 import { modalConfirm, RadioGroup } from "../../components/ui";
 
-export const Contacts = () => {
+export const Emails = () => {
   const navigate = useNavigate();
   const { isMobile } = useDevice();
 

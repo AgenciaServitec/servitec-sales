@@ -29,9 +29,9 @@ import { SendEmailMessageModal } from "./SendEmailMessageModal";
 import { SendEmailQuoteModal } from "./SendEmailQuoteModal";
 import { findColor } from "../../../utils";
 import Tabs from "antd/lib/tabs";
-import { ClaimInformation } from "../../../pages/contacts/ClaimInformation";
-import { RequestInformation } from "../../../pages/contacts/RequestInformation";
-import { ContactInformation } from "../../../pages/contacts/ContactInformation";
+import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
+import { RequestInformation } from "../../../pages/emails/RequestInformation";
+import { ContactInformation } from "../../../pages/emails/ContactInformation";
 
 export const DrawerUserInformation = ({
   contact,

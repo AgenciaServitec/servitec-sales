@@ -30,7 +30,7 @@ import { useGlobalData } from "../../../providers";
 import { darken } from "polished";
 import { theme } from "../../../styles";
 
-export const Contact = () => {
+export const Email = () => {
   const { contactId } = useParams();
   const navigate = useNavigate();
   const { clients } = useGlobalData();
