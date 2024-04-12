@@ -7,10 +7,13 @@ import { orderBy } from "lodash";
 import moment from "moment";
 import { useGlobalData } from "../../providers";
 import styled from "styled-components";
-import { Select, TagHostname } from "../../components/ui";
+import { TagHostname } from "../../components/ui";
+import { FilterContact } from "./FilterContact";
+import { useQueryString } from "../../hooks/useQueryString";
 
 export const Contact = () => {
   const { clients } = useGlobalData();
+  const [contactId, setContactId] = useQueryString("contactId", "all");
 
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     firestore.collection("contacts").where("isDeleted", "==", false)
@@ -20,9 +23,10 @@ export const Contact = () => {
     ...contact,
     client: clients.find((client) => client.id === contact.clientId),
   }));
-  
+
   return (
     <Container>
+      <FilterContact clients={clients} />
       <List>
         <VirtualList
           data={orderBy(contactsMergeClients, ["createAt"], ["desc"])}
