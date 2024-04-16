@@ -121,7 +121,8 @@ export const ContactInList = ({
                   <div className="item-client-logo">
                     <img
                       src={
-                        findClient(contact.clientId)?.logotipo?.thumbUrl || NoFound
+                        findClient(contact.clientId)?.logotipo?.thumbUrl ||
+                        NoFound
                       }
                       alt="client logo"
                     />
