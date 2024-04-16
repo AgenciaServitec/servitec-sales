@@ -28,14 +28,20 @@
       "redirects": [],
       "rewrites": [
         {
-          "source": "/api/**",
-          "function": "api"
-        },
-        {
           "source": "**",
           "destination": "/index.html"
         }
       ]
+    },
+    {
+      "target": "hosting-api",
+      "rewrites": [
+        {
+          "source": "/**",
+          "function": "api"
+        }
+      ],
+      "headers": []
     }
   ],
   "firestore": {
