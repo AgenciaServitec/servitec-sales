@@ -373,15 +373,6 @@ const ContainerDrawer = styled(Drawer)`
   }
 `;
 
-// const InformationWrapper = styled.div`
-//   ${({ contactType, colorByContactType }) => css`
-//     border-radius: 0.5em;
-//     padding: 0.7em;
-//     background-color: ${colorByContactType[contactType]?.bg || ""};
-//     border: 1px solid ${colorByContactType[contactType]?.color || ""};
-//   `}
-// `;
-
 const DescriptionItem = ({ title, content }) => (
   <div className="site-description-item-profile-wrapper">
     <p className="site-description-item-profile-p-label">{title}:</p>
