@@ -194,7 +194,7 @@ export const DrawerUserInformation = ({
               />
               <IconAction
                 key={contact.id}
-                onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
+                onClick={() => onNavigateTo(`/contacts/history/${contact.id}`)}
                 size={40}
                 style={{ color: "#e7c600" }}
                 tooltipTitle="Historial"

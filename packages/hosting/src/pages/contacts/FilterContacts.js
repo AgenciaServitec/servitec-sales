@@ -4,7 +4,7 @@ import { Select } from "../../components/ui";
 import { Col, Row } from "antd";
 import { concat } from "lodash";
 
-export const FilterContact = ({
+export const FilterContacts = ({
   clients,
   hostname,
   onSetHostname,

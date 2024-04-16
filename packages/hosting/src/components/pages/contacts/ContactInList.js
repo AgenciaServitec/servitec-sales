@@ -91,7 +91,7 @@ export const ContactInList = ({
               />,
               <IconAction
                 key={contact.id}
-                onClick={() => onNavigateTo(`/contacts/${contact.id}`)}
+                onClick={() => onNavigateTo(`/contacts/history/${contact.id}`)}
                 size={55}
                 style={{ color: "#e7c600" }}
                 tooltipTitle="Historial"

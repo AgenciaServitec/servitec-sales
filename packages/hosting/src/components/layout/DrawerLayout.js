@@ -48,7 +48,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faAddressBook} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
-        onNavigateTo("/contact");
+        onNavigateTo("/contacts");
         setIsVisibleDrawer(false);
       },
     },

@@ -30,7 +30,7 @@ import { useGlobalData } from "../../../providers";
 import { darken } from "polished";
 import { theme } from "../../../styles";
 
-export const Email = () => {
+export const HistoryIntegration = () => {
   const { contactId } = useParams();
   const navigate = useNavigate();
   const { clients } = useGlobalData();
@@ -52,6 +52,9 @@ export const Email = () => {
   const onGoBack = () => navigate(-1);
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
+
+  const findClient = (clientId) =>
+    clients.find((client) => client.id === clientId);
 
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
 
