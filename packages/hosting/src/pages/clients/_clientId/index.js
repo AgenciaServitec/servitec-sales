@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
+import Checkbox from "antd/lib/checkbox";
 import { useNavigate, useParams } from "react-router";
 import Title from "antd/lib/typography/Title";
 import {
-  ComponentContainer,
   Button,
+  ComponentContainer,
   Form,
   Input,
   InputNumber,
@@ -19,9 +20,7 @@ import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
-import { assign } from "lodash";
 import { phoneCodes } from "../../../data-list";
-import { Checkbox } from "antd";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
@@ -72,6 +71,8 @@ export const ClientIntegration = () => {
   const mapClient = (client, formData) => ({
     id: client.id,
     name: formData.name.toLowerCase(),
+    isotipo: formData?.isotipo || null,
+    logotipo: formData.logotipo,
     receptorEmail: formData.receptorEmail.toLowerCase(),
     receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
     hostname: formData.hostname.toLowerCase(),
@@ -111,8 +112,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
 
   const schema = yup.object({
     name: yup.string().required(),
+    isotipo: yup.object(),
     logotipo: yup.object().required(),
-    isotipo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
     hostname: yup.string().required(),
@@ -149,8 +150,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
   const resetForm = () => {
     reset({
       name: client?.name || "",
-      logotipo: client?.logotipo || null,
       isotipo: client?.isotipo || null,
+      logotipo: client?.logotipo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
       hostname: client?.hostname || "",
@@ -196,7 +197,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
             </Col>
             <Col span={24} md={12}>
               <Controller
-                name="logotipo"
+                name="isotipo"
                 control={control}
                 defaultValue={null}
                 render={({ field: { onChange, value, name } }) => (
@@ -205,8 +206,10 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                     accept="image/*"
                     name={name}
                     value={value}
-                    filePath={`clients/${client.id}/logotipo`}
+                    filePath={`clients/${client.id}/isotipo`}
                     resize="150x150"
+                    fileName="isotipo"
+                    thumbExtension="png"
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
@@ -227,8 +230,10 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                     accept="image/*"
                     name={name}
                     value={value}
-                    filePath={`clients/${client.id}/isotipo`}
+                    filePath={`clients/${client.id}/logotipo`}
                     resize="350x167"
+                    fileName="logotipo"
+                    thumbExtension="png"
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
@@ -317,7 +322,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     type="color"
-                    label="Color de cliente"
+                    label="Color primario"
                     animation={false}
                     name={name}
                     value={value}

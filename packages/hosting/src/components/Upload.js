@@ -55,6 +55,7 @@ export const Upload = ({
   label,
   required = false,
   resize = null,
+  thumbExtension = "webp",
   value,
   onChange,
   onUploading,
@@ -103,6 +104,7 @@ export const Upload = ({
         filePath,
         fileName,
         resize,
+        thumbExtension,
         storage,
         isImage,
         options: {
