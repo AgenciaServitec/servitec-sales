@@ -46,7 +46,7 @@ export const FloatingBubble = ({
     >
       <ItemLogo bgColor={clientColors?.bg}>
         <img
-          src={client?.logo?.thumbUrl || NoFound}
+          src={client?.logotipo?.thumbUrl || NoFound}
           alt="logo agencia servitec"
         />
       </ItemLogo>

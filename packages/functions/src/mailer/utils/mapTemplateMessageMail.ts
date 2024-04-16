@@ -4,7 +4,7 @@ export interface MessageMustacheView {
   theme: string;
   client: {
     name: string;
-    logoUrl: string;
+    logotipoUrl: string;
     textColor: string;
     bgColor: string;
   };
@@ -19,7 +19,7 @@ export const mapTemplateMessageMailMustache = (
     theme: client.theme,
     client: {
       name: client.name,
-      logoUrl: client.logo.thumbUrl,
+      logotipoUrl: client.logotipo.thumbUrl,
       textColor: client.textColor,
       bgColor: client.bgColor,
     },

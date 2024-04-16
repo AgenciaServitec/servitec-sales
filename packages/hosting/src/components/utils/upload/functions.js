@@ -35,6 +35,7 @@ export const uploadFile = async ({
   fileName,
   storage,
   resize,
+  thumbExtension,
   options: { file, onError, onProgress, onSuccess },
 }) =>
   await new Promise((resolve, reject) => {
@@ -52,7 +53,7 @@ export const uploadFile = async ({
       },
       thumbUrl: {
         path: `${filePath}/thumbs`,
-        fileName: `${fileName}_${resize}.webp`,
+        fileName: `${fileName}_${resize}.${thumbExtension}`,
       },
     };
 
