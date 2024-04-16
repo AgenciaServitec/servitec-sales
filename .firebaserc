@@ -7,7 +7,7 @@
     "sendingemails-348505": {
       "hosting": {
         "app": [
-          "sendingemails-348505"
+          "servitecsales"
         ],
         "api": [
           "api-servitecsales"
@@ -17,7 +17,7 @@
     "sendingemails-dev-351600": {
       "hosting": {
         "app": [
-          "sendingemails-dev-351600"
+          "servitecsales"
         ],
         "api": [
           "api-servitecsales-dev"
