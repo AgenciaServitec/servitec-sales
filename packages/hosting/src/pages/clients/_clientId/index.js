@@ -111,7 +111,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
 
   const schema = yup.object({
     name: yup.string().required(),
-    logo: yup.object().required(),
+    logotipo: yup.object().required(),
+    isotipo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),
     hostname: yup.string().required(),
@@ -148,7 +149,8 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
   const resetForm = () => {
     reset({
       name: client?.name || "",
-      logo: client?.logo || null,
+      logotipo: client?.logotipo || null,
+      isotipo: client?.isotipo || null,
       receptorEmail: client?.receptorEmail || "",
       receptorEmailsCopy: client?.receptorEmailsCopy || "",
       hostname: client?.hostname || "",
@@ -192,19 +194,41 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
                 )}
               />
             </Col>
-            <Col span={24}>
+            <Col span={24} md={12}>
               <Controller
-                name="logo"
+                name="logotipo"
                 control={control}
                 defaultValue={null}
                 render={({ field: { onChange, value, name } }) => (
                   <Upload
-                    label="Logo cliente (300x90)"
+                    label="Isotipo (150 x 150)"
                     accept="image/*"
                     name={name}
                     value={value}
-                    filePath={`clients/${client.id}`}
-                    resize="300x90"
+                    filePath={`clients/${client.id}/logotipo`}
+                    resize="150x150"
+                    buttonText="Subir imagen"
+                    error={error(name)}
+                    required={required(name)}
+                    onChange={(file) => onChange(file)}
+                    onUploading={setUploadingImage}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24} md={12}>
+              <Controller
+                name="logotipo"
+                control={control}
+                defaultValue={null}
+                render={({ field: { onChange, value, name } }) => (
+                  <Upload
+                    label="Logotipo (350 x 167)"
+                    accept="image/*"
+                    name={name}
+                    value={value}
+                    filePath={`clients/${client.id}/isotipo`}
+                    resize="350x167"
                     buttonText="Subir imagen"
                     error={error(name)}
                     required={required(name)}
