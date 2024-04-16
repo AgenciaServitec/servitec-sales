@@ -22,6 +22,7 @@
     "polished": "^4.2.2",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
+    "react-avatar": "^5.0.3",
     "react-bubble-ui": "^1.1.2",
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^3.0.4",

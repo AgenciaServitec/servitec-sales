@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { version } from "../../firebase";
 import { useAuthentication } from "../../providers";
 import {
+  faAddressBook,
   faHome,
   faLayerGroup,
   faSignOutAlt,
@@ -32,12 +33,22 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Clientes",
+      label: "Clientes API",
       key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/clients");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Contactos",
+      key: "contacts",
+      icon: <FontAwesomeIcon icon={faAddressBook} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/contact");
         setIsVisibleDrawer(false);
       },
     },

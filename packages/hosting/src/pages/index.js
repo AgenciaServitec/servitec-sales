@@ -7,3 +7,4 @@ export * from "./clients/_clientId";
 export * from "./login";
 export * from "./users";
 export * from "./users/_userId";
+export * from "./contact";

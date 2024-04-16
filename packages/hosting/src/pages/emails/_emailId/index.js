@@ -53,9 +53,6 @@ export const Email = () => {
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
-  const findClient = (clientId) =>
-    clients.find((client) => client.id === clientId);
-
   const viewContacts = () => orderBy(contacts, ["createAt"], ["desc"]);
 
   if (loadingContact || loadingContacts) return <Spinner fullscreen />;

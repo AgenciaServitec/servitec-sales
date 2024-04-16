@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import {
   ClientIntegration,
   ClientsIntegration,
+  Contact,
   Email,
   Emails,
   Login,
@@ -79,6 +80,17 @@ export const Router = () => (
         <PrivateRoute>
           <BaseLayout>
             <UserIntegration />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="/contact"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <Contact />
           </BaseLayout>
         </PrivateRoute>
       }

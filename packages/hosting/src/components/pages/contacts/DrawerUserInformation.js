@@ -32,6 +32,7 @@ import Tabs from "antd/lib/tabs";
 import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
 import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ContactInformation } from "../../../pages/emails/ContactInformation";
+import { InformationWrapper } from "./InformationWrapper";
 
 export const DrawerUserInformation = ({
   contact,
@@ -370,15 +371,6 @@ const ContainerDrawer = styled(Drawer)`
     color: rgba(0, 0, 0, 0.65);
     font-size: 0.9em;
   }
-`;
-
-const InformationWrapper = styled.div`
-  ${({ contactType, colorByContactType }) => css`
-    border-radius: 0.5em;
-    padding: 0.7em;
-    background-color: ${colorByContactType[contactType]?.bg || ""};
-    border: 1px solid ${colorByContactType[contactType]?.color || ""};
-  `}
 `;
 
 const DescriptionItem = ({ title, content }) => (
