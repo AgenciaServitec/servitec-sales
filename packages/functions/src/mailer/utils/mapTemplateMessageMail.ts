@@ -19,7 +19,7 @@ export const mapTemplateMessageMailMustache = (
     theme: client.theme,
     client: {
       name: client.name,
-      logoUrl: client.logo.thumbUrl,
+      logoUrl: client.logotipo.thumbUrl,
       textColor: client.textColor,
       bgColor: client.bgColor,
     },

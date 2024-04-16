@@ -28,7 +28,7 @@ export const mapTemplateContactMailMustache = (
     theme: client.theme,
     client: {
       name: client.name,
-      clientLogo: client.logo.thumbUrl,
+      clientLogo: client.logotipo.thumbUrl,
       textColor: client.textColor,
       bgColor: client.bgColor,
       hostname: client.hostname,

@@ -56,7 +56,7 @@ interface Client {
   readonly id: string;
   bgColor: string;
   isDeleted: boolean;
-  logo: Image;
+  logotipo: Image;
   name: string;
   phone: Phone;
   receptorEmail: string;
