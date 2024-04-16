@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import { List, Row, Col, Typography } from "antd";
@@ -8,16 +8,20 @@ import { orderBy } from "lodash";
 import moment from "moment";
 import { useGlobalData } from "../../providers";
 import styled from "styled-components";
-import { TagHostname } from "../../components/ui";
-import { FilterContact } from "./FilterContact";
+import { IconAction, notification, TagHostname } from "../../components/ui";
+import { FilterContacts } from "./FilterContacts";
 import { useQueryString } from "../../hooks/useQueryString";
 import { InformationWrapper } from "../../components/pages";
 import { useDevice } from "../../hooks";
+import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
 
 const { Text } = Typography;
 
-export const Contact = () => {
+export const ContactsIntegration = () => {
   const { isMobile } = useDevice();
+  const navigate = useNavigate();
+
   const { clients } = useGlobalData();
   const [hostname, setHostname] = useQueryString("hostname", "all");
   const [typeContact, setTypeContact] = useQueryString("typeContact", "all");
@@ -25,6 +29,12 @@ export const Contact = () => {
   const [contacts = [], contactsLoading, contactsError] = useCollectionData(
     firestore.collection("contacts").where("isDeleted", "==", false)
   );
+
+  useEffect(() => {
+    contactsError && notification({ type: "error", message: contactsError });
+  }, []);
+
+  const onNavigateTo = (url) => navigate(url);
 
   const contactsMergeClients = contacts.map((contact) => ({
     ...contact,
@@ -47,7 +57,7 @@ export const Contact = () => {
 
   return (
     <Container>
-      <FilterContact
+      <FilterContacts
         hostname={hostname}
         onSetHostname={setHostname}
         typeContact={typeContact}
@@ -64,6 +74,7 @@ export const Contact = () => {
           data={orderBy(contacsView, ["createAt"], ["desc"])}
           height={500}
           itemHeight={47}
+          loading={contactsLoading}
         >
           {(contact) => (
             <List.Item key={contact.id}>
@@ -119,7 +130,18 @@ export const Contact = () => {
                   </InformationWrapper>
                 }
               />
-              <div>content</div>
+              <div>
+                <IconAction
+                  key={contact.id}
+                  onClick={() =>
+                    onNavigateTo(`/contacts/history/${contact.id}`)
+                  }
+                  size={40}
+                  style={{ color: "#e7c600" }}
+                  tooltipTitle="Historial"
+                  icon={faCalendarAlt}
+                />
+              </div>
             </List.Item>
           )}
         </VirtualList>

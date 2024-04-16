@@ -3,8 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import {
   ClientIntegration,
   ClientsIntegration,
-  Contact,
-  Email,
+  ContactsIntegration,
   Emails,
   Login,
   Page403,
@@ -14,6 +13,7 @@ import {
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
+import { HistoryIntegration } from "../pages/contacts/history";
 
 export const Router = () => (
   <Routes>
@@ -25,17 +25,6 @@ export const Router = () => (
         <PrivateRoute>
           <BaseLayout>
             <Emails />
-          </BaseLayout>
-        </PrivateRoute>
-      }
-    />
-    <Route
-      exact
-      path="/emails/:emailId"
-      element={
-        <PrivateRoute>
-          <BaseLayout>
-            <Email />
           </BaseLayout>
         </PrivateRoute>
       }
@@ -86,11 +75,22 @@ export const Router = () => (
     />
     <Route
       exact
-      path="/contact"
+      path="/contacts"
       element={
         <PrivateRoute>
           <BaseLayout>
-            <Contact />
+            <ContactsIntegration />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="/contacts/history/:contactId"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <HistoryIntegration />
           </BaseLayout>
         </PrivateRoute>
       }
