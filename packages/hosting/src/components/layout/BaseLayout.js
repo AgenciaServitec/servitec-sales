@@ -7,12 +7,15 @@ import { FooterLayout } from "./FooterLayout";
 import { useNavigate } from "react-router";
 import { BreadcrumbLayout } from "./Breadcrumb";
 import { useAuthentication } from "../../providers";
+import useSound from "use-sound";
+import { ContactSound } from "../../multimedia";
 
 const { Content } = LayoutAntd;
 
 export const BaseLayout = ({ children }) => {
   const navigate = useNavigate();
   const { authUser } = useAuthentication();
+  const [play] = useSound(ContactSound, { soundEnabled: false });
 
   const [isVisibleDrawer, setIsVisibleDrawer] = useState(false);
 
@@ -20,7 +23,7 @@ export const BaseLayout = ({ children }) => {
 
   return (
     <LayoutContainer>
-      <LayoutAntd className="site-layout">
+      <LayoutAntd className="site-layout" onClick={() => play()}>
         <DrawerLayout
           isVisibleDrawer={isVisibleDrawer}
           setIsVisibleDrawer={setIsVisibleDrawer}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
@@ -18,10 +18,13 @@ import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { firestore } from "../../firebase";
 import { modalConfirm, RadioGroup } from "../../components/ui";
+import useSound from "use-sound";
+import { ContactSound } from "../../multimedia";
 
 export const Emails = () => {
   const navigate = useNavigate();
   const { isMobile } = useDevice();
+  const [play] = useSound(ContactSound, { volume: 7 });
 
   const { authUser } = useAuthentication();
   const { contacts, loadingContacts } = useContacts();
@@ -31,10 +34,17 @@ export const Emails = () => {
   const [clientId, setClientId] = useQueryString("clientId", "all");
   const [type, setType] = useQueryString("type", "all");
 
+  const [contactsData, setContactsData] = useState([]); //Contacts data of provider
   const [contact, setContact] = useState(null);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
-  const lastContact = orderBy(contacts, "createAt", "desc")[0];
+  useEffect(() => {
+    setContactsData(contacts);
+
+    if (contacts.length > contactsData.length) play();
+  }, [contacts]);
+
+  const lastContact = orderBy(contactsData, "createAt", "desc")[0];
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
@@ -58,8 +68,8 @@ export const Emails = () => {
   );
 
   const viewContacts = orderBy(
-    contacts
-      .filter((contact) => contact.status === status)
+    contactsData
+      .filter((contact) => (status ? contact.status === status : true))
       .filter((contact) =>
         clientId === "all"
           ? includes(
