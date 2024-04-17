@@ -112,7 +112,21 @@ interface EmailClaim extends Contact {
   suggestionComplaint?: string;
 }
 
+interface EmailRequestEntry extends Contact {
+  dateToMeet: string;
+  timeToMeet: string;
+  meetingType: string;
+  plan?: {
+    id: string;
+    name: string;
+    price: string;
+  };
+}
+
 interface EmailRequest extends Contact {
+  dateToMeet: FirebaseFirestore.Timestamp;
+  timeToMeet: FirebaseFirestore.Timestamp;
+  meetingType: string;
   plan?: {
     id: string;
     name: string;

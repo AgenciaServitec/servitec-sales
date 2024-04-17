@@ -103,7 +103,20 @@
                             </div>
                             <div>{{request.plan.name}}</div>
                           </div>
-                          {{/request.plan}} {{#request.message}}
+                          {{/request.plan}}
+                          <div style="margin-bottom: 7px; width: 100%">
+                            <div style="font-size: 13px; font-weight: 500">
+                              Fecha de reunion:
+                            </div>
+                            <div>{{request.dateToMeet}}</div>
+                          </div>
+                          <div style="margin-bottom: 7px; width: 100%">
+                            <div style="font-size: 13px; font-weight: 500">
+                              Hora de reunion:
+                            </div>
+                            <div>{{request.timeToMeet}}</div>
+                          </div>
+                          {{#request.message}}
                           <div style="margin-bottom: 7px; width: 100%">
                             <div style="font-size: 13px; font-weight: 500">
                               Mensaje:
@@ -116,7 +129,7 @@
                               "
                             >
                                         {{{request.message}}}
-                                         </pre
+                                                </pre
                             >
                           </div>
                           {{/request.message}}
