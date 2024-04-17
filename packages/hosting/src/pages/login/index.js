@@ -10,9 +10,12 @@ import { useFormUtils } from "../../hooks";
 import Title from "antd/es/typography/Title";
 import { ImageLogin, LoginBackground } from "../../images";
 import { mediaQuery } from "../../styles";
+import useSound from "use-sound";
+import { ContactSound } from "../../multimedia";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const [play] = useSound(ContactSound, { soundEnabled: false });
 
   const { authUser, login, loginLoading } = useAuthentication();
 
@@ -89,6 +92,7 @@ export const Login = () => {
               type="primary"
               loading={loginLoading}
               htmlType="submit"
+              onClick={() => play()}
             >
               Iniciar sesión
             </Button>
