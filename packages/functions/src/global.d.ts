@@ -113,8 +113,8 @@ interface EmailClaim extends Contact {
 }
 
 interface EmailRequestEntry extends Contact {
-  dateToMeet: string;
-  timeToMeet: string;
+  dateToMeet: Date;
+  timeToMeet: Date;
   meetingType: string;
   plan?: {
     id: string;

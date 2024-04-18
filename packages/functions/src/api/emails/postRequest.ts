@@ -5,7 +5,7 @@ import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
 import { fetchCollection, now } from "../../firebase/firestore";
 import { sendMailRequestToReceptor } from "../../mailer";
-import { stringToTimestamp } from "../../utils";
+import { dateToTimestamp } from "../../utils";
 
 interface Body {
   request: EmailRequestEntry;
@@ -86,9 +86,9 @@ const mapContact = (
     lastName: (request?.lastName || "").toLowerCase(),
     email: request.email.toLowerCase(),
     ...(request?.message && { message: request.message }),
-    dateToMeet: stringToTimestamp(request.dateToMeet),
-    timeToMeet: stringToTimestamp(request.timeToMeet),
-    meetingType: stringToTimestamp(request.meetingType),
+    dateToMeet: dateToTimestamp(request.dateToMeet),
+    timeToMeet: dateToTimestamp(request.timeToMeet),
+    meetingType: request.meetingType,
     ...(request?.plan && { plan: request.plan }),
     phone: request.phone,
     termsAndConditions: request?.termsAndConditions || true,
