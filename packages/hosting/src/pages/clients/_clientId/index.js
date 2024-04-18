@@ -112,7 +112,7 @@ const Client = ({ client, onSubmitSaveClient, savingClient, onGoBack }) => {
 
   const schema = yup.object({
     name: yup.string().required(),
-    isotipo: yup.object(),
+    isotipo: yup.object().nullable(),
     logotipo: yup.object().required(),
     receptorEmail: yup.string().required(),
     receptorEmailsCopy: yup.string(),

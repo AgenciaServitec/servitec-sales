@@ -108,8 +108,10 @@ const Clients = ({
                 avatar={
                   <Image
                     src={
-                      client?.isotipo?.thumbUrl ||
-                      "https://firebasestorage.googleapis.com/v0/b/sendingemails-348505.appspot.com/o/resources%2Fimage-not-found.jpg?alt=media&token=35125bc7-a978-4ee0-8d01-d820b79b24b6"
+                      client?.isotipo?.thumbUrl
+                        ? client?.isotipo?.thumbUrl
+                        : client?.logotipo?.thumbUrl ||
+                          "https://firebasestorage.googleapis.com/v0/b/sendingemails-348505.appspot.com/o/resources%2Fimage-not-found.jpg?alt=media&token=35125bc7-a978-4ee0-8d01-d820b79b24b6"
                     }
                     width={150}
                     height={90}
