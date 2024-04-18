@@ -2,14 +2,14 @@ import React from "react";
 import { Col } from "antd";
 import { capitalize } from "lodash";
 
-export const ShowFullName = (contact) => {
+export const ShowFullName = ({ fullName, firstName, lastName }) => {
   return (
     <>
-      {contact?.fullName ? (
+      {fullName ? (
         <Col xs={24}>
           <DescriptionItem
             title="Nombres y Apellidos"
-            content={capitalize(contact?.fullName) || ""}
+            content={capitalize(fullName) || ""}
           />
         </Col>
       ) : (
@@ -17,13 +17,13 @@ export const ShowFullName = (contact) => {
           <Col xs={24} sm={12}>
             <DescriptionItem
               title="Nombres"
-              content={capitalize(contact?.firstName) || ""}
+              content={capitalize(firstName) || ""}
             />
           </Col>
           <Col xs={24} sm={12}>
             <DescriptionItem
               title="Apellidos"
-              content={capitalize(contact?.lastName) || ""}
+              content={capitalize(lastName) || ""}
             />
           </Col>
         </>

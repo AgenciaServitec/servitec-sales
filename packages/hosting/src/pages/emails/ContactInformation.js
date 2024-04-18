@@ -1,32 +1,14 @@
 import React from "react";
 import { Col } from "antd";
-import { capitalize } from "lodash";
+import { ShowFullName } from "../../components/pages";
 
 export const ContactInformation = ({ contact }) => (
   <>
-    {contact?.fullName ? (
-      <Col xs={24}>
-        <DescriptionItem
-          title="Nombres y Apellidos"
-          content={capitalize(contact?.fullName) || ""}
-        />
-      </Col>
-    ) : (
-      <>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Nombres"
-            content={capitalize(contact?.firstName) || ""}
-          />
-        </Col>
-        <Col xs={24} sm={12}>
-          <DescriptionItem
-            title="Apellidos"
-            content={capitalize(contact?.lastName) || ""}
-          />
-        </Col>
-      </>
-    )}
+    <ShowFullName
+      fullName={contact?.fullName}
+      firstName={contact.firstName}
+      lastName={contact.lastName}
+    />
     <Col xs={24} sm={12}>
       <DescriptionItem title="Email" content={contact?.email || ""} />
     </Col>
