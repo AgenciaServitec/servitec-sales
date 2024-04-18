@@ -24,6 +24,12 @@ export const RequestInformation = ({ request }) => (
     <Col xs={24} sm={12}>
       <DescriptionItem title="Email" content={request?.email || ""} />
     </Col>
+    <Col xs={24} sm={12}>
+      <DescriptionItem
+        title="Teléfono"
+        content={`${request?.phone?.countryCode} ${request?.phone?.number}`}
+      />
+    </Col>
     {request?.dateToMeet && (
       <Col xs={24} sm={12}>
         <DescriptionItem
