@@ -8,7 +8,7 @@ import { fetchCollection } from "../firebase/firestore";
 import { firestore } from "../firebase";
 
 interface Props {
-  request: EmailRequestEntry;
+  request: EmailRequest;
 }
 
 export const sendMailRequestToReceptor = async ({

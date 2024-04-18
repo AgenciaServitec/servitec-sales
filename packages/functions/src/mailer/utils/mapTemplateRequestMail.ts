@@ -1,6 +1,5 @@
 import { capitalize, toLower } from "lodash";
-import moment from "moment";
-import { dateToTimestamp } from "../../utils";
+import moment from "moment-timezone";
 
 export interface RequestMustacheView {
   theme: string;
@@ -27,7 +26,7 @@ export interface RequestMustacheView {
 }
 
 export const mapTemplateRequestMailMustache = (
-  contact: EmailRequestEntry,
+  contact: EmailRequest,
   client: Client,
 ): RequestMustacheView => {
   return {
@@ -46,12 +45,8 @@ export const mapTemplateRequestMailMustache = (
       email: toLower(contact.email),
       phoneNumber: `${contact.phone.countryCode} ${contact.phone.number}`,
       message: contact.message,
-      dateToMeet: moment(dateToTimestamp(contact.dateToMeet).toDate()).format(
-        "DD/MM/YYYY",
-      ),
-      timeToMeet: moment(dateToTimestamp(contact.timeToMeet).toDate()).format(
-        "HH:mm a",
-      ),
+      dateToMeet: moment(contact.dateToMeet, "DD/MM/YYYY").format("DD/MM/YYYY"),
+      timeToMeet: moment(contact.timeToMeet, "HH:mm").format("HH:mm a"),
       meetingType: contact.meetingType,
       ...(contact?.plan && {
         plan: {
