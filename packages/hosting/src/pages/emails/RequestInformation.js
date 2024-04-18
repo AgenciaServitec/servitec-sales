@@ -27,13 +27,13 @@ export const RequestInformation = ({ request }) => (
     <Col xs={24} sm={12}>
       <DescriptionItem
         title="Fecha de reunion"
-        content={moment(request.dateToMeet.toDate()).format("DD/MM/YYYY")}
+        content={moment(request.dateToMeet, "DD/MM/YYYY").format("DD/MM/YYYY")}
       />
     </Col>
     <Col xs={24} sm={12}>
       <DescriptionItem
         title="Hora de reunion"
-        content={moment(request.timeToMeet.toDate()).format("HH:mm a")}
+        content={moment(request.timeToMeet, "HH:mm").format("HH:mm a")}
       />
     </Col>
   </>
