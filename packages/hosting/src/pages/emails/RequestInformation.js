@@ -24,18 +24,32 @@ export const RequestInformation = ({ request }) => (
     <Col xs={24} sm={12}>
       <DescriptionItem title="Email" content={request?.email || ""} />
     </Col>
-    <Col xs={24} sm={12}>
-      <DescriptionItem
-        title="Fecha de reunion"
-        content={moment(request.dateToMeet, "DD/MM/YYYY").format("DD/MM/YYYY")}
-      />
-    </Col>
-    <Col xs={24} sm={12}>
-      <DescriptionItem
-        title="Hora de reunion"
-        content={moment(request.timeToMeet, "HH:mm").format("HH:mm a")}
-      />
-    </Col>
+    {request?.dateToMeet && (
+      <Col xs={24} sm={12}>
+        <DescriptionItem
+          title="Fecha de reunion"
+          content={moment(request.dateToMeet, "DD/MM/YYYY").format(
+            "DD/MM/YYYY"
+          )}
+        />
+      </Col>
+    )}
+    {request?.timeToMeet && (
+      <Col xs={24} sm={12}>
+        <DescriptionItem
+          title="Hora de reunion"
+          content={moment(request.timeToMeet, "HH:mm").format("HH:mm a")}
+        />
+      </Col>
+    )}
+    {request?.meetingType && (
+      <Col xs={24} sm={12}>
+        <DescriptionItem
+          title="Tipo de reunion"
+          content={request.meetingType === "remote" ? "Remoto" : "Presencial"}
+        />
+      </Col>
+    )}
   </>
 );
 
