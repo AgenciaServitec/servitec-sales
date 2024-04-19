@@ -4,7 +4,7 @@ import { firestore } from "../../firebase";
 import { List, Row, Col, Typography } from "antd";
 import Avatar from "react-avatar";
 import VirtualList from "rc-virtual-list";
-import { orderBy } from "lodash";
+import { capitalize, orderBy, startCase } from "lodash";
 import moment from "moment";
 import { useGlobalData } from "../../providers";
 import styled from "styled-components";
@@ -91,11 +91,13 @@ export const ContactsIntegration = () => {
                   />
                 }
                 title={
-                  <span>
-                    {contact?.fullName
-                      ? contact.fullName
-                      : `${contact.firstName} ${contact.lastName}`}
-                  </span>
+                  <div className="link-color">
+                    {capitalize(
+                      contact?.fullName
+                        ? contact.fullName
+                        : `${contact.firstName} ${contact.lastName}`
+                    )}
+                  </div>
                 }
                 description={
                   <InformationWrapper
@@ -151,7 +153,6 @@ export const ContactsIntegration = () => {
 };
 
 const Container = styled.section`
-  text-transform: capitalize;
   .contact-details {
     margin-right: 1em;
   }
