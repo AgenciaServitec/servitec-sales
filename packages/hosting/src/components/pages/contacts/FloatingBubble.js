@@ -77,7 +77,7 @@ const Container = styled.div`
     }
 
     .item-full-name {
-      color: #000;
+      color: ${emailsColors?.text_color};
       font-size: 1em;
       padding: 0.2em 0.4em;
       border-radius: 1em;
@@ -91,7 +91,7 @@ const Container = styled.div`
       padding: 0.2em 0.7em;
       border-radius: 1em;
       text-align: center;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
       color: ${clientColors?.color || "#fff"};
     }
   `}

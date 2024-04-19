@@ -20,8 +20,8 @@ export const RequestInformation = ({
         title="Produco/Servicio"
         content={
           <span key={request?.plan?.id} style={{ color: "#000" }}>
-            {request?.plan?.name || ""} x{" "}
-            <strong>{request?.plan?.price || ""}</strong>
+            {request?.plan?.name || ""} /{" "}
+            <strong>s/ {request?.plan?.price || ""}</strong>
           </span>
         }
       />

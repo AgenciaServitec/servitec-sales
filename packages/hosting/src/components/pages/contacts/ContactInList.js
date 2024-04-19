@@ -73,7 +73,7 @@ export const ContactInList = ({
   };
 
   return (
-    <Container>
+    <div>
       <List
         className="demo-loadmore-list"
         itemLayout={isMobile ? "vertical" : "horizontal"}
@@ -187,24 +187,9 @@ export const ContactInList = ({
           </List.Item>
         )}
       />
-    </Container>
+    </div>
   );
 };
-
-const Container = styled.div`
-  .site-description-item-profile-p-label {
-    display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 0;
-    font-size: 0.9em;
-  }
-
-  .item-value {
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 14px;
-    line-height: 1.5715;
-  }
-`;
 
 const ContactPicture = styled.div`
   ${({ clientColors }) => css`
