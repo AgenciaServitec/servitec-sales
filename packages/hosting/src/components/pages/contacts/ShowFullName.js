@@ -1,5 +1,6 @@
 import React from "react";
 import { Col } from "antd";
+import { EnvelopeByEmailColor } from "../../ui";
 
 export const ShowFullName = ({
   contact,
@@ -10,7 +11,7 @@ export const ShowFullName = ({
 
   return (
     <Col span={24}>
-      <DescriptionItem
+      <EnvelopeByEmailColor
         title="Nombres y Apellidos"
         content={
           <span
@@ -27,10 +28,3 @@ export const ShowFullName = ({
     </Col>
   );
 };
-
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
-);

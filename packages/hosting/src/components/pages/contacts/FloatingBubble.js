@@ -1,10 +1,8 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { capitalize } from "lodash";
 import { darken } from "polished";
 import { keyframes } from "../../../styles";
 import { NoFound } from "../../../images";
-import Tag from "antd/lib/tag";
 import { emailsType } from "../../../data-list";
 
 export const FloatingBubble = ({
@@ -37,11 +35,6 @@ export const FloatingBubble = ({
           alt="logo agencia servitec"
         />
       </ItemLogo>
-      {contact?.type && (
-        <TagItem color={emailsType[contact.type].color}>
-          {emailsType[contact.type].text}
-        </TagItem>
-      )}
       <span className="item-full-name capitalize">
         {contact?.fullName
           ? contact.fullName
@@ -54,19 +47,13 @@ export const FloatingBubble = ({
   );
 };
 
-const TagItem = styled(Tag)`
-  border-radius: 0.5em;
-  padding: 0 3px;
-  margin: 0;
-`;
-
 const Container = styled.div`
   ${({ emailsColors, clientColors, isLastContact }) => css`
     width: 90%;
     height: 90%;
     border-radius: 50%;
-    border: 2px solid ${emailsColors?.color || "#c4c4c4"};
-    background: ${darken(0.07, emailsColors?.bg || "#c4c4c4")};
+    border: 2px solid ${darken(0.07, emailsColors?.primary_color || "#c4c4c4")};
+    background: ${emailsColors?.primary_color || "#c4c4c4"};
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -101,7 +88,7 @@ const Container = styled.div`
 
     .item-tag {
       font-size: 0.7em;
-      padding: 0.2em 0.5em;
+      padding: 0.2em 0.7em;
       border-radius: 1em;
       text-align: center;
       background: rgba(0, 0, 0, 0.7);

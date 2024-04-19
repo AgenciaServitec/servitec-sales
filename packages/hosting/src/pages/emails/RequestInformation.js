@@ -2,6 +2,7 @@ import React from "react";
 import { Col } from "antd";
 import { ShowFullName } from "../../components/pages";
 import moment from "moment";
+import { EnvelopeByEmailColor } from "../../components/ui";
 
 export const RequestInformation = ({
   request,
@@ -15,10 +16,10 @@ export const RequestInformation = ({
       onOpenDrawerContact={onOpenDrawerContact}
     />
     <Col xs={24} sm={12}>
-      <DescriptionItem
-        title="Tipo de Plan"
+      <EnvelopeByEmailColor
+        title="Produco/Servicio"
         content={
-          <span key={request?.plan?.id}>
+          <span key={request?.plan?.id} style={{ color: "#000" }}>
             {request?.plan?.name || ""} x{" "}
             <strong>{request?.plan?.price || ""}</strong>
           </span>
@@ -26,17 +27,17 @@ export const RequestInformation = ({
       />
     </Col>
     <Col xs={24} sm={12}>
-      <DescriptionItem
+      <EnvelopeByEmailColor
         title="Teléfono"
         content={`${request?.phone?.countryCode} ${request?.phone?.number}`}
       />
     </Col>
     <Col xs={24} sm={12}>
-      <DescriptionItem title="Email" content={request?.email || ""} />
+      <EnvelopeByEmailColor title="Email" content={request?.email || ""} />
     </Col>
     {request?.dateToMeet && (
       <Col xs={24} sm={12}>
-        <DescriptionItem
+        <EnvelopeByEmailColor
           title="Fecha de reunion"
           content={moment(request.dateToMeet, "DD/MM/YYYY").format(
             "DD/MM/YYYY"
@@ -46,7 +47,7 @@ export const RequestInformation = ({
     )}
     {request?.timeToMeet && (
       <Col xs={24} sm={12}>
-        <DescriptionItem
+        <EnvelopeByEmailColor
           title="Hora de reunion"
           content={moment(request.timeToMeet, "HH:mm").format("HH:mm a")}
         />
@@ -54,18 +55,11 @@ export const RequestInformation = ({
     )}
     {request?.meetingType && (
       <Col xs={24} sm={12}>
-        <DescriptionItem
+        <EnvelopeByEmailColor
           title="Tipo de reunion"
           content={request.meetingType === "remote" ? "Remoto" : "Presencial"}
         />
       </Col>
     )}
   </>
-);
-
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
 );

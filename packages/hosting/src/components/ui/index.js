@@ -20,4 +20,5 @@ export * from "./TextArea";
 export * from "./TimePicker";
 export * from "./Audio";
 export * from "./TagHostname";
+export * from "./EnvelopeByEmailColor";
 // export { default as Upload } from "./Upload";

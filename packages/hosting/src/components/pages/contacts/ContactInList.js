@@ -1,6 +1,6 @@
 import React from "react";
-import { Col, List, Row, Tag } from "antd";
-import { IconAction, TagHostname } from "../../ui";
+import { Col, List, Row } from "antd";
+import { EnvelopeByEmailColor, IconAction, TagHostname } from "../../ui";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faCalendarAlt,
@@ -18,6 +18,7 @@ import { ContactInformation } from "../../../pages/emails/ContactInformation";
 import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
 import { InformationWrapper } from "./InformationWrapper";
+import { emailsType } from "../../../data-list";
 
 export const ContactInList = ({
   contacts,
@@ -33,21 +34,6 @@ export const ContactInList = ({
 
   const findClient = (clientId) =>
     clients.find((client) => client.id === clientId);
-
-  const contactType = {
-    contact: {
-      text: "Contacto",
-      color: "orange",
-    },
-    request: {
-      text: "Solicitud",
-      color: "green",
-    },
-    claim: {
-      text: "Reclamo",
-      color: "red",
-    },
-  };
 
   const showContact = (contact) => {
     switch (contact.type) {
@@ -170,21 +156,11 @@ export const ContactInList = ({
                 </ContactPicture>
               }
               description={
-                <InformationWrapper contactType={contact.type}>
+                <InformationWrapper emailType={emailsType[contact.type]}>
                   <Row gutter={[0, 3]}>
                     {showContact(contact)}
                     <Col xs={24} sm={12}>
-                      <DescriptionItem
-                        title="Tipo"
-                        content={
-                          <TagItem color={contactType[contact.type]?.color}>
-                            {contactType[contact.type]?.text}
-                          </TagItem>
-                        }
-                      />
-                    </Col>
-                    <Col xs={24} sm={12}>
-                      <DescriptionItem
+                      <EnvelopeByEmailColor
                         title="Hostname"
                         content={
                           <TagHostname
@@ -195,7 +171,7 @@ export const ContactInList = ({
                       />
                     </Col>
                     <Col xs={24} sm={12}>
-                      <DescriptionItem
+                      <EnvelopeByEmailColor
                         title="Fecha creación"
                         content={
                           moment(contact?.createAt.toDate()).format(
@@ -220,15 +196,14 @@ const Container = styled.div`
     display: inline-block;
     margin-right: 8px;
     margin-bottom: 0;
-    color: rgba(0, 0, 0, 0.65);
     font-size: 0.9em;
   }
-`;
 
-const TagItem = styled(Tag)`
-  border-radius: 0.5em;
-  padding: 0 3px;
-  margin: 0;
+  .item-value {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    line-height: 1.5715;
+  }
 `;
 
 const ContactPicture = styled.div`
@@ -263,10 +238,3 @@ const ContactPicture = styled.div`
     }
   `}
 `;
-
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
-);

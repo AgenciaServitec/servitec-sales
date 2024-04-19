@@ -1,5 +1,20 @@
 export const emailsType = {
-  contact: { text: "Contacto", color: "#d46b08", bg: "#fff7e6" },
-  request: { text: "Solicitud", color: "#389e0d", bg: "#f6ffed" },
-  claim: { text: "Reclamo", color: "#cf1322", bg: "#fff1f0" },
+  contact: {
+    name: "Contacto",
+    primary_color: "#f85d17",
+    secondary_color: "#fff7e6",
+    text_color: "#fff",
+  },
+  request: {
+    name: "Solicitud",
+    primary_color: "#21a83c",
+    secondary_color: "#f6ffed",
+    text_color: "#fff",
+  },
+  claim: {
+    name: "Reclamo",
+    primary_color: "#f81414",
+    secondary_color: "#fff1f0",
+    text_color: "#fff",
+  },
 };
