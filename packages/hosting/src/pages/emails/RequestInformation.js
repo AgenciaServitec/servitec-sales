@@ -3,32 +3,36 @@ import { Col } from "antd";
 import { ShowFullName } from "../../components/pages";
 import moment from "moment";
 
-export const RequestInformation = ({ request }) => (
+export const RequestInformation = ({
+  request,
+  onSetContact,
+  onOpenDrawerContact,
+}) => (
   <>
     <ShowFullName
-      fullName={request?.fullName}
-      firstName={request.firstName}
-      lastName={request.lastName}
+      contact={request}
+      onSetContact={onSetContact}
+      onOpenDrawerContact={onOpenDrawerContact}
     />
     <Col xs={24} sm={12}>
       <DescriptionItem
         title="Tipo de Plan"
         content={
-          <h4 key={request?.plan?.id}>
+          <span key={request?.plan?.id}>
             {request?.plan?.name || ""} x{" "}
             <strong>{request?.plan?.price || ""}</strong>
-          </h4>
+          </span>
         }
       />
-    </Col>
-    <Col xs={24} sm={12}>
-      <DescriptionItem title="Email" content={request?.email || ""} />
     </Col>
     <Col xs={24} sm={12}>
       <DescriptionItem
         title="Teléfono"
         content={`${request?.phone?.countryCode} ${request?.phone?.number}`}
       />
+    </Col>
+    <Col xs={24} sm={12}>
+      <DescriptionItem title="Email" content={request?.email || ""} />
     </Col>
     {request?.dateToMeet && (
       <Col xs={24} sm={12}>

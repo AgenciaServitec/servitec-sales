@@ -1,15 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import { colorsByEmailType } from "../../../data-list";
 
-export const InformationWrapper = ({
-  contactType,
-  colorByContactType,
-  children,
-  className,
-}) => (
+export const InformationWrapper = ({ contactType, children, className }) => (
   <Container
     contactType={contactType}
-    colorByContactType={colorByContactType}
+    colorByContactType={colorsByEmailType}
     className={className}
   >
     {children}

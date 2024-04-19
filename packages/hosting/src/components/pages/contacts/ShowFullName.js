@@ -1,34 +1,33 @@
 import React from "react";
 import { Col } from "antd";
-import { capitalize } from "lodash";
+import { capitalize, startCase } from "lodash";
 
-export const ShowFullName = ({ fullName, firstName, lastName }) => {
+export const ShowFullName = ({
+  contact,
+  onSetContact,
+  onOpenDrawerContact,
+}) => {
+  const { fullName, firstName, lastName } = contact;
+
   return (
-    <>
-      {fullName ? (
-        <Col xs={24}>
-          <DescriptionItem
-            title="Nombres y Apellidos"
-            content={capitalize(fullName) || ""}
-          />
-        </Col>
-      ) : (
-        <>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Nombres"
-              content={capitalize(firstName) || ""}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Apellidos"
-              content={capitalize(lastName) || ""}
-            />
-          </Col>
-        </>
-      )}
-    </>
+    <Col span={24}>
+      <DescriptionItem
+        title="Nombres y Apellidos"
+        content={
+          <span
+            className={onSetContact && "link-color"}
+            onClick={() => {
+              onSetContact && onSetContact(contact);
+              onOpenDrawerContact && onOpenDrawerContact();
+            }}
+          >
+            {fullName
+              ? startCase(capitalize(fullName))
+              : `${capitalize(firstName)} ${capitalize(lastName)}`}
+          </span>
+        }
+      />
+    </Col>
   );
 };
 

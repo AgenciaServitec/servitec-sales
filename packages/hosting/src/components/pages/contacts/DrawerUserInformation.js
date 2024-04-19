@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Col, Divider, Drawer, Row, Switch } from "antd";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import {
   Button,
   Form,
@@ -113,12 +113,6 @@ export const DrawerUserInformation = ({
     }
   };
 
-  const colorByContactType = {
-    contact: { color: "#d46b08", bg: "#fff7e6" },
-    request: { color: "#389e0d", bg: "#f6ffed" },
-    claim: { color: "#cf1322", bg: "#fff1f0" },
-  };
-
   return (
     <>
       <ContainerDrawer
@@ -133,10 +127,7 @@ export const DrawerUserInformation = ({
           paddingBottom: 80,
         }}
       >
-        <InformationWrapper
-          contactType={contact.type}
-          colorByContactType={colorByContactType}
-        >
+        <InformationWrapper contactType={contact.type}>
           <Row gutter={[0, 7]}>
             {showContact(contact)}
             <Col xs={24} sm={12}>

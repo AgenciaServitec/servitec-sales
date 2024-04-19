@@ -3,12 +3,16 @@ import { Col } from "antd";
 import { capitalize } from "lodash";
 import { ShowFullName } from "../../components/pages";
 
-export const ClaimInformation = ({ claim }) => (
+export const ClaimInformation = ({
+  claim,
+  onSetContact,
+  onOpenDrawerContact,
+}) => (
   <>
     <ShowFullName
-      fullName={claim?.fullName}
-      firstName={claim.firstName}
-      lastName={claim.lastName}
+      contact={claim}
+      onSetContact={onSetContact}
+      onOpenDrawerContact={onOpenDrawerContact}
     />
     <Col xs={24} sm={12}>
       <DescriptionItem
@@ -47,13 +51,13 @@ export const ClaimInformation = ({ claim }) => (
       />
     </Col>
     <Col xs={24} sm={12}>
-      <DescriptionItem title="Email" content={claim?.email || ""} />
-    </Col>
-    <Col xs={24} sm={12}>
       <DescriptionItem
         title="Teléfono"
         content={claim?.phone?.countryCode || "" + claim?.phone?.number || ""}
       />
+    </Col>
+    <Col xs={24} sm={12}>
+      <DescriptionItem title="Email" content={claim?.email || ""} />
     </Col>
     <Col xs={24} sm={12}>
       <DescriptionItem
