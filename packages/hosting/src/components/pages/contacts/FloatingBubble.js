@@ -5,6 +5,7 @@ import { darken } from "polished";
 import { keyframes } from "../../../styles";
 import { NoFound } from "../../../images";
 import Tag from "antd/lib/tag";
+import { emailsType } from "../../../data-list";
 
 export const FloatingBubble = ({
   contact,
@@ -20,24 +21,10 @@ export const FloatingBubble = ({
     bg: client?.bgColor || "#c4c4c4",
   };
 
-  const contactType = {
-    contact: {
-      text: "Contacto",
-      color: "orange",
-    },
-    request: {
-      text: "Solicitud",
-      color: "green",
-    },
-    claim: {
-      text: "Reclamo",
-      color: "red",
-    },
-  };
-
   return (
     <Container
       isLastContact={isLastContact}
+      emailsColors={emailsType[contact.type]}
       clientColors={clientColors}
       onClick={() => {
         onSetContact(contact);
@@ -51,13 +38,15 @@ export const FloatingBubble = ({
         />
       </ItemLogo>
       {contact?.type && (
-        <TagItem color={contactType[contact.type].color}>
-          {contactType[contact.type].text}
+        <TagItem color={emailsType[contact.type].color}>
+          {emailsType[contact.type].text}
         </TagItem>
       )}
-      <span className="item-full-name">{`${capitalize(
-        contact.firstName
-      )} ${capitalize(contact.lastName)}`}</span>
+      <span className="item-full-name capitalize">
+        {contact?.fullName
+          ? contact.fullName
+          : `${contact.firstName} ${contact.lastName}`}
+      </span>
       {contact?.hostname && (
         <span className="item-tag">{contact.hostname}</span>
       )}
@@ -72,12 +61,12 @@ const TagItem = styled(Tag)`
 `;
 
 const Container = styled.div`
-  ${({ clientColors, isLastContact }) => css`
+  ${({ emailsColors, clientColors, isLastContact }) => css`
     width: 90%;
     height: 90%;
     border-radius: 50%;
-    border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
-    background: ${({ clientColors }) => clientColors?.bg || "#c4c4c4"};
+    border: 2px solid ${emailsColors?.color || "#c4c4c4"};
+    background: ${darken(0.07, emailsColors?.bg || "#c4c4c4")};
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -101,21 +90,21 @@ const Container = styled.div`
     }
 
     .item-full-name {
-      color: ${({ clientColors }) => clientColors?.color || "#fff"};
+      color: #000;
       font-size: 1em;
       padding: 0.2em 0.4em;
       border-radius: 1em;
       width: 90%;
       text-align: center;
+      font-weight: 500;
     }
 
     .item-tag {
       font-size: 0.7em;
-      padding: 0.2em 0.4em;
+      padding: 0.2em 0.5em;
       border-radius: 1em;
       text-align: center;
-      background: ${darken(0.09, clientColors?.bg || "#c4c4c4")};
-      border: 2px solid ${darken(0.08, clientColors?.bg || "#c4c4c4")};
+      background: rgba(0, 0, 0, 0.7);
       color: ${clientColors?.color || "#fff"};
     }
   `}
@@ -130,6 +119,7 @@ const ItemLogo = styled.div`
   background: ${({ bgColor }) => darken(0.07, bgColor)};
   padding: 0.2em 0.4em;
   border-radius: 7em;
+  overflow: hidden;
   img {
     width: 90%;
     height: 100%;

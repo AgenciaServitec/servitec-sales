@@ -40,6 +40,9 @@ const global = css`
       color: #4994fd;
     }
   }
+  .capitalize {
+    text-transform: capitalize;
+  }
 
   /* width */
   ::-webkit-scrollbar {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Col } from "antd";
-import { capitalize, startCase } from "lodash";
 
 export const ShowFullName = ({
   contact,
@@ -15,15 +14,13 @@ export const ShowFullName = ({
         title="Nombres y Apellidos"
         content={
           <span
-            className={onSetContact && "link-color"}
+            className={onSetContact && "link-color capitalize"}
             onClick={() => {
               onSetContact && onSetContact(contact);
               onOpenDrawerContact && onOpenDrawerContact();
             }}
           >
-            {fullName
-              ? startCase(capitalize(fullName))
-              : `${capitalize(firstName)} ${capitalize(lastName)}`}
+            {fullName ? fullName : `${firstName} ${lastName}`}
           </span>
         }
       />
