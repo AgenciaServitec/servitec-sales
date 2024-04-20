@@ -96,14 +96,17 @@
                             </div>
                             <div>{{request.phoneNumber}}</div>
                           </div>
-                          {{#request.plan}}
+                          {{#request.product}}
                           <div style="margin-bottom: 7px; width: 100%">
                             <div style="font-size: 13px; font-weight: 500">
-                              Plan:
+                              Producto:
                             </div>
-                            <div>{{request.plan.name}}</div>
+                            <div>
+                              {{request.product.name}}:
+                              {{request.product.totalNeto}}
+                            </div>
                           </div>
-                          {{/request.plan}}
+                          {{/request.product}}
                           <div style="margin-bottom: 7px; width: 100%">
                             <div style="font-size: 13px; font-weight: 500">
                               Fecha de reunion:

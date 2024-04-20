@@ -18,9 +18,16 @@ export interface RequestMustacheView {
     dateToMeet: string;
     timeToMeet: string;
     meetingType: string;
-    plan?: {
+    product?: {
+      id: string;
       name: string;
+      type: string;
       price: string;
+      discount: {
+        type: string;
+        value: number;
+      };
+      totalNeto: number;
     };
   };
 }
@@ -48,11 +55,8 @@ export const mapTemplateRequestMailMustache = (
       dateToMeet: moment(contact.dateToMeet, "DD/MM/YYYY").format("DD/MM/YYYY"),
       timeToMeet: moment(contact.timeToMeet, "HH:mm").format("HH:mm a"),
       meetingType: contact.meetingType,
-      ...(contact?.plan && {
-        plan: {
-          name: contact.plan.name,
-          price: contact.plan.price,
-        },
+      ...(contact?.product && {
+        product: contact.product,
       }),
     },
   };

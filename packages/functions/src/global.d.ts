@@ -116,9 +116,15 @@ interface EmailRequest extends Contact {
   dateToMeet: string;
   timeToMeet: string;
   meetingType: string;
-  plan?: {
+  product?: {
     id: string;
     name: string;
+    type: string;
     price: string;
+    discount: {
+      type: string;
+      value: number;
+    };
+    totalNeto: number;
   };
 }

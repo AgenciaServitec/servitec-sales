@@ -88,7 +88,7 @@ const mapContact = (
     dateToMeet: request.dateToMeet,
     timeToMeet: request.timeToMeet,
     meetingType: request.meetingType,
-    ...(request?.plan && { plan: request.plan }),
+    ...(request?.product && { product: request.product }),
     phone: request.phone,
     termsAndConditions: request?.termsAndConditions || true,
     createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
