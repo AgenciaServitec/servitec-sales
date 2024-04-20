@@ -36,11 +36,13 @@ export const RequestInformation = ({
             </div>
             <div>
               <span style={{ textDecoration: "line-through" }}>
-                s/ {request?.product?.price || ""}
+                s/ {request?.product?.price.toFixed(2)}
               </span>
-              &nbsp;
+              &nbsp;{" "}
               <span>
-                <strong>s/ {request?.product?.totalNeto || ""}</strong>
+                <strong>
+                  s/ {request?.product?.totalNeto.toFixed(2) || ""}
+                </strong>
               </span>
             </div>
           </div>
