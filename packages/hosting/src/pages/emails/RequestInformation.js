@@ -1,30 +1,88 @@
 import React from "react";
 import { Col } from "antd";
 import { ShowFullName } from "../../components/pages";
+import moment from "moment";
+import { EnvelopeByEmailColor } from "../../components/ui";
+import Tag from "antd/lib/tag";
 
-export const RequestInformation = ({ request }) => (
+export const RequestInformation = ({
+  request,
+  onSetContact,
+  onOpenDrawerContact,
+}) => (
   <>
-    <ShowFullName request={request} />
+    <ShowFullName
+      contact={request}
+      onSetContact={onSetContact}
+      onOpenDrawerContact={onOpenDrawerContact}
+    />
     <Col xs={24} sm={12}>
-      <DescriptionItem
-        title="Tipo de Plan"
+      <EnvelopeByEmailColor
+        title="Producto"
         content={
-          <h4 key={request?.plan?.id}>
-            {request?.plan?.name || ""} x{" "}
-            <strong>{request?.plan?.price || ""}</strong>
-          </h4>
+          <div
+            key={request?.product?.id}
+            style={{ color: "#000", display: "flex", flexWrap: "wrap", gap: 5 }}
+          >
+            <div>
+              {request?.product?.name || ""} &nbsp;
+              {request?.product?.discount && (
+                <Tag color="warning" style={{ padding: "0 3px" }}>
+                  {request?.product?.discount?.type === "fixed"
+                    ? `-${request?.product?.discount.value}`
+                    : `- ${request?.product?.discount.value}%`}{" "}
+                </Tag>
+              )}
+            </div>
+            <div>
+              <span style={{ textDecoration: "line-through" }}>
+                s/ {request?.product?.price.toFixed(2)}
+              </span>
+              &nbsp;{" "}
+              <span>
+                <strong>
+                  s/ {request?.product?.totalNeto.toFixed(2) || ""}
+                </strong>
+              </span>
+            </div>
+          </div>
         }
       />
     </Col>
     <Col xs={24} sm={12}>
-      <DescriptionItem title="Email" content={request?.email || ""} />
+      <EnvelopeByEmailColor
+        title="Teléfono"
+        content={`${request?.phone?.countryCode} ${request?.phone?.number}`}
+      />
     </Col>
+    <Col xs={24} sm={12}>
+      <EnvelopeByEmailColor title="Email" content={request?.email || ""} />
+    </Col>
+    {request?.dateToMeet && (
+      <Col xs={24} sm={12}>
+        <EnvelopeByEmailColor
+          title="Fecha de reunion"
+          content={moment(request.dateToMeet, "DD/MM/YYYY").format(
+            "DD/MM/YYYY"
+          )}
+        />
+      </Col>
+    )}
+    {request?.timeToMeet && (
+      <Col xs={24} sm={12}>
+        <EnvelopeByEmailColor
+          title="Hora de reunion"
+          content={moment(request.timeToMeet, "HH:mm").format("HH:mm a")}
+        />
+      </Col>
+    )}
+    {request?.meetingType && (
+      <Col xs={24} sm={12}>
+        <EnvelopeByEmailColor
+          title="Tipo de reunion"
+          content={request.meetingType === "remote" ? "Remoto" : "Presencial"}
+        />
+      </Col>
+    )}
   </>
-);
-
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
 );

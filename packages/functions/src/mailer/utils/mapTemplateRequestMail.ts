@@ -1,4 +1,5 @@
 import { capitalize, toLower } from "lodash";
+import moment from "moment-timezone";
 
 export interface RequestMustacheView {
   theme: string;
@@ -14,9 +15,19 @@ export interface RequestMustacheView {
     email: string;
     phoneNumber: string;
     message?: string;
-    plan?: {
+    dateToMeet: string;
+    timeToMeet: string;
+    meetingType: string;
+    product?: {
+      id: string;
       name: string;
+      type: string;
       price: string;
+      discount: {
+        type: string;
+        value: number;
+      };
+      totalNeto: number;
     };
   };
 }
@@ -41,11 +52,11 @@ export const mapTemplateRequestMailMustache = (
       email: toLower(contact.email),
       phoneNumber: `${contact.phone.countryCode} ${contact.phone.number}`,
       message: contact.message,
-      ...(contact?.plan && {
-        plan: {
-          name: contact.plan.name,
-          price: contact.plan.price,
-        },
+      dateToMeet: moment(contact.dateToMeet, "DD/MM/YYYY").format("DD/MM/YYYY"),
+      timeToMeet: moment(contact.timeToMeet, "HH:mm").format("HH:mm a"),
+      meetingType: contact.meetingType,
+      ...(contact?.product && {
+        product: contact.product,
       }),
     },
   };

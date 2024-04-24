@@ -113,9 +113,18 @@ interface EmailClaim extends Contact {
 }
 
 interface EmailRequest extends Contact {
-  plan?: {
+  dateToMeet: string;
+  timeToMeet: string;
+  meetingType: string;
+  product?: {
     id: string;
     name: string;
+    type: string;
     price: string;
+    discount: {
+      type: string;
+      value: number;
+    };
+    totalNeto: number;
   };
 }

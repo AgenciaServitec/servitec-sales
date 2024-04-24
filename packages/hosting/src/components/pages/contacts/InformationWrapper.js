@@ -1,26 +1,17 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-export const InformationWrapper = ({
-  contactType,
-  colorByContactType,
-  children,
-  className,
-}) => (
-  <Container
-    contactType={contactType}
-    colorByContactType={colorByContactType}
-    className={className}
-  >
+export const InformationWrapper = ({ emailType, children, className }) => (
+  <Container emailType={emailType} className={className}>
     {children}
   </Container>
 );
 
 const Container = styled.div`
-  ${({ contactType, colorByContactType }) => css`
+  ${({ emailType }) => css`
     border-radius: 0.5em;
     padding: 0.7em;
-    background-color: ${colorByContactType[contactType]?.bg || ""};
-    border: 1px solid ${colorByContactType[contactType]?.color || ""};
+    background-color: ${emailType?.secondary_color || ""};
+    border: 1px solid ${emailType?.primary_color || ""};
   `}
 `;

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Col, Divider, Drawer, Row, Switch } from "antd";
-import styled, { css } from "styled-components";
+import { Col, Divider, Drawer, Row, Switch, Tag } from "antd";
+import styled from "styled-components";
 import {
   Button,
+  EnvelopeByEmailColor,
   Form,
   IconAction,
   modalConfirm,
@@ -33,6 +34,7 @@ import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
 import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ContactInformation } from "../../../pages/emails/ContactInformation";
 import { InformationWrapper } from "./InformationWrapper";
+import { emailsType } from "../../../data-list";
 
 export const DrawerUserInformation = ({
   contact,
@@ -113,12 +115,6 @@ export const DrawerUserInformation = ({
     }
   };
 
-  const colorByContactType = {
-    contact: { color: "#d46b08", bg: "#fff7e6" },
-    request: { color: "#389e0d", bg: "#f6ffed" },
-    claim: { color: "#cf1322", bg: "#fff1f0" },
-  };
-
   return (
     <>
       <ContainerDrawer
@@ -133,14 +129,11 @@ export const DrawerUserInformation = ({
           paddingBottom: 80,
         }}
       >
-        <InformationWrapper
-          contactType={contact.type}
-          colorByContactType={colorByContactType}
-        >
+        <InformationWrapper emailType={emailsType[contact.type]}>
           <Row gutter={[0, 7]}>
             {showContact(contact)}
             <Col xs={24} sm={12}>
-              <DescriptionItem
+              <EnvelopeByEmailColor
                 title="Hostname"
                 content={
                   contact?.hostname ? (
@@ -152,8 +145,20 @@ export const DrawerUserInformation = ({
                 }
               />
             </Col>
+            {emailsType?.[contact.type] && (
+              <Col xs={24} sm={12}>
+                <EnvelopeByEmailColor
+                  title="Tipo"
+                  content={
+                    <TagItem color={emailsType[contact.type]?.primary_color}>
+                      {emailsType[contact.type]?.name}
+                    </TagItem>
+                  }
+                />
+              </Col>
+            )}
             <Col xs={24} sm={12}>
-              <DescriptionItem
+              <EnvelopeByEmailColor
                 title="Fecha creación"
                 content={
                   moment(contact?.createAt.toDate()).format(
@@ -327,55 +332,10 @@ const ContainerDrawer = styled(Drawer)`
       width: 100% !important;
     }
   }
-  .site-form-in-drawer-wrapper {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    padding: 10px 16px;
-    text-align: right;
-    background: #fff;
-    border-top: 1px solid #e9e9e9;
-  }
-
-  .site-description-item-profile-wrapper {
-    margin-bottom: 7px;
-
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 14px;
-    line-height: 1.5715;
-  }
-
-  [data-theme="compact"] .site-description-item-profile-wrapper {
-    font-size: 12px;
-    line-height: 1.66667;
-  }
-
-  .ant-drawer-body p.site-description-item-profile-p {
-    display: block;
-    margin-bottom: 16px;
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 1em;
-    line-height: 1.5715;
-  }
-
-  [data-theme="compact"] .ant-drawer-body p.site-description-item-profile-p {
-    font-size: 1em;
-    line-height: 1.66667;
-  }
-
-  .site-description-item-profile-p-label {
-    display: inline-block;
-    margin-right: 8px;
-    margin-bottom: 0;
-    color: rgba(0, 0, 0, 0.65);
-    font-size: 0.9em;
-  }
 `;
 
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
-);
+const TagItem = styled(Tag)`
+  border-radius: 0.5em;
+  padding: 0 3px;
+  margin: 0;
+`;

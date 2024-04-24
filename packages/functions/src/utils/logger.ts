@@ -1,5 +1,3 @@
-/*
-import { log, info, warn, error, write } from "firebase-functions/lib/logger";
+import firebaseLogger = require("firebase-functions/logger");
 
-export const logger = { log, info, warn, error, write };
-*/
+export const logger = firebaseLogger;

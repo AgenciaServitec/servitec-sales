@@ -1,40 +1,30 @@
 import React from "react";
 import { Col } from "antd";
-import { capitalize } from "lodash";
+import { EnvelopeByEmailColor } from "../../ui";
 
-export const ShowFullName = (contact) => {
+export const ShowFullName = ({
+  contact,
+  onSetContact,
+  onOpenDrawerContact,
+}) => {
+  const { fullName, firstName, lastName } = contact;
+
   return (
-    <>
-      {contact?.fullName ? (
-        <Col xs={24}>
-          <DescriptionItem
-            title="Nombres y Apellidos"
-            content={capitalize(contact?.fullName) || ""}
-          />
-        </Col>
-      ) : (
-        <>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Nombres"
-              content={capitalize(contact?.firstName) || ""}
-            />
-          </Col>
-          <Col xs={24} sm={12}>
-            <DescriptionItem
-              title="Apellidos"
-              content={capitalize(contact?.lastName) || ""}
-            />
-          </Col>
-        </>
-      )}
-    </>
+    <Col span={24}>
+      <EnvelopeByEmailColor
+        title="Nombres y Apellidos"
+        content={
+          <span
+            className={onSetContact && "link-color capitalize"}
+            onClick={() => {
+              onSetContact && onSetContact(contact);
+              onOpenDrawerContact && onOpenDrawerContact();
+            }}
+          >
+            {fullName ? fullName : `${firstName} ${lastName}`}
+          </span>
+        }
+      />
+    </Col>
   );
 };
-
-const DescriptionItem = ({ title, content }) => (
-  <div className="site-description-item-profile-wrapper">
-    <p className="site-description-item-profile-p-label">{title}:</p>
-    {content}
-  </div>
-);
