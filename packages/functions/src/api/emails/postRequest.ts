@@ -10,7 +10,7 @@ interface Body {
   request: EmailRequest;
 }
 
-export const PostRequest = async (
+export const postRequest = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
   next: NextFunction,

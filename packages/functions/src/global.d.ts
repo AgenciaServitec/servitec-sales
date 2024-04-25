@@ -19,7 +19,7 @@ interface DefaultFirestoreProps {
   isDeleted: boolean;
 }
 
-type RoleCode = "super_admin" | "client_admin";
+type RoleCode = "super_admin" | "client_admin" | "visitor" | "agent";
 
 interface Image {
   name: string;
@@ -127,4 +127,16 @@ interface EmailRequest extends Contact {
     };
     totalNeto: number;
   };
+}
+
+type SentBy = "emisor" | "receptor";
+
+// CHATS / MESSAGES
+interface Message extends DefaultFirestoreProps {
+  id: string;
+  userId: string;
+  chatId: string;
+  roleCode: RoleCode;
+  sentBy: SentBy;
+  message: string;
 }

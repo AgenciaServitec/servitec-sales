@@ -2,8 +2,11 @@ import express from "express";
 import cors from "cors";
 import { errorHandler, validateRequest } from "./_middlewares";
 import { body } from "express-validator";
-import { PostClaim, PostContact, PostRequest, PostSendMessage } from "./emails";
+import { postClaim, postContact, postRequest, postSendMessage } from "./emails";
+import { postVisitor } from "./visitors";
 import { patchUser, postUser, putUser } from "./users";
+import { getChat } from "./chats/getChat";
+import { postMessage } from "./chats";
 
 const app: express.Application = express();
 
@@ -39,6 +42,7 @@ app.put(
 
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
+// EMAILS
 app.post(
   "/generic/contact",
   [
@@ -47,7 +51,7 @@ app.post(
     body("contact.hostname").exists(),
   ],
   validateRequest,
-  PostContact,
+  postContact,
 );
 
 app.post(
@@ -58,7 +62,7 @@ app.post(
     body("contact.hostname").exists(),
   ],
   validateRequest,
-  PostContact,
+  postContact,
 );
 
 app.post(
@@ -69,7 +73,7 @@ app.post(
     body("claim.hostname").exists(),
   ],
   validateRequest,
-  PostClaim,
+  postClaim,
 );
 
 app.post(
@@ -80,15 +84,21 @@ app.post(
     body("request.hostname").exists(),
   ],
   validateRequest,
-  PostRequest,
+  postRequest,
 );
 
 app.post(
   "/emails/send-message",
   [body("email").exists(), body("message").exists()],
   validateRequest,
-  PostSendMessage,
+  postSendMessage,
 );
+
+// CHATS
+app.post("/visitors/:visitorId", [], postVisitor);
+
+app.get("/chats/:chatId", [], getChat);
+app.post("/chats/message", [], postMessage);
 
 app.use(errorHandler);
 

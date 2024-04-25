@@ -10,7 +10,7 @@ interface Body {
   claim: EmailClaim;
 }
 
-export const PostClaim = async (
+export const postClaim = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
   next: NextFunction,

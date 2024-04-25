@@ -10,7 +10,7 @@ interface Body {
   contact: EmailContact;
 }
 
-export const PostContact = async (
+export const postContact = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
   next: NextFunction,
