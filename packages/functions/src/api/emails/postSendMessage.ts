@@ -10,7 +10,7 @@ interface Body {
   clientId: string;
 }
 
-export const PostSendMessage = async (
+export const postSendMessage = async (
   req: Request<unknown, unknown, Body, unknown>,
   res: Response,
   next: NextFunction,
