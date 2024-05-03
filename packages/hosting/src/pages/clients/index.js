@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import List from "antd/lib/list";
@@ -13,7 +13,7 @@ import {
   TagHostname,
 } from "../../components/ui";
 import { useDevice } from "../../hooks";
-import { useGlobalData } from "../../providers";
+import { useAuthentication, useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
 import styled, { css } from "styled-components";
 import { capitalize } from "lodash";
@@ -24,10 +24,15 @@ import { findColor } from "../../utils";
 const { Title, Text } = Typography;
 
 export const ClientsIntegration = () => {
+  const { authUser } = useAuthentication();
   const { isMobile } = useDevice();
   const navigate = useNavigate();
 
   const { clients } = useGlobalData();
+
+  useEffect(() => {
+    authUser?.roleCode !== "super_admin" && navigate(-1);
+  }, []);
 
   const navigateTo = (clientId) => {
     const url = `/clients/${clientId}`;

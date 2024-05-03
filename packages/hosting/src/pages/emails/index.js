@@ -24,7 +24,6 @@ import { ContactSound } from "../../multimedia";
 export const Emails = () => {
   const navigate = useNavigate();
   const { isMobile } = useDevice();
-  const [play] = useSound(ContactSound, { volume: 7 });
 
   const { authUser } = useAuthentication();
   const { contacts, loadingContacts } = useContacts();
@@ -34,17 +33,10 @@ export const Emails = () => {
   const [clientId, setClientId] = useQueryString("clientId", "all");
   const [type, setType] = useQueryString("type", "all");
 
-  const [contactsData, setContactsData] = useState([]); //Contacts data of provider
   const [contact, setContact] = useState(null);
   const [isVisibleDrawerContact, setIsVisibleDrawerContact] = useState(false);
 
-  useEffect(() => {
-    setContactsData(contacts);
-
-    if (contacts.length > contactsData.length) play();
-  }, [contacts]);
-
-  const lastContact = orderBy(contactsData, "createAt", "desc")[0];
+  const lastContact = orderBy(contacts, "createAt", "desc")[0];
 
   const navigateWithBlankTo = (url) => window.open(url, "_blank");
 
@@ -68,7 +60,7 @@ export const Emails = () => {
   );
 
   const viewContacts = orderBy(
-    contactsData
+    contacts
       .filter((contact) => (status ? contact.status === status : true))
       .filter((contact) =>
         clientId === "all"
@@ -180,8 +172,7 @@ export const Emails = () => {
                       </Col>
                       <Col xs={24} sm={25} md={5}>
                         <Title level={2}>
-                          Recepción de contactos en tiempo real de clientes y
-                          webs de servitec
+                          Recepción de emails en tiempo real
                         </Title>
                       </Col>
                     </Row>

@@ -56,7 +56,7 @@ export const DrawerLayout = ({
       label: "Usuarios",
       key: "users",
       icon: <FontAwesomeIcon icon={faUsers} size="lg" />,
-      isVisible: user?.roleCode !== "marketing",
+      isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/users");
         setIsVisibleDrawer(false);

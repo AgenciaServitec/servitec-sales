@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { firestore, querySnapshotToArray } from "../firebase";
 import moment from "moment";
 import { notification } from "../components/ui";
+import useSound from "use-sound";
+import { ContactSound } from "../multimedia";
 
 const ContactsContext = createContext({
   contacts: [],
@@ -10,11 +12,19 @@ const ContactsContext = createContext({
 
 export const ContactsProvider = ({ children }) => {
   const [contacts, setContacts] = useState([]);
+  const [contactsData, setContactsData] = useState([]); //Contacts data of provider
   const [loadingContacts, setLoadingContacts] = useState(true);
+  const [play] = useSound(ContactSound, { volume: 7 });
 
   useEffect(() => {
     fetchContacts();
   }, []);
+
+  useEffect(() => {
+    setContactsData(contacts);
+
+    if (contacts.length > contactsData.length) play();
+  }, [contacts]);
 
   const fetchContacts = () => {
     try {
@@ -48,7 +58,7 @@ export const ContactsProvider = ({ children }) => {
   return (
     <ContactsContext.Provider
       value={{
-        contacts: contacts,
+        contacts: contactsData,
         loadingContacts,
       }}
     >

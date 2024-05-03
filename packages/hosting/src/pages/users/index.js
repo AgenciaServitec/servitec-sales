@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Row from "antd/lib/row";
 import Col from "antd/lib/col";
 import Typography from "antd/lib/typography";
@@ -28,6 +28,10 @@ export const Users = () => {
   const { authUser } = useAuthentication();
   const { users } = useGlobalData();
   const { patchUser, patchUserResponse } = useApiUserPatch();
+
+  useEffect(() => {
+    authUser?.roleCode !== "super_admin" && navigate(-1);
+  }, []);
 
   const navigateTo = (userId) => {
     const url = `/users/${userId}`;
