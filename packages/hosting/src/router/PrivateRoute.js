@@ -1,8 +1,11 @@
+import React from "react";
 import { useAuthentication } from "../providers";
 import { Navigate } from "react-router-dom";
 
-export const PrivateRoute = ({ path = "/login", children }) => {
+export const PrivateRoute = ({ children }) => {
   const { authUser } = useAuthentication();
 
-  return authUser ? children : Navigate({ to: path });
+  const isLoginPage = location.pathname === "/login";
+
+  return isLoginPage || authUser ? children : <Navigate to="/login" />;
 };

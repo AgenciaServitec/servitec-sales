@@ -15,7 +15,7 @@ import { ContactSound } from "../../multimedia";
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [play] = useSound(ContactSound, { soundEnabled: false });
+  const [play] = useSound(ContactSound, { soundEnabled: false, volume: 0 });
 
   const { authUser, login, loginLoading } = useAuthentication();
 
