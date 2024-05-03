@@ -3,28 +3,41 @@ import styled from "styled-components";
 import { Select } from "../../components/ui";
 import { Col, Row } from "antd";
 import { concat } from "lodash";
+import Title from "antd/es/typography/Title";
 
 export const FilterContacts = ({
+  user,
   clients,
   hostname,
   onSetHostname,
   typeContact,
   onSetTypeContact,
 }) => {
+  const hostnameSelectOptions = concat(
+    [{ value: "all", label: "Todos" }],
+    clients
+      .filter((client) =>
+        user?.roleCode === "super_admin"
+          ? true
+          : (user?.clientsIds || []).includes(client.id)
+      )
+      .map((client) => ({
+        label: client.hostname,
+        value: client.hostname,
+      }))
+  );
+
   return (
     <Container>
       <Row gutter={16}>
+        <Col span={24}>
+          <Title level={2}>Contactos</Title>
+        </Col>
         <Col span={24} md={5}>
           <p>Hostname:</p>
           <Select
             value={hostname}
-            options={concat(
-              [{ value: "all", label: "Todos" }],
-              clients.map((client) => ({
-                label: client.hostname,
-                value: client.hostname,
-              }))
-            )}
+            options={hostnameSelectOptions}
             onChange={onSetHostname}
           />
         </Col>

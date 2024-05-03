@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
-import { List, Row, Col, Typography } from "antd";
+import { Col, List, Row, Typography } from "antd";
 import Avatar from "react-avatar";
 import VirtualList from "rc-virtual-list";
-import { capitalize, orderBy, startCase } from "lodash";
+import { capitalize, orderBy } from "lodash";
 import moment from "moment";
-import { useGlobalData } from "../../providers";
+import { useAuthentication, useGlobalData } from "../../providers";
 import styled from "styled-components";
 import { IconAction, notification, TagHostname } from "../../components/ui";
 import { FilterContacts } from "./FilterContacts";
@@ -21,8 +21,9 @@ const { Text } = Typography;
 export const ContactsIntegration = () => {
   const { isMobile } = useDevice();
   const navigate = useNavigate();
-
+  const { authUser } = useAuthentication();
   const { clients } = useGlobalData();
+
   const [hostname, setHostname] = useQueryString("hostname", "all");
   const [typeContact, setTypeContact] = useQueryString("typeContact", "all");
 
@@ -36,12 +37,18 @@ export const ContactsIntegration = () => {
 
   const onNavigateTo = (url) => navigate(url);
 
-  const contactsMergeClients = contacts.map((contact) => ({
-    ...contact,
-    client: clients.find((client) => client.id === contact.clientId),
-  }));
+  const contactsMergeClients = contacts
+    .map((contact) => ({
+      ...contact,
+      client: clients.find((client) => client.id === contact.clientId),
+    }))
+    .filter((contact) =>
+      (authUser?.clientsIds || []).includes("all")
+        ? true
+        : (authUser?.clientsIds || []).includes(contact.clientId)
+    );
 
-  const contacsView = contactsMergeClients
+  const contactsView = contactsMergeClients
     .filter((contact) =>
       hostname === "all" ? true : hostname === contact.hostname
     )
@@ -63,18 +70,20 @@ export const ContactsIntegration = () => {
         typeContact={typeContact}
         onSetTypeContact={setTypeContact}
         clients={clients}
+        user={authUser}
       />
       <Row>
         <Col>
-          <Text>{contacsView.length} Resultados</Text>
+          <Text>{contactsView.length} Resultados</Text>
         </Col>
       </Row>
       <List itemLayout={isMobile ? "vertical" : "horizontal"}>
         <VirtualList
-          data={orderBy(contacsView, ["createAt"], ["desc"])}
-          height={500}
+          data={orderBy(contactsView, ["createAt"], ["desc"])}
+          height={600}
           itemHeight={47}
           loading={contactsLoading}
+          itemKey="list-contacts"
         >
           {(contact) => (
             <List.Item key={contact.id}>
