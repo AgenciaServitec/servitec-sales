@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Col, Divider, Drawer, Row, Switch, Tag } from "antd";
+import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Col, Divider, Drawer, Row, Tag } from "antd";
 import styled from "styled-components";
 import {
   Button,
@@ -9,12 +9,12 @@ import {
   IconAction,
   modalConfirm,
   notification,
+  RadioGroup,
   TagHostname,
 } from "../../ui";
 import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Group } from "../../ui/component-container/Group";
 import moment from "moment";
 import { firestore } from "../../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,6 +35,7 @@ import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ContactInformation } from "../../../pages/emails/ContactInformation";
 import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
+import { useFormUtils } from "../../../hooks";
 
 export const DrawerUserInformation = ({
   contact,
@@ -49,28 +50,41 @@ export const DrawerUserInformation = ({
   const [isVisibleSendEmailModal, setIsVisibleSendEmailModal] = useState(false);
   const [isVisibleQuotationEmailModal, setIsVisibleQuotationEmailModal] =
     useState(false);
-
-  const [statusType, setStatusType] = useState(false);
   const [savingContact, setSavingContact] = useState(false);
 
   const schema = yup.object({
-    status: yup.bool(),
+    status: yup.string().required(),
   });
 
-  const { handleSubmit } = useForm({
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+    watch,
+  } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      status: false,
+    },
   });
 
-  const resetStatusType = () => setStatusType(false);
+  const { required, error } = useFormUtils({ errors, schema });
 
-  const onSubmitSaveContact = async () => {
+  useEffect(() => {
+    reset({
+      status: contact?.status || "pending",
+    });
+  }, [isVisibleDrawerRight]);
+
+  const onSubmitSaveContact = async (formData) => {
     try {
       setSavingContact(true);
 
       modalConfirm({
         title: "¿Quieres marcar este contacto como atendido?",
         content: "Al aceptar, el contacto desaparecerá de la vista",
-        onOk: async () => await onSaveContact(),
+        onOk: async () => await onSaveContact(formData),
       });
     } catch (e) {
       console.error("ErrorSaveContact:", e);
@@ -80,14 +94,11 @@ export const DrawerUserInformation = ({
     }
   };
 
-  const onSaveContact = async () => {
+  const onSaveContact = async (formData) => {
     await firestore
       .collection("contacts")
       .doc(contact.id)
-      .set(
-        { ...contact, status: statusType ? "attended" : "pending" },
-        { merge: true }
-      );
+      .update({ ...contact, status: formData.status });
 
     notification({
       type: "success",
@@ -122,7 +133,6 @@ export const DrawerUserInformation = ({
         width={650}
         onClose={() => {
           onCloseDrawerContact();
-          resetStatusType();
         }}
         visible={isVisibleDrawerRight}
         bodyStyle={{
@@ -274,7 +284,7 @@ export const DrawerUserInformation = ({
           </Col>
         </Row>
         <Divider />
-        {contact.status === "pending" && (
+        {contact?.status === "pending" && (
           <Row>
             <Col span={24}>
               <Form
@@ -283,15 +293,31 @@ export const DrawerUserInformation = ({
               >
                 <Row gutter={[0, 10]}>
                   <Col span={24}>
-                    <Group label="¿El contacto fue atendido?">
-                      <Switch
-                        onClick={(e) => setStatusType(e)}
-                        checkedChildren="Si"
-                        unCheckedChildren="No"
-                        defaultChecked={false}
-                        checked={statusType}
-                      />
-                    </Group>
+                    <Controller
+                      name="status"
+                      control={control}
+                      defaultValue=""
+                      render={({ field: { onChange, value, name } }) => (
+                        <RadioGroup
+                          label="¿El email fue atendido?"
+                          name={name}
+                          value={value}
+                          onChange={onChange}
+                          error={error(name)}
+                          required={required(name)}
+                          options={[
+                            {
+                              label: "No",
+                              value: "pending",
+                            },
+                            {
+                              label: "Si",
+                              value: "attended",
+                            },
+                          ]}
+                        />
+                      )}
+                    />
                   </Col>
                   <Col span={24}>
                     <Button
@@ -299,7 +325,7 @@ export const DrawerUserInformation = ({
                       htmlType="submit"
                       type="primary"
                       size="large"
-                      disabled={!statusType || savingContact}
+                      disabled={watch("status") === "pending" || savingContact}
                     >
                       Guardar
                     </Button>
