@@ -21,6 +21,7 @@ import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
 import { useGlobalData } from "../../../providers";
 import { phoneCodes } from "../../../data-list";
+import { assign } from "lodash";
 
 export const ClientIntegration = () => {
   const navigate = useNavigate();
@@ -68,32 +69,38 @@ export const ClientIntegration = () => {
     }
   };
 
-  const mapClient = (client, formData) => ({
-    id: client.id,
-    name: formData.name.toLowerCase(),
-    isotipo: formData?.isotipo || null,
-    logotipo: formData.logotipo,
-    receptorEmail: formData.receptorEmail.toLowerCase(),
-    receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
-    hostname: formData.hostname.toLowerCase(),
-    theme:
-      formData.hostname.split(".").length > 2
-        ? formData.hostname.split(".")[1]
-        : formData.hostname.split(".")[0],
-    phone: {
-      number: formData.phoneNumber,
-      countryCode: formData.countryCode,
-    },
-    smtpConfig: formData.customSMTP
-      ? {
-          service: formData.smtpConfig?.service || "",
-          auth: {
-            user: formData.smtpConfig?.user || "",
-            pass: formData.smtpConfig?.pass || "",
-          },
-        }
-      : null,
-  });
+  const mapClient = (client, formData) =>
+    assign(
+      {},
+      {
+        id: client.id,
+        name: formData.name.toLowerCase(),
+        isotipo: formData?.isotipo || null,
+        logotipo: formData.logotipo,
+        receptorEmail: formData.receptorEmail.toLowerCase(),
+        receptorEmailsCopy: formData.receptorEmailsCopy.toLowerCase(),
+        bgColor: formData.bgColor,
+        textColor: formData.textColor,
+        hostname: formData.hostname.toLowerCase(),
+        theme:
+          formData.hostname.split(".").length > 2
+            ? formData.hostname.split(".")[1]
+            : formData.hostname.split(".")[0],
+        phone: {
+          number: formData.phoneNumber,
+          countryCode: formData.countryCode,
+        },
+        smtpConfig: formData.customSMTP
+          ? {
+              service: formData.smtpConfig?.service || "",
+              auth: {
+                user: formData.smtpConfig?.user || "",
+                pass: formData.smtpConfig?.pass || "",
+              },
+            }
+          : null,
+      }
+    );
 
   const onGoBack = () => navigate(-1);
 
