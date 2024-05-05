@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Button, Form, Input, InputPassword } from "../../components/ui";
-import styled, { css } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,6 +15,7 @@ import { ContactSound } from "../../multimedia";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
   const [play] = useSound(ContactSound, { soundEnabled: false, volume: 0 });
 
   const { authUser, login, loginLoading } = useAuthentication();
@@ -51,7 +52,9 @@ export const Login = () => {
         </div>
         <div className="wrapper-login">
           <div className="title-login">
-            <Title level={2}>Iniciar Sesión</Title>
+            <Title level={3} color={theme.colors.primary}>
+              Inicio de sesión
+            </Title>
           </div>
           <Form onSubmit={handleSubmit(onSubmitLogin)}>
             <Controller
@@ -140,10 +143,11 @@ const Container = styled.div`
         padding: 5em 2em 5em;
       }
       &__title {
-        color: ${theme.colors.white};
         h2 {
+          color: ${theme.colors.primary};
           font-size: 2.5em;
           font-weight: bold;
+          text-align: center;
         }
       }
       img {
@@ -157,7 +161,6 @@ const Container = styled.div`
       flex: 1 1 0;
       padding: 1.5em;
       background-color: rgba(255, 255, 255, 0.4);
-      color: #000;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -165,12 +168,9 @@ const Container = styled.div`
         padding: 2em;
       }
       .title-login {
-        h2 {
-          text-align: center;
-          color: inherit;
-          font-size: 2.5em;
-          font-weight: 700;
-        }
+        color: ${theme.colors.primary};
+        text-align: center;
+        font-weight: 700;
       }
       .ant-space-item {
         > div {
