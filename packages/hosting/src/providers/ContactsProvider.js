@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { firestore, querySnapshotToArray } from "../firebase";
+import { firestore } from "../firebase";
 import moment from "moment";
-import { notification } from "../components/ui";
 import useSound from "use-sound";
 import { ContactSound } from "../multimedia";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useAuthentication } from "./AuthenticationProvider";
+import { notification } from "../components/ui";
 
 const ContactsContext = createContext({
   contacts: [],
@@ -11,55 +13,42 @@ const ContactsContext = createContext({
 });
 
 export const ContactsProvider = ({ children }) => {
-  const [contacts, setContacts] = useState([]);
+  const { authUser } = useAuthentication();
   const [contactsData, setContactsData] = useState([]); //Contacts data of provider
-  const [loadingContacts, setLoadingContacts] = useState(true);
   const [play] = useSound(ContactSound, { volume: 7 });
 
+  const [contacts = [], contactsLoading, contactsError] = useCollectionData(
+    authUser
+      ? firestore
+          .collection("contacts")
+          .where(
+            "createAtString",
+            ">=",
+            moment().subtract(1, "month").format("YYYY-MM-DD")
+          )
+          .where(
+            "createAtString",
+            "<=",
+            moment().add(1, "day").format("YYYY-MM-DD")
+          )
+          .where("isDeleted", "==", false)
+      : null
+  );
+
   useEffect(() => {
-    fetchContacts();
-  }, []);
+    contactsError && notification({ type: "error", message: contactsError });
+  }, [contactsError]);
 
   useEffect(() => {
     setContactsData(contacts);
-
-    if (contacts.length > contactsData.length) play();
+    if (contacts.length > contactsData.length) return play();
   }, [contacts]);
-
-  const fetchContacts = () => {
-    try {
-      setLoadingContacts(true);
-
-      const queryRef = firestore.collection("contacts");
-
-      const unsubscribe = queryRef
-        .where(
-          "createAtString",
-          ">=",
-          moment().subtract(1, "month").format("YYYY-MM-DD")
-        )
-        .where(
-          "createAtString",
-          "<=",
-          moment().add(1, "day").format("YYYY-MM-DD")
-        )
-        .where("isDeleted", "==", false)
-        .onSnapshot((snapshot) => setContacts(querySnapshotToArray(snapshot)));
-
-      return () => unsubscribe();
-    } catch (error) {
-      notification({ type: "error" });
-      console.log("Error in fetchContacts: ", error);
-    } finally {
-      setLoadingContacts(false);
-    }
-  };
 
   return (
     <ContactsContext.Provider
       value={{
         contacts: contactsData,
-        loadingContacts,
+        loadingContacts: contactsLoading,
       }}
     >
       {children}
