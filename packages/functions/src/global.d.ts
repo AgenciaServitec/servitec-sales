@@ -78,6 +78,18 @@ interface SmtpConfig {
   };
 }
 
+type SentBy = "emisor" | "receptor";
+
+// CHATS / MESSAGES
+interface Message extends DefaultFirestoreProps {
+  id: string;
+  userId: string;
+  chatId: string;
+  roleCode: RoleCode;
+  sentBy: SentBy;
+  message: string;
+}
+
 interface Contact extends DefaultFirestoreProps {
   readonly id: string;
   clientId: string;
@@ -127,16 +139,4 @@ interface EmailRequest extends Contact {
     };
     totalNeto: number;
   };
-}
-
-type SentBy = "emisor" | "receptor";
-
-// CHATS / MESSAGES
-interface Message extends DefaultFirestoreProps {
-  id: string;
-  userId: string;
-  chatId: string;
-  roleCode: RoleCode;
-  sentBy: SentBy;
-  message: string;
 }
