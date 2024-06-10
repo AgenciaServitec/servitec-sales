@@ -128,6 +128,19 @@ interface EmailRequest extends Contact {
     totalNeto: number;
   };
 }
+interface EmailQuotation extends Contact {
+  planType?: string;
+  businessLine?: string;
+  accountingAdvice?: boolean;
+  spreadsheet?: boolean;
+  typeAccounting?: string;
+  monthlyPurchases?: string;
+  ruc?: string;
+  taxRegime?: string;
+  monthlyBudget?: string;
+  howManyWorkers?: number;
+  monthlySales?: number;
+}
 
 type SentBy = "emisor" | "receptor";
 

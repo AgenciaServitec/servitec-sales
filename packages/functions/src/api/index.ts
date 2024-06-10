@@ -88,6 +88,17 @@ app.post(
 );
 
 app.post(
+  "/emails/quotation",
+  [
+    body("quotation.phone").exists(),
+    body("quotation.email").exists(),
+    body("quotation.hostname").exists(),
+  ],
+  validateRequest,
+  postRequest,
+);
+
+app.post(
   "/emails/send-message",
   [body("email").exists(), body("message").exists()],
   validateRequest,
