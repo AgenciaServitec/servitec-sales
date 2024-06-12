@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express";
-import { firestore } from "../../firebase";
-import { assign, isEmpty, merge } from "lodash";
-import { searchDataEmail } from "../_utils";
+import {NextFunction, Request, Response} from "express";
+import {firestore} from "../../firebase";
+import {assign, isEmpty, merge} from "lodash";
+import {searchDataEmail} from "../_utils";
 import moment from "moment/moment";
-import { fetchCollection, now } from "../../firebase/firestore";
-import { sendMailRequestToReceptor } from "../../mailer";
+import {fetchCollection, now} from "../../firebase/firestore";
+import {sendMailQuotationToReceptor} from "../../mailer/sendMailQuotationToReceptor";
 
 interface Body {
     quotation: EmailQuotation;
@@ -36,9 +36,9 @@ export const postQuotation = async (
             return;
         }
 
-        const p0 = fetchSetRequestInContacts(quotation, client);
+        const p0 = fetchSetQuotationInContacts(quotation, client);
 
-        const p1 = sendMailRequestToReceptor({
+        const p1 = sendMailQuotationToReceptor({
             quotation,
         });
 
@@ -59,7 +59,7 @@ const fetchClient = async (hostname: string): Promise<Client | undefined> => {
     return clients[0];
 };
 
-const fetchSetRequestInContacts = async (
+const fetchSetQuotationInContacts = async (
     quotation: EmailQuotation,
     client: Client,
 ): Promise<void> => {
@@ -75,26 +75,29 @@ const mapContact = (
     contactId: string,
     quotation: EmailQuotation,
     client: Client,
-): OmitDefaultFirestoreProps<EmailRequest> => {
+): OmitDefaultFirestoreProps<EmailQuotation> => {
     const contact_ = merge(quotation, {
         id: contactId,
         clientId: client.id,
         hostname: client.hostname,
         fullName: (quotation?.fullName || "").toLowerCase(),
-        firstName: (quotation?.firstName || "").toLowerCase(),
-        lastName: (quotation?.lastName || "").toLowerCase(),
-        email: quotation.email.toLowerCase(),
-        ...(quotation?.message && { message: quotation.message }),
-        dateToMeet: quotation.dateToMeet,
-        timeToMeet: quotation.timeToMeet,
-        meetingType: quotation.meetingType,
-        ...(quotation?.product && { product: quotation.product }),
         phone: quotation.phone,
-        termsAndConditions: quotation?.termsAndConditions || true,
+        email: quotation.email,
+        planType: quotation.planType,
+        businessLine: quotation.businessLine,
+        accountingAdvice: quotation.accountingAdvice,
+        spreadsheet: quotation.spreadsheet,
+        typeAccounting: quotation.typeAccounting,
+        monthlyPurchases: quotation.monthlyPurchases,
+        ruc: quotation.ruc,
+        taxRegime: quotation.taxRegime,
+        monthlyBudget: quotation.monthlySales,
+        howManyWorkers: quotation.howManyWorkers,
+        monthlySales: quotation.monthlySales,
         createAtString: moment(now().toDate()).format("YYYY-MM-DD"),
         isDeleted: false,
         status: "pending",
-        type: "request",
+        type: "quotation",
         createAt: now(),
     });
 
