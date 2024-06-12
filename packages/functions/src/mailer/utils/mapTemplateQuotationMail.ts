@@ -10,6 +10,7 @@ export interface QuotationMustacheView {
   quotation: {
     fullName: string;
     phoneNumber: string;
+    email: string;
     planType: string;
     businessLine: string;
     accountingAdvice: boolean;
@@ -40,6 +41,7 @@ export const mapTemplateQuotationMustache = (
     quotation: {
       fullName: contact?.fullName || "",
       phoneNumber: `${contact.phone.countryCode} ${contact.phone.number}`,
+      email: contact?.email || "",
       planType: contact?.planType || "",
       businessLine: contact?.businessLine || "",
       accountingAdvice: contact?.accountingAdvice || false,
