@@ -14,6 +14,8 @@ export const createSubject = <T extends ObjectType>(
       return `[${capitalize(view.client.name)}] - Reclamo 😡`;
     case Templates.EMAIL_MESSAGE:
       return `[${capitalize(view.client.name)}] - Mensaje ✉️`;
+    case Templates.EMAIL_QUOTATION:
+      return `[${capitalize(view.client.name)}] - Cotización 💵`;
     default:
       return "";
   }

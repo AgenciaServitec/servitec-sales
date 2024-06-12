@@ -3,4 +3,5 @@ export enum Templates {
   EMAIL_REQUEST = "emailRequest.html",
   EMAIL_CLAIM = "emailClaim.html",
   EMAIL_MESSAGE = "emailMessage.html",
+  EMAIL_QUOTATION = "emailQuotation.html",
 }
