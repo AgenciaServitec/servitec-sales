@@ -78,18 +78,6 @@ interface SmtpConfig {
   };
 }
 
-type SentBy = "emisor" | "receptor";
-
-// CHATS / MESSAGES
-interface Message extends DefaultFirestoreProps {
-  id: string;
-  userId: string;
-  chatId: string;
-  roleCode: RoleCode;
-  sentBy: SentBy;
-  message: string;
-}
-
 interface Contact extends DefaultFirestoreProps {
   readonly id: string;
   clientId: string;
@@ -139,4 +127,29 @@ interface EmailRequest extends Contact {
     };
     totalNeto: number;
   };
+}
+interface EmailQuotation extends Contact {
+  planType?: string;
+  businessLine?: string;
+  accountingAdvice?: boolean;
+  spreadsheet?: boolean;
+  typeAccounting?: string;
+  monthlyPurchases?: string;
+  ruc?: string;
+  taxRegime?: string;
+  monthlyBudget?: string;
+  howManyWorkers?: number;
+  monthlySales?: number;
+}
+
+type SentBy = "emisor" | "receptor";
+
+// CHATS / MESSAGES
+interface Message extends DefaultFirestoreProps {
+  id: string;
+  userId: string;
+  chatId: string;
+  roleCode: RoleCode;
+  sentBy: SentBy;
+  message: string;
 }
