@@ -36,6 +36,7 @@ import { ContactInformation } from "../../../pages/emails/ContactInformation";
 import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
 import { useFormUtils } from "../../../hooks";
+import { QuotationInformation } from "../../../pages/emails/QuotationInformation";
 
 export const DrawerUserInformation = ({
   contact,
@@ -121,6 +122,8 @@ export const DrawerUserInformation = ({
         return <RequestInformation request={contact} />;
       case "claim":
         return <ClaimInformation claim={contact} />;
+      case "quotation":
+        return <QuotationInformation quotation={contact} />;
       default:
         return <ContactInformation contact={contact} />;
     }

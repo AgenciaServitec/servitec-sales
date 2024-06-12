@@ -17,4 +17,10 @@ export const emailsType = {
     secondary_color: "#fff1f0",
     text_color: "#fff",
   },
+  quotation: {
+    name: "Cotización",
+    primary_color: "#41c3ff",
+    secondary_color: "#e9f8ff",
+    text_color: "#fff",
+  },
 };

@@ -122,6 +122,7 @@ export const Emails = () => {
                   { label: "Contacto", value: "contact" },
                   { label: "Solicitudes", value: "request" },
                   { label: "Reclamos", value: "claim" },
+                  { label: "Cotizaciones", value: "quotation" },
                 ]}
               />
             </Col>
