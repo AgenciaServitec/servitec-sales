@@ -19,6 +19,7 @@ import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
 import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
+import { QuotationInformation } from "../../../pages/emails/QuotationInformation";
 
 export const ContactInList = ({
   contacts,
@@ -57,6 +58,14 @@ export const ContactInList = ({
         return (
           <ClaimInformation
             claim={contact}
+            onSetContact={onSetContact}
+            onOpenDrawerContact={onOpenDrawerContact}
+          />
+        );
+      case "quotation":
+        return (
+          <QuotationInformation
+            quotation={contact}
             onSetContact={onSetContact}
             onOpenDrawerContact={onOpenDrawerContact}
           />
