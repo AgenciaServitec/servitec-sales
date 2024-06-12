@@ -2,7 +2,13 @@ import express from "express";
 import cors from "cors";
 import { errorHandler, validateRequest } from "./_middlewares";
 import { body } from "express-validator";
-import {postClaim, postContact, postQuotation, postRequest, postSendMessage} from "./emails";
+import {
+  postClaim,
+  postContact,
+  postQuotation,
+  postRequest,
+  postSendMessage,
+} from "./emails";
 import { postVisitor } from "./visitors";
 import { patchUser, postUser, putUser } from "./users";
 import { getChat } from "./chats/getChat";
@@ -95,7 +101,7 @@ app.post(
     body("quotation.hostname").exists(),
   ],
   validateRequest,
-    postQuotation,
+  postQuotation,
 );
 
 app.post(
