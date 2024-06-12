@@ -24,7 +24,7 @@ export const config: Config = {
       service: "gmail",
       auth: {
         user: "servitecperu266@gmail.com",
-        pass: "ysro pvvs dwzr psat",
+        pass: "aghv nygl mzqo gqud",
       },
     },
     hosting: {
@@ -40,7 +40,7 @@ export const config: Config = {
       service: "gmail",
       auth: {
         user: "servitecperu266@gmail.com",
-        pass: "ysro pvvs dwzr psat",
+        pass: "aghv nygl mzqo gqud",
       },
     },
     hosting: {
