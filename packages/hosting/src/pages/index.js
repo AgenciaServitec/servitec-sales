@@ -7,3 +7,4 @@ export * from "./login";
 export * from "./users";
 export * from "./users/_userId";
 export * from "./contacts";
+export * from "./spam"
