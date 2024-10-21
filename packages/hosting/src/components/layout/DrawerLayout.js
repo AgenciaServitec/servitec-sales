@@ -70,7 +70,7 @@ export const DrawerLayout = ({
       icon: <FontAwesomeIcon icon={faSpaceAwesome} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
-        onNavigateTo("");
+        onNavigateTo("/spam");
         setIsVisibleDrawer(false);
       },
     },
