@@ -65,12 +65,12 @@ export const DrawerLayout = ({
       },
     },
     {
-      label: "Spam",
-      key: "spam",
+      label: "Spams",
+      key: "spams",
       icon: <FontAwesomeIcon icon={faSpaceAwesome} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
-        onNavigateTo("/spam");
+        onNavigateTo("/spams");
         setIsVisibleDrawer(false);
       },
     },
