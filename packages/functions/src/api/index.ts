@@ -49,16 +49,16 @@ app.put(
 app.patch("/users/:userId", [body("updateBy").exists()], patchUser);
 
 // EMAILS
-app.post(
-  "/generic/contact",
-  [
-    body("contact.phone").exists(),
-    body("contact.email").exists(),
-    body("contact.hostname").exists(),
-  ],
-  validateRequest,
-  postContact,
-);
+// app.post(
+//   "/generic/contact",
+//   [
+//     body("contact.phone").exists(),
+//     body("contact.email").exists(),
+//     body("contact.hostname").exists(),
+//   ],
+//   validateRequest,
+//   postContact,
+// );
 
 app.post(
   "/emails/contact",

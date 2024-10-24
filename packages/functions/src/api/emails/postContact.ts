@@ -5,6 +5,7 @@ import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
 import { fetchCollection, now } from "../../firebase/firestore";
 import { sendMailContactToReceptor } from "../../mailer";
+import { spamsDetected } from "../../utils";
 
 interface Body {
   contact: EmailContact;
@@ -30,6 +31,13 @@ export const postContact = async (
     const { contact } = formData;
 
     const client: Client | undefined = await fetchClient(contact.hostname);
+
+    const existsSpams = await spamsDetected(contact);
+
+    if (existsSpams) {
+      res.status(412).send("spams_detected").end();
+      return;
+    }
 
     if (!client || isEmpty(client)) {
       res.status(412).send("client_no_exists").end();
