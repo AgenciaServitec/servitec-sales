@@ -10,7 +10,7 @@ import {
   Page404,
   UserIntegration,
   Users,
-    Spams,
+  Spams,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -96,17 +96,17 @@ export const Router = () => (
         </PrivateRoute>
       }
     />
-      <Route
-          exact
-          path="/spams"
-          element={
-              <PrivateRoute>
-                  <BaseLayout>
-                      <Spams />
-                  </BaseLayout>
-              </PrivateRoute>
-          }
-      />
+    <Route
+      exact
+      path="/spams"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <Spams />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
 
     <Route
       exact

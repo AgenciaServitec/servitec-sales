@@ -12,8 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
-import {faSpaceAwesome} from "@fortawesome/free-brands-svg-icons";
-
+import { faSpaceAwesome } from "@fortawesome/free-brands-svg-icons";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
