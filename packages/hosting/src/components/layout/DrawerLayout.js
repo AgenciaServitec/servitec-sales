@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
+import { faSpaceAwesome } from "@fortawesome/free-brands-svg-icons";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
@@ -59,6 +60,16 @@ export const DrawerLayout = ({
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/users");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Spams",
+      key: "spams",
+      icon: <FontAwesomeIcon icon={faSpaceAwesome} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/spams");
         setIsVisibleDrawer(false);
       },
     },

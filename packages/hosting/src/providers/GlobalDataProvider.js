@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../firebase";
 import { useAuthentication } from "./AuthenticationProvider";
@@ -8,6 +8,7 @@ import { orderBy } from "lodash";
 const GlobalDataContext = createContext({
   clients: [],
   users: [],
+  spams: [],
 });
 
 export const GlobalDataProvider = ({ children }) => {
@@ -25,20 +26,27 @@ export const GlobalDataProvider = ({ children }) => {
       : null
   );
 
-  const error = clientsError || usersError;
-  const loading = clientsLoading || usersLoading;
+  const [spams = [], spamsLoading, spamsError] = useCollectionData(
+    authUser
+      ? firestore.collection("spams").where("isDeleted", "==", false)
+      : null
+  );
+
+  const error = clientsError || usersError || spamsError;
+  const loading = clientsLoading || usersLoading || spamsLoading;
 
   useEffect(() => {
     error && notification({ type: "error" });
   }, [error]);
 
-  if (loading) return <Spinner height="100vh" />;
+  if (loading) return <Spinner height="100svh" />;
 
   return (
     <GlobalDataContext.Provider
       value={{
         clients: orderBy(clients, (client) => [client.createAt], ["asc"]),
         users: orderBy(users, (user) => [user.createAt], ["asc"]),
+        spams: orderBy(spams, (spam) => [spam.createAt], ["desc"]),
       }}
     >
       {children}
