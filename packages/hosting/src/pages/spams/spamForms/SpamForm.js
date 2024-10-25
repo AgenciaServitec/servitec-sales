@@ -1,93 +1,147 @@
-import React, { useEffect, useState } from "react";
-import { Row, Col, Input, Button, Select, notification } from "antd";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React from 'react';
+import Row from "antd/lib/row";
+import Col from "antd/lib/col";
+import Title from "antd/lib/typography/Title";
+import {useNavigate} from "react-router";
+import {Form, Input, InputNumber, notification, Select, TextArea} from "../../../components/ui";
+import {Controller, useForm} from "react-hook-form";
+import { assign, capitalize, concat } from "lodash";
+import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {useFormUtils} from "../../../hooks";
 
-// Definición del esquema de validación
-const schema = yup.object().shape({
-    email: yup.string()
-        .test('multiple-emails', 'Por favor, ingresa correos válidos', value => {
-            if (!value) return true; // Permite vacío
-            const emails = value.split(',').map(email => email.trim());
-            return emails.every(email => yup.string().email().isValidSync(email));
-        })
-        .notRequired(),
-    phone: yup.string()
-        .matches(/^[0-9,\s+]+$/, "Solo se permiten números y comas")
-        .notRequired(),
-}).test('at-least-one', 'Debes ingresar al menos un correo o teléfono', function (value) {
-    return value.email || value.phone;
-});
+export const SpamIntegration = () => {
 
-export const SpamForm = ({ onSubmit, spam }) => {
-    const { control, handleSubmit, reset } = useForm({
+    const navigate = useNavigate()
+
+    const onSubmitSaveSpam = async (formData) =>{
+        try{
+            const _spam = mapSpam(formData)
+
+            await  saveSpam(_spam);
+
+            notification({type:"success"});
+
+            onGoBack();
+        }catch (e){
+            console.log("ErrorSaveSpam: ",e)
+            notification({type:"error"})
+        };
+    };
+
+    const saveSpam = async (spam) =>{
+        spamId === "new" ? await postSpam(spam) : await putSpam(spam);
+
+        const responseStatus = postSpamResponse.ok || putSpamResponse.ok;
+
+        if (!responseStatus) return notification({type:"error"})
+    }
+
+    const mapSpam = (formData) =>{
+        const existsAllOption = formData.spamsIds.find(
+            (clientId) => clientId == "all"
+        );
+
+        const clientsIds = existsAllOption ? ["all"] : formData.clientsIds;
+
+        return assign(
+            {},
+            {
+                id: spam.id,
+                clientsIds: clientsIds,
+
+            }
+        )
+    }
+    const onGoBack = () => navigate(-1);
+
+
+    return (
+        <Spam
+
+        />
+    );
+};
+
+const Spam = () =>{
+
+    const schema = yup.object({
+        clientsIds: yup.array().min(1).required(),
+        roleCode: yup.string().required(),
+        firstName: yup.string().required(),
+        lastName: yup.string().required(),
+        email: yup.string().email().required(),
+        password: yup.string().required(),
+        countryCode: yup.string().required(),
+        phoneNumber: yup.number().required(),
+    });
+
+    const {
+        formState: { errors },
+        handleSubmit,
+        control,
+        reset,
+        watch,
+    } = useForm({
         resolver: yupResolver(schema),
     });
 
-    const [dataType, setDataType] = useState('email'); // Estado para seleccionar el tipo de dato
-
-
-    useEffect(() => {
-        if (spam) {
-            reset(spam);
-        }
-    }, [spam, reset]);
-
-
-    const submitForm = (data) => {
-        const emails = (data.email || "").split(',').map(email => email.trim()).filter(Boolean);
-        const phones = (data.phone || "").split(',').map(phone => phone.trim()).filter(Boolean);
-
-        // Llama a la función onSubmit con los datos procesados
-        onSubmit({ email: emails, phone: phones });
-
-        reset()
-
-        notification.success({ message: "Spam agregado correctamente!" });
-    };
+    const { required, error } = useFormUtils({ errors, schema });
 
     return (
-        <form onSubmit={handleSubmit(submitForm)}>
-            <Row gutter={[16, 16]}>
-                <Col span={24}>
-                    <Select
-                        value={dataType}
-                        onChange={setDataType}
-                        style={{ width: '100%' }}
-                    >
-                        <Select.Option value="email">Correo Electrónico</Select.Option>
-                        <Select.Option value="phone">Teléfono</Select.Option>
-                    </Select>
-                </Col>
-                {dataType === 'email' && (
-                    <Col span={24}>
-                        <Controller
-                            name="email"
-                            control={control}
-                            render={({ field }) => (
-                                <Input {...field} placeholder="Correos Electrónicos (separados por comas)" />
-                            )}
-                        />
-                    </Col>
-                )}
-                {dataType === 'phone' && (
-                    <Col span={24}>
-                        <Controller
-                            name="phone"
-                            control={control}
-                            render={({ field }) => (
-                                <Input {...field} placeholder="Teléfonos (separados por comas)" />
-                            )}
-                        />
-                    </Col>
-                )}
-                <Col span={24}>
-                    <Button type="primary" htmlType="submit">
-                        Guardar Spam
-                    </Button>
-                </Col>
-            </Row>
-        </form>
-    );
-};
+        <Row>
+            <Col span={24}>
+                <Title level={3}> Spam </Title>
+            </Col>
+            <Col span={24}>
+                <Form>
+                    <Row gutter={[16,16]}>
+                        <Col span={24}>
+                            <Controller
+                                name="spam"
+                                control={control}
+                                defaultValue={[]}
+                                render={({ field: { onChange, value, name } }) => (
+                                    <Select
+                                        label="Tipo"
+                                        value={value}
+                                        onChange={onChange}
+                                        error={error(name)}
+                                        required={required(name)}
+                                        options={[
+                                            {
+                                                label:"Email",
+                                                value: "email",
+                                            },
+                                            {
+                                                label:"Telefono",
+                                                value:"phone"
+                                            }
+                                        ]}
+                                    />
+                                )}
+                            />
+                        </Col>
+                        <Col span={24}>
+                            <Controller
+                                name="spamInfo"
+                                control={control}
+                                defaultValue=""
+                                render={({ field: { onChange, value, name } }) => (
+                                    <TextArea
+                                        label="Ingrese el valor"
+                                        name={name}
+                                        value={value}
+                                        onChange={onChange}
+                                        error={error(name)}
+                                        required={required(name)}
+                                    />
+                                )}
+                            />
+                        </Col>
+                    </Row>
+                </Form>
+            </Col>
+        </Row>
+    )
+}

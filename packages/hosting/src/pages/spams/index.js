@@ -3,7 +3,7 @@ import { Row, Col, List, Typography, Button, Modal, notification } from "antd";
 import { IconAction, modalConfirm} from "../../components/ui";
 import { useGlobalData } from "../../providers";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import {SpamForm} from "./spamForms/SpamForm";
+import { SpamIntegration} from "./spamForms/SpamForm";
 
 const { Title, Text } = Typography;
 
@@ -63,14 +63,12 @@ export const Spams = () => {
                 />
             </Col>
 
-            {/* Modal para agregar spam */}
             <Modal
                 title="Agregar Spam"
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
-                footer={null}
             >
-                <SpamForm onSubmit={handleAddSpam} />
+                <SpamIntegration onSubmit={handleAddSpam} />
             </Modal>
         </Row>
     );
