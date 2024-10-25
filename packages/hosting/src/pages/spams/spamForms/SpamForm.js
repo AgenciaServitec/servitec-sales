@@ -1,147 +1,193 @@
-import React from 'react';
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import Title from "antd/lib/typography/Title";
-import {useNavigate} from "react-router";
-import {Form, Input, InputNumber, notification, Select, TextArea} from "../../../components/ui";
-import {Controller, useForm} from "react-hook-form";
-import { assign, capitalize, concat } from "lodash";
-import {yupResolver} from "@hookform/resolvers/yup";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import {
+  Button,
+  Col,
+  Form,
+  notification,
+  Row,
+  Select,
+  TextArea,
+  Typography,
+} from "../../../components/ui";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {useFormUtils} from "../../../hooks";
+import { useFormUtils } from "../../../hooks";
+import { getSpamId } from "../../../firebase/collections";
 
-export const SpamIntegration = () => {
+export const SpamIntegration = ({ onAddSpam, onIsModalVisible }) => {
+  const navigate = useNavigate();
+  const [spam, setSpam] = useState(null);
 
-    const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
 
-    const onSubmitSaveSpam = async (formData) =>{
-        try{
-            const _spam = mapSpam(formData)
+  useEffect(() => {
+    const _spam = { id: getSpamId() };
 
-            await  saveSpam(_spam);
+    if (!_spam) return navigate(-1);
 
-            notification({type:"success"});
+    setSpam(_spam);
+  }, []);
 
-            onGoBack();
-        }catch (e){
-            console.log("ErrorSaveSpam: ",e)
-            notification({type:"error"})
-        };
-    };
+  const onGoBack = () => navigate(-1);
 
-    const saveSpam = async (spam) =>{
-        spamId === "new" ? await postSpam(spam) : await putSpam(spam);
+  const onSaveSpam = async (formData) => {
+    try {
+      setLoading(true);
 
-        const responseStatus = postSpamResponse.ok || putSpamResponse.ok;
+      const values = formData.value.split(",");
 
-        if (!responseStatus) return notification({type:"error"})
+      if (values.length > 1) {
+        const spamsToFirestore = values.map((value) => ({
+          id: getSpamId(),
+          type: formData.type,
+          value,
+        }));
+
+        spamsToFirestore.map((spam) => onAddSpam(spam));
+
+        notification({ type: "success" });
+        onIsModalVisible(false);
+        return;
+      }
+
+      await onAddSpam(mapSpam(formData));
+
+      notification({ type: "success" });
+      onIsModalVisible(false);
+    } catch (e) {
+      console.log("ErrorSaveSpam: ", e);
+      notification({ type: "error" });
+    } finally {
+      setLoading(false);
     }
+  };
 
-    const mapSpam = (formData) =>{
-        const existsAllOption = formData.spamsIds.find(
-            (clientId) => clientId == "all"
-        );
+  const mapSpam = (formData) => ({
+    ...spam,
+    type: formData.type,
+    value: formData.value,
+  });
 
-        const clientsIds = existsAllOption ? ["all"] : formData.clientsIds;
-
-        return assign(
-            {},
-            {
-                id: spam.id,
-                clientsIds: clientsIds,
-
-            }
-        )
-    }
-    const onGoBack = () => navigate(-1);
-
-
-    return (
-        <Spam
-
-        />
-    );
+  return (
+    <Spam
+      onSaveSpam={onSaveSpam}
+      loading={loading}
+      onIsModalVisible={onIsModalVisible}
+    />
+  );
 };
 
-const Spam = () =>{
+const Spam = ({ onSaveSpam, loading, onIsModalVisible }) => {
+  const schema = yup.object({
+    type: yup.string().required(),
+    value: yup.string().required(),
+  });
 
-    const schema = yup.object({
-        clientsIds: yup.array().min(1).required(),
-        roleCode: yup.string().required(),
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        email: yup.string().email().required(),
-        password: yup.string().required(),
-        countryCode: yup.string().required(),
-        phoneNumber: yup.number().required(),
+  const {
+    formState: { errors },
+    handleSubmit,
+    control,
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      type: "email",
+    },
+  });
+
+  const { required, error } = useFormUtils({ errors, schema });
+
+  const onSubmit = (formData) => {
+    onSaveSpam(formData);
+    resetData();
+  };
+
+  const resetData = () =>
+    reset({
+      type: "",
+      value: "",
     });
 
-    const {
-        formState: { errors },
-        handleSubmit,
-        control,
-        reset,
-        watch,
-    } = useForm({
-        resolver: yupResolver(schema),
-    });
-
-    const { required, error } = useFormUtils({ errors, schema });
-
-    return (
-        <Row>
+  return (
+    <Row>
+      <Col span={24}>
+        <Typography.Title level={3}> Spam </Typography.Title>
+      </Col>
+      <Col span={24}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Row gutter={[16, 16]}>
             <Col span={24}>
-                <Title level={3}> Spam </Title>
+              <Controller
+                name="type"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <Select
+                    label="Tipo"
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                    options={[
+                      {
+                        label: "Email",
+                        value: "email",
+                      },
+                      {
+                        label: "Telefono",
+                        value: "phone",
+                      },
+                    ]}
+                  />
+                )}
+              />
             </Col>
             <Col span={24}>
-                <Form>
-                    <Row gutter={[16,16]}>
-                        <Col span={24}>
-                            <Controller
-                                name="spam"
-                                control={control}
-                                defaultValue={[]}
-                                render={({ field: { onChange, value, name } }) => (
-                                    <Select
-                                        label="Tipo"
-                                        value={value}
-                                        onChange={onChange}
-                                        error={error(name)}
-                                        required={required(name)}
-                                        options={[
-                                            {
-                                                label:"Email",
-                                                value: "email",
-                                            },
-                                            {
-                                                label:"Telefono",
-                                                value:"phone"
-                                            }
-                                        ]}
-                                    />
-                                )}
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <Controller
-                                name="spamInfo"
-                                control={control}
-                                defaultValue=""
-                                render={({ field: { onChange, value, name } }) => (
-                                    <TextArea
-                                        label="Ingrese el valor"
-                                        name={name}
-                                        value={value}
-                                        onChange={onChange}
-                                        error={error(name)}
-                                        required={required(name)}
-                                    />
-                                )}
-                            />
-                        </Col>
-                    </Row>
-                </Form>
+              <Controller
+                name="value"
+                control={control}
+                render={({ field: { onChange, value, name } }) => (
+                  <TextArea
+                    label="Puedes ingresar un solo valor o varios separandolos con comas (,)"
+                    rows={5}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
             </Col>
-        </Row>
-    )
-}
+          </Row>
+          <Row justify="end" gutter={[16, 16]}>
+            <Col span={24} md={8}>
+              <Button
+                type="default"
+                size="large"
+                block
+                onClick={() => onIsModalVisible(false)}
+                disabled={loading}
+              >
+                Cancelar
+              </Button>
+            </Col>
+            <Col span={24} md={8}>
+              <Button
+                type="primary"
+                size="large"
+                block
+                htmlType="submit"
+                disabled={loading}
+                loading={loading}
+              >
+                Guardar
+              </Button>
+            </Col>
+          </Row>
+        </Form>
+      </Col>
+    </Row>
+  );
+};

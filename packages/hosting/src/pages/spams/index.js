@@ -1,75 +1,99 @@
 import React, { useState } from "react";
-import { Row, Col, List, Typography, Button, Modal, notification } from "antd";
-import { IconAction, modalConfirm} from "../../components/ui";
+import {
+  Button,
+  Col,
+  IconAction,
+  List,
+  Modal,
+  modalConfirm,
+  notification,
+  Row,
+  Tag,
+  Typography,
+} from "../../components/ui";
 import { useGlobalData } from "../../providers";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { SpamIntegration} from "./spamForms/SpamForm";
+import { SpamIntegration } from "./spamForms/SpamForm";
+import { addSpam, updateSpam } from "../../firebase/collections";
+import { useDefaultFirestoreProps } from "../../hooks";
 
 const { Title, Text } = Typography;
 
 export const Spams = () => {
-    const { spams, addSpam, removeSpam } = useGlobalData();
-    const [isModalVisible, setIsModalVisible] = useState(false);
+  const { spams } = useGlobalData();
+  const { assignCreateProps, assignDeleteProps } = useDefaultFirestoreProps();
 
-    const onDeleteSpam = async(spamId) => {
-        try {
-            await removeSpam(spamId);
-            notification.success({ message: "Spam eliminado correctamente!" });
-        } catch (error) {
-            notification.error({ message: "Error al eliminar spam." });
-        }
-    };
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const onConfirmRemoveSpam = (spamId) =>
-        modalConfirm({
-            content: "¿Estás seguro de que deseas eliminar este spam?",
-            onOk: () => onDeleteSpam(spamId),
-        });
+  const onIsModalVisible = (isModalVisible = false) =>
+    setIsModalVisible(isModalVisible);
 
-    const handleAddSpam = (spamData) => {
-        addSpam(spamData);
-        setIsModalVisible(false);
-    };
+  const onDeleteSpam = async (spamId) => {
+    try {
+      await updateSpam(spamId, assignDeleteProps({ isDeleted: true }));
+      notification({ type: "success" });
+    } catch (error) {
+      notification({ type: "error" });
+    }
+  };
 
-    return (
-        <Row gutter={[16, 16]}>
-            <Col span={24}>
-                <Title level={3}>Correos Spam</Title>
-                <Button type="primary" onClick={() => setIsModalVisible(true)}>
-                    Agregar Spam
-                </Button>
-            </Col>
-            <Col span={24}>
-                <List
-                    itemLayout="horizontal"
-                    dataSource={spams}
-                    renderItem={(spam) => (
-                        <List.Item
-                            actions={[
-                                <IconAction
-                                    key="delete"
-                                    tooltipTitle="Eliminar"
-                                    icon={faTrash}
-                                    onClick={() => onConfirmRemoveSpam(spam.id)}
-                                />,
-                            ]}
-                        >
-                            <List.Item.Meta
-                                title={<Text>{spam.email.join(', ')}</Text>} // Muestra todos los correos
-                                description={<Text>{spam.phone.join(', ')}</Text>} // Muestra todos los teléfonos
-                            />
-                        </List.Item>
-                    )}
-                />
-            </Col>
+  const onConfirmRemoveSpam = (spamId) =>
+    modalConfirm({
+      onOk: () => onDeleteSpam(spamId),
+    });
 
-            <Modal
-                title="Agregar Spam"
-                open={isModalVisible}
-                onCancel={() => setIsModalVisible(false)}
+  const onAddSpam = async (spamData) => {
+    await addSpam(assignCreateProps(spamData));
+  };
+
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Title level={3}>Correos Spam</Title>
+        <Button type="primary" onClick={() => setIsModalVisible(true)}>
+          Agregar Spam
+        </Button>
+      </Col>
+      <Col span={24}>
+        <List
+          itemLayout="horizontal"
+          dataSource={spams}
+          renderItem={(spam) => (
+            <List.Item
+              actions={[
+                <IconAction
+                  key="delete"
+                  tooltipTitle="Eliminar"
+                  icon={faTrash}
+                  styled={{ color: (theme) => theme.colors.error }}
+                  onClick={() => onConfirmRemoveSpam(spam.id)}
+                />,
+              ]}
             >
-                <SpamIntegration onSubmit={handleAddSpam} />
-            </Modal>
-        </Row>
-    );
+              <List.Item.Meta
+                title={
+                  <Tag color={spam?.type === "phone" ? "blue" : "red"}>
+                    {spam?.type === "phone" ? "Teléfono" : "Email"}
+                  </Tag>
+                }
+                description={<Text>{spam?.value}</Text>}
+              />
+            </List.Item>
+          )}
+        />
+      </Col>
+
+      <Modal
+        title="Agregar Spam"
+        open={isModalVisible}
+        onCancel={() => onIsModalVisible(false)}
+        footer={null}
+      >
+        <SpamIntegration
+          onAddSpam={onAddSpam}
+          onIsModalVisible={onIsModalVisible}
+        />
+      </Modal>
+    </Row>
+  );
 };
