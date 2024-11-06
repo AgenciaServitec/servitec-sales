@@ -10,10 +10,10 @@ purposes.
 
 ### Pre-requirements 📋
 
-- Node js `14`
+- Node js `18`
 - Git
 - GCloud sdk
-- Webstorm > 2020
+- Webstorm > 2023
 
 ## Install 📦
 
@@ -166,8 +166,7 @@ yarn cypress:check
 
 ```
 Rol: super admin
-User: admin@agenciaservitec.com
-Pass: no------o
+User: admin@servitecsales.com
 ```
 
 ### Extensions

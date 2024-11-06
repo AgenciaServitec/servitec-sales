@@ -153,3 +153,9 @@ interface Message extends DefaultFirestoreProps {
   sentBy: SentBy;
   message: string;
 }
+
+interface Spam extends DefaultFirestoreProps {
+  id: string;
+  type: "email" | "phone";
+  value: string;
+}

@@ -1,3 +1,7 @@
+import { Row, Col, List, Typography, Button, Modal, Tag } from "antd";
+
+export { Row, Col, List, Typography, Button, Modal, Tag };
+
 export * from "./component-container";
 export * from "./calendar";
 
@@ -9,7 +13,6 @@ export * from "./IconAction";
 export * from "./Input";
 export * from "./InputNumber";
 export * from "./InputPassword";
-export * from "./Modal";
 export * from "./modalConfirm";
 export * from "./notification";
 export * from "./RadioGroup";
