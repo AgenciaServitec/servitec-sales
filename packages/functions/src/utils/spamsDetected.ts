@@ -7,6 +7,10 @@ export const spamsDetected = async (contact: Contact): Promise<boolean> => {
   assert(contact.email, "Missing contact.email!");
   assert(contact.phone.number, "Missing phone.number!");
 
+  const regex = /^9[0-9]{8}$/gm;
+
+  if (!regex.test(contact.phone.number.toString())) return false;
+
   const p0 = fetchCollection(
     spamsRef
       .where("value", "==", contact.email)

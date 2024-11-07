@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, List, Row } from "antd";
-import { EnvelopeByEmailColor, IconAction, TagHostname } from "../../ui";
+import {
+  Button,
+  EnvelopeByEmailColor,
+  IconAction,
+  modalConfirm,
+  notification,
+  TagHostname,
+} from "../../ui";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
   faCalendarAlt,
@@ -20,6 +27,8 @@ import { ClaimInformation } from "../../../pages/emails/ClaimInformation";
 import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
 import { QuotationInformation } from "../../../pages/emails/QuotationInformation";
+import Checkbox from "antd/lib/checkbox";
+import { firestore } from "../../../firebase";
 
 export const ContactInList = ({
   contacts,
@@ -32,6 +41,7 @@ export const ContactInList = ({
   onConfirmDeleteContact,
 }) => {
   const { authUser } = useAuthentication();
+  const [checkedList, setCheckedList] = useState([]);
 
   const findClient = (clientId) =>
     clients.find((client) => client.id === clientId);
@@ -81,8 +91,53 @@ export const ContactInList = ({
     }
   };
 
+  const checkedListLength = checkedList.length;
+
+  const onChangeChecked = (id, checked) => {
+    if (!checked) {
+      const newCheckedList = checkedList.filter((_id) => _id !== id);
+      setCheckedList(newCheckedList);
+    } else {
+      setCheckedList((prev) => [...prev, id]);
+    }
+  };
+
+  const deleteContacts = (contactsId) => {
+    try {
+      contactsId.map(
+        async (contactId) =>
+          await firestore
+            .collection("contacts")
+            .doc(contactId)
+            .update({ isDeleted: true })
+      );
+
+      notification({ type: "success" });
+    } catch (e) {
+      console.error(e);
+      notification({ type: "error" });
+    }
+  };
+
+  const confirmDeleteContacts = (contactsId) =>
+    modalConfirm({
+      title: "¿Seguro que quieres eliminar?",
+      content: `se eliminara ${
+        checkedListLength > 1 ? "los contactos" : "el contacto"
+      }`,
+      onOk: () => deleteContacts(contactsId),
+    });
+
   return (
     <div>
+      <Button
+        type="primary"
+        danger
+        disabled={checkedListLength < 1}
+        onClick={() => confirmDeleteContacts(checkedList)}
+      >
+        Eliminar emails ({checkedListLength})
+      </Button>
       <List
         className="demo-loadmore-list"
         itemLayout={isMobile ? "vertical" : "horizontal"}
@@ -142,57 +197,65 @@ export const ContactInList = ({
               ),
             ]}
           >
-            <List.Item.Meta
-              avatar={
-                <ContactPicture
-                  onClick={() => {
-                    onSetContact(contact);
-                    onOpenDrawerContact();
-                  }}
-                  clientColors={findColor(contact?.clientId, clients)}
-                >
-                  <div className="item-client-logo">
-                    <img
-                      src={
-                        findClient(contact.clientId)?.isotipo
-                          ? findClient(contact.clientId).isotipo.thumbUrl
-                          : findClient(contact.clientId)?.logotipo?.thumbUrl ||
-                            NoFound
-                      }
-                      alt="client logo"
-                    />
-                  </div>
-                </ContactPicture>
-              }
-              description={
-                <InformationWrapper emailType={emailsType[contact.type]}>
-                  <Row gutter={[0, 3]}>
-                    {showContact(contact)}
-                    <Col xs={24} sm={12}>
-                      <EnvelopeByEmailColor
-                        title="Hostname"
-                        content={
-                          <TagHostname
-                            hostname={contact.hostname}
-                            clientColors={findColor(contact.clientId, clients)}
-                          />
+            <ContainerItem>
+              <Checkbox
+                onChange={(e) => onChangeChecked(contact.id, e.target.checked)}
+              />
+              <List.Item.Meta
+                avatar={
+                  <ContactPicture
+                    onClick={() => {
+                      onSetContact(contact);
+                      onOpenDrawerContact();
+                    }}
+                    clientColors={findColor(contact?.clientId, clients)}
+                  >
+                    <div className="item-client-logo">
+                      <img
+                        src={
+                          findClient(contact.clientId)?.isotipo
+                            ? findClient(contact.clientId).isotipo.thumbUrl
+                            : findClient(contact.clientId)?.logotipo
+                                ?.thumbUrl || NoFound
                         }
+                        alt="client logo"
                       />
-                    </Col>
-                    <Col xs={24} sm={12}>
-                      <EnvelopeByEmailColor
-                        title="Fecha creación"
-                        content={
-                          moment(contact?.createAt.toDate()).format(
-                            "DD/MM/YYYY HH:mm A"
-                          ) || ""
-                        }
-                      />
-                    </Col>
-                  </Row>
-                </InformationWrapper>
-              }
-            />
+                    </div>
+                  </ContactPicture>
+                }
+                description={
+                  <InformationWrapper emailType={emailsType[contact.type]}>
+                    <Row gutter={[0, 3]}>
+                      {showContact(contact)}
+                      <Col xs={24} sm={12}>
+                        <EnvelopeByEmailColor
+                          title="Hostname"
+                          content={
+                            <TagHostname
+                              hostname={contact.hostname}
+                              clientColors={findColor(
+                                contact.clientId,
+                                clients
+                              )}
+                            />
+                          }
+                        />
+                      </Col>
+                      <Col xs={24} sm={12}>
+                        <EnvelopeByEmailColor
+                          title="Fecha creación"
+                          content={
+                            moment(contact?.createAt.toDate()).format(
+                              "DD/MM/YYYY HH:mm A"
+                            ) || ""
+                          }
+                        />
+                      </Col>
+                    </Row>
+                  </InformationWrapper>
+                }
+              />
+            </ContainerItem>
           </List.Item>
         )}
       />
@@ -212,6 +275,7 @@ const ContactPicture = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+
     .item-client-logo {
       overflow: hidden;
       background: ${darken(0.08, clientColors?.bg || "#c4c4c4")};
@@ -223,6 +287,7 @@ const ContactPicture = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
+
       img {
         width: 90%;
         height: 100%;
@@ -231,4 +296,11 @@ const ContactPicture = styled.div`
       }
     }
   `}
+`;
+
+const ContainerItem = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 `;
