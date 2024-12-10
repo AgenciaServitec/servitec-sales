@@ -5,6 +5,7 @@ import { version } from "../../firebase";
 import { useAuthentication } from "../../providers";
 import {
   faAddressBook,
+  faCheckCircle,
   faHome,
   faLayerGroup,
   faSignOutAlt,
@@ -60,6 +61,16 @@ export const DrawerLayout = ({
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/users");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Revisión websites",
+      key: "review-websites",
+      icon: <FontAwesomeIcon icon={faCheckCircle} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/review-websites");
         setIsVisibleDrawer(false);
       },
     },

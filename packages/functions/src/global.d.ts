@@ -159,3 +159,9 @@ interface Spam extends DefaultFirestoreProps {
   type: "email" | "phone";
   value: string;
 }
+
+interface Web extends DefaultFirestoreProps {
+  id: string;
+  url: string;
+  status: "not_reviewed" | "up" | "down" | "rate_limited" | "with_problems";
+}

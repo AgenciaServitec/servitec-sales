@@ -6,7 +6,7 @@ type HttpsOptions = functionsHttps.HttpsOptions;
 
 const httpsOptions = (httpsOptions?: Partial<HttpsOptions>): HttpsOptions => ({
   timeoutSeconds: 540,
-  memory: "256MiB",
+  memory: "1GiB",
   maxInstances: 10,
   ...httpsOptions,
 });
