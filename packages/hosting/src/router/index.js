@@ -8,9 +8,10 @@ import {
   Login,
   Page403,
   Page404,
+  Spams,
   UserIntegration,
   Users,
-  Spams,
+  ReviewWebsitesIntegration,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -107,7 +108,17 @@ export const Router = () => (
         </PrivateRoute>
       }
     />
-
+    <Route
+      exact
+      path="/review-websites"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <ReviewWebsitesIntegration />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
     <Route
       exact
       path="/403"
