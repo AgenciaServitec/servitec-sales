@@ -5,7 +5,7 @@ import { searchDataEmail } from "../_utils";
 import moment from "moment/moment";
 import { fetchCollection, now } from "../../firebase/firestore";
 import { sendMailContactToReceptor } from "../../mailer";
-import { spamsDetected } from "../../utils";
+import { spamsDetectedAndFormatPhone } from "../../utils";
 
 interface Body {
   contact: EmailContact;
@@ -32,10 +32,10 @@ export const postContact = async (
 
     const client: Client | undefined = await fetchClient(contact.hostname);
 
-    const existsSpams = await spamsDetected(contact);
+    const existsSpams = await spamsDetectedAndFormatPhone(contact);
 
     if (existsSpams) {
-      res.status(412).send("spams_detected").end();
+      res.status(412).send("an_error_occurred").end();
       return;
     }
 
@@ -64,7 +64,7 @@ const fetchClient = async (hostname: string): Promise<Client | undefined> => {
     firestore.collection("clients").where("hostname", "==", hostname),
   );
 
-  return clients[0];
+  return clients?.[0];
 };
 
 const fetchSetContact = async (

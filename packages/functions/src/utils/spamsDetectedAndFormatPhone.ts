@@ -1,29 +1,37 @@
 import assert from "assert";
+import { isEmpty } from "lodash";
 import { fetchCollection } from "../firebase/firestore";
 import { spamsRef } from "../collections";
-import { isEmpty } from "lodash";
+import { logger } from "./logger";
 
-export const spamsDetected = async (contact: Contact): Promise<boolean> => {
+export const spamsDetectedAndFormatPhone = async (
+  contact: Contact,
+): Promise<boolean> => {
   assert(contact.email, "Missing contact.email!");
   assert(contact.phone.number, "Missing phone.number!");
 
-  const regex = /^9[0-9]{8}$/gm;
+  const regexPhoneNumber = /^9\d{8}$/;
 
-  if (!regex.test(contact.phone.number.toString())) return false;
+  if (!regexPhoneNumber.test(contact.phone.number.toString())) return true;
 
   const p0 = fetchCollection(
     spamsRef
+      .where("type", "==", "email")
       .where("value", "==", contact.email)
       .where("isDeleted", "==", false),
   );
 
   const p1 = fetchCollection(
     spamsRef
+      .where("type", "==", "phone")
       .where("value", "==", contact.phone.number.toString())
       .where("isDeleted", "==", false),
   );
 
   const [spamsWithEmails, spamsWithPhones] = await Promise.all([p0, p1]);
 
-  return !isEmpty([...spamsWithEmails, ...spamsWithPhones]);
+  logger.log("spamsWithEmails: ", spamsWithPhones);
+  logger.log("spamsWithPhones: ", spamsWithPhones);
+
+  return !isEmpty(spamsWithEmails) || !isEmpty(spamsWithPhones);
 };
