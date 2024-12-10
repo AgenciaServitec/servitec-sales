@@ -1,6 +1,6 @@
-import { Row, Col, List, Typography, Button, Modal, Tag } from "antd";
+import { Row, Col, List, Typography, Button, Modal, Tag, Flex } from "antd";
 
-export { Row, Col, List, Typography, Button, Modal, Tag };
+export { Row, Col, List, Typography, Button, Modal, Tag, Flex };
 
 export * from "./component-container";
 export * from "./calendar";
