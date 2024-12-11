@@ -1,10 +1,10 @@
 import { sendMail } from "./sendMail";
-import assert from "assert";
 import { createBody } from "./themes";
 import { Templates } from "./themes/common";
 import { common } from "../config";
 import { orderBy } from "lodash";
 import moment from "moment";
+import { createSubject } from "./themes/common/subjects";
 
 interface Props {
   websites: Web[];
@@ -19,17 +19,13 @@ interface Mail {
 export const sendMailReviewAllWebsites = async ({
   websites,
 }: Props): Promise<void> => {
-  assert(websites, "Missing websites");
+  const view = mapMail(websites);
 
   await sendMail(common.operatorDefault, {
     to: common.operatorDefault.receptorEmail,
     bcc: common.operatorDefault.receptorEmailsCopy,
-    subject: "[Servitec Sales] Reporte diario de websites",
-    html: createBody(
-      Templates.EMAIL_WEBSITE_REPORTS,
-      "common",
-      mapMail(websites),
-    ),
+    subject: createSubject(Templates.EMAIL_WEBSITES_REVIEW_REPORT, view),
+    html: createBody(Templates.EMAIL_WEBSITES_REVIEW_REPORT, "common", view),
   });
 };
 

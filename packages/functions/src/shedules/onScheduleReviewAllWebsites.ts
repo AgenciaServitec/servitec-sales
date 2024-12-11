@@ -1,9 +1,8 @@
 import { logger } from "../utils/logger";
 import { sendMailReviewAllWebsites } from "../mailer";
-import { fetchWebs, updateWeb } from "../collections";
+import { fetchWebs, updateWeb, updateSetting } from "../collections";
 import { checkWebsite } from "../api/review-website/checkWebsites";
 import assert from "assert";
-import { firestore } from "../firebase";
 import type { OnSchedule } from "./interface";
 import { defaultFirestoreProps } from "../utils";
 
@@ -23,10 +22,11 @@ export const onScheduleReviewAllWebsites: OnSchedule = async () => {
       );
     }
 
-    await firestore
-      .collection("settings")
-      .doc("default")
-      .update({ reviewAllWebsites: 0 });
+    await updateSetting("default", {
+      reviewAllWebsites: {
+        count: 0,
+      },
+    });
 
     const _websites = await fetchWebs();
     assert(_websites, "_websites missing!");

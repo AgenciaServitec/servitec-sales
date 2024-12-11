@@ -16,7 +16,7 @@ export const createSubject = <T extends ObjectType>(
       return `[${capitalize(view.client.name)}] - Mensaje ✉️`;
     case Templates.EMAIL_QUOTATION:
       return `[${capitalize(view.client.name)}] - Cotización 💵`;
-    case Templates.EMAIL_WEBSITE_REPORTS:
+    case Templates.EMAIL_WEBSITES_REVIEW_REPORT:
       return `[Servitec Sales] Reporte diario de websites`;
     default:
       return "";
