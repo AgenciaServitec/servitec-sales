@@ -242,7 +242,7 @@ const ReviewWebsites = ({
                 [(web) => statusPriority[web.status]],
                 ["asc"]
               )}
-              height={600}
+              height="60svh"
               itemHeight={47}
               loading={websLoading}
               itemKey="list-webs"
