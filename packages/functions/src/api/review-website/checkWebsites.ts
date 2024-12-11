@@ -21,7 +21,7 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
       validateStatus: (status) => status >= 200 && status < 300,
     });
 
-    const bodyContent = response.data?.trim();
+    const bodyContent = response.data.trim();
     const hasVisibleContent = bodyContent?.length > 0;
 
     return hasVisibleContent ? "up" : "with_problems";

@@ -29,6 +29,13 @@ interface Image {
   url: string;
 }
 
+interface Setting {
+  version: string;
+  reviewAllWebsites: {
+    count: number;
+  };
+}
+
 interface User extends DefaultFirestoreProps {
   readonly id: string;
   clientsIds: string[];

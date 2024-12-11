@@ -2,7 +2,8 @@ import "moment-timezone";
 import { app } from "./api";
 import functionsHttps = require("firebase-functions/v2/https");
 import functionScheduler = require("firebase-functions/v2/scheduler");
-import { onScheduleReviewAllWebsites } from "./shedules/onScheduleReviewAllWebsites";
+import { onScheduleReviewAllWebsites } from "./shedules";
+import { isProduction } from "./config";
 
 type HttpsOptions = functionsHttps.HttpsOptions;
 type ScheduleOptions = functionScheduler.ScheduleOptions;
@@ -16,18 +17,18 @@ const httpsOptions = (httpsOptions?: Partial<HttpsOptions>): HttpsOptions => ({
 
 const scheduleOptions = (
   schedule: string,
-  scheduleOptions?: Partial<ScheduleOptions>,
+  options?: Partial<ScheduleOptions>,
 ): ScheduleOptions => ({
-  schedule,
-  timeoutSeconds: 540,
+  schedule: isProduction ? schedule : "0 1 * * *",
   memory: "256MiB",
+  timeoutSeconds: 540,
   timeZone: "America/Lima",
-  ...scheduleOptions,
+  ...options,
 });
 
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
 exports.onScheduleReviewAllWebsites = functionScheduler.onSchedule(
-  scheduleOptions("/1 * * * *"),
+  scheduleOptions("0 3 * * *"),
   onScheduleReviewAllWebsites,
 );
