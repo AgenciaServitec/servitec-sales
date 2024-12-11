@@ -5,7 +5,6 @@ import {
   useCollectionData,
   useDocumentData,
 } from "react-firebase-hooks/firestore";
-import { firestore } from "../../firebase";
 import {
   Button,
   Flex,
@@ -13,8 +12,12 @@ import {
   modalConfirm,
   notification,
   Tag,
+  Spin,
+  Col,
+  List,
+  Row,
+  Typography,
 } from "../../components/ui";
-import { Col, List, Row, Typography } from "antd";
 import VirtualList from "rc-virtual-list";
 import { orderBy } from "lodash";
 import styled from "styled-components";
@@ -27,13 +30,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { WebComponentIntegration } from "./WebComponent";
 import dayjs from "dayjs";
-import { deleteWeb, settingsRef, websRef } from "../../firebase/collections";
+import {
+  deleteWeb,
+  settingsRef,
+  updateSetting,
+  websRef,
+} from "../../firebase/collections";
 import {
   useApiReviewAllWebsitesPost,
   useApiReviewWebsitePost,
 } from "../../api";
 import { webStatus } from "../../data-list";
-import Spin from "antd/lib/spin";
 
 const { Text } = Typography;
 
@@ -80,17 +87,16 @@ export const ReviewWebsitesIntegration = () => {
 
       if (!postReviewAllWebsitesResponse.ok) throw new Error("error_in_server");
 
-      await firestore
-        .collection("settings")
-        .doc("default")
-        .update({
-          reviewAllWebsites: {
-            count:
-              settings.reviewAllWebsites.count >= 2
-                ? 2
-                : settings.reviewAllWebsites.count + 1,
-          },
-        });
+      const isCounterOlderOrEqual = settings.reviewAllWebsites.count >= 2;
+
+      await updateSetting("default", {
+        reviewAllWebsites: {
+          ...settings.reviewAllWebsites,
+          count: isCounterOlderOrEqual
+            ? 2
+            : settings.reviewAllWebsites.count + 1,
+        },
+      });
 
       notification({ type: "success" });
     } catch (e) {
