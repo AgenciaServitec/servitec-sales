@@ -1,52 +1,50 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import { addWeb, getWebId, updateWeb } from "../../firebase/collections";
+import { addWeb, getWebId } from "../../firebase/collections";
 import {
+  Alert,
   Button,
   Col,
   Form,
-  Input,
   notification,
   Row,
+  TextArea,
 } from "../../components/ui";
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
+import { validateURL } from "../../utils";
 
 export const WebComponentIntegration = ({ web = null, webs, onCloseModal }) => {
-  const [webFirestore, setWebFirestore] = useState(null);
   const [saveLoading, setSaveLoading] = useState(false);
 
-  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
-
-  const isNew = !web?.id;
-
-  useEffect(() => {
-    const _web = isNew
-      ? {
-          id: getWebId(),
-        }
-      : webs.find((_w) => _w.id === web.id);
-
-    if (!_web) return onCloseModal();
-
-    setWebFirestore(_web);
-  }, [web?.id]);
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
   const onSaveWeb = async (formData) => {
     try {
       setSaveLoading(true);
 
-      isNew
-        ? await addWeb(
-            assignCreateProps({
-              id: webFirestore.id,
-              status: "not_reviewed",
-              ...formData,
-            })
-          )
-        : await updateWeb(webFirestore.id, assignUpdateProps({ ...formData }));
+      const arrayUrls = formData.url.split(",").map((url) => url.toLowerCase());
+
+      const isValidatedUrls = arrayUrls.every((url) => validateURL(url));
+      if (!isValidatedUrls)
+        return notification({
+          type: "error",
+          title: "Parece que hay una URL o más con el formato incorrecto.",
+        });
+
+      const promises = arrayUrls.map((url) =>
+        addWeb(
+          assignCreateProps({
+            id: getWebId(),
+            url,
+            status: "not_reviewed",
+          })
+        )
+      );
+
+      await Promise.all(promises);
 
       notification({ type: "success" });
 
@@ -61,7 +59,6 @@ export const WebComponentIntegration = ({ web = null, webs, onCloseModal }) => {
 
   return (
     <WebComponent
-      web={webFirestore}
       onSaveWeb={onSaveWeb}
       isSavingWeb={saveLoading}
       onCloseModal={onCloseModal}
@@ -69,7 +66,7 @@ export const WebComponentIntegration = ({ web = null, webs, onCloseModal }) => {
   );
 };
 
-const WebComponent = ({ web, onSaveWeb, isSavingWeb, onCloseModal }) => {
+const WebComponent = ({ onSaveWeb, isSavingWeb, onCloseModal }) => {
   const schema = yup.object({
     url: yup.string().url().required(),
   });
@@ -78,22 +75,14 @@ const WebComponent = ({ web, onSaveWeb, isSavingWeb, onCloseModal }) => {
     formState: { errors },
     handleSubmit,
     control,
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
+    defaultValues: {
+      url: "",
+    },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
-
-  useEffect(() => {
-    resetForm();
-  }, [web?.id]);
-
-  const resetForm = () => {
-    reset({
-      url: web?.url || "",
-    });
-  };
 
   const onSubmit = (formData) => onSaveWeb(formData);
 
@@ -103,12 +92,21 @@ const WebComponent = ({ web, onSaveWeb, isSavingWeb, onCloseModal }) => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
+              <Alert
+                type="info"
+                showIcon
+                message="Puedes agregar varias URLS separandolos con comas (,)"
+              />
+            </Col>
+            <Col span={24}>
               <Controller
                 name="url"
                 control={control}
                 render={({ field: { onChange, value, name } }) => (
-                  <Input
-                    label="Url de pagina web"
+                  <TextArea
+                    label="URL de pagina web"
+                    placeholder="https://www.google.com/,https://servitec-peru.com/"
+                    rows={4}
                     value={value}
                     onChange={onChange}
                     error={error(name)}

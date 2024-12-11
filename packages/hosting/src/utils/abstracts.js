@@ -25,3 +25,8 @@ export const findColor = (clientId, clients = []) => {
     bg: client?.bgColor || "#c4c4c4",
   };
 };
+
+export const validateURL = (url) => {
+  const regex = /^(https?:\/\/)([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(:\d+)?(\/.*)?$/;
+  return regex.test(url);
+};
