@@ -4,6 +4,8 @@ import { Templates } from "./themes/common";
 import { common } from "../config";
 import { orderBy } from "lodash";
 import moment from "moment";
+import "moment/locale/es";
+
 import { createSubject } from "./themes/common/subjects";
 
 interface Props {
@@ -19,6 +21,8 @@ interface Mail {
 export const sendMailReviewAllWebsites = async ({
   websites,
 }: Props): Promise<void> => {
+  moment.locale("es");
+
   const view = mapMail(websites);
 
   await sendMail(common.operatorDefault, {
@@ -32,7 +36,9 @@ export const sendMailReviewAllWebsites = async ({
 const mapMail = (websites: Web[]): Mail => ({
   lastDateReviewWebsites: moment(
     orderBy(websites, "updateAt", "desc")[0].updateAt.toDate(),
-  ).format("dddd DD MMMM YYYY HH:mm A"),
+  )
+    .tz("America/Lima")
+    .format("dddd DD MMMM YYYY HH:mm A"),
   totalReviewWebsites: websites.length,
   down: websites
     .filter((website) => website.status === "down")
