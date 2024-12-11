@@ -4,7 +4,7 @@ import { fetchCollectionOnce, fetchDocumentOnce } from "../utils";
 export const websRef = firestore.collection("webs");
 export const getWebId = () => websRef.doc().id;
 
-export const fetchWeb = () => async (id) => fetchDocumentOnce(websRef.doc(id));
+export const fetchWeb = async (id) => fetchDocumentOnce(websRef.doc(id));
 
 export const fetchWebs = async () =>
   fetchCollectionOnce(websRef.where("isDeleted", "==", false));

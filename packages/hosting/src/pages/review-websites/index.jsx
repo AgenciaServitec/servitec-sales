@@ -17,6 +17,7 @@ import {
   Spin,
   Tag,
   Typography,
+  Space,
 } from "../../components/ui";
 import VirtualList from "rc-virtual-list";
 import { orderBy } from "lodash";
@@ -28,7 +29,7 @@ import {
   faTerminal,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import { WebComponentIntegration } from "./WebComponent";
+import { AddWebsitesIntegration } from "./AddWebsites";
 import dayjs from "dayjs";
 import {
   deleteWeb,
@@ -41,6 +42,7 @@ import {
   useApiReviewWebsitePost,
 } from "../../api";
 import { webStatus } from "../../data-list";
+import { AddEmailsIntegration } from "./AddEmails";
 
 const { Text } = Typography;
 
@@ -118,6 +120,12 @@ export const ReviewWebsitesIntegration = () => {
     }
   };
 
+  const onConfirmRunReviewWebsite = (webId) =>
+    modalConfirm({
+      title: "¿Seguro que quieres ejecutar la revisión de todas las webs?",
+      onOk: async () => await onRunReviewAllWebsites(webId),
+    });
+
   const loading = settingsLoading || websLoading;
 
   return (
@@ -128,7 +136,7 @@ export const ReviewWebsitesIntegration = () => {
           isMobile={isMobile}
           webs={webs}
           onConfirmRemoveWeb={onConfirmRemoveWeb}
-          onRunReviewAllWebsites={onRunReviewAllWebsites}
+          onRunReviewAllWebsites={onConfirmRunReviewWebsite}
           webVerifiedLoading={postReviewAllWebsitesLoading}
           onRunReviewWebsite={onRunReviewWebsite}
           postReviewWebsiteLoading={postReviewWebsiteLoading}
@@ -151,19 +159,25 @@ const ReviewWebsites = ({
   settings,
 }) => {
   const [websiteSelected, setWebsiteSelected] = useState(null);
+  const { onShowModal, onCloseModal } = useModal();
 
   const websView = webs;
 
-  const { isTablet } = useDevice();
-  const { onShowModal, onCloseModal } = useModal();
-
-  const onShowWebComponent = (web = null) => {
+  const onShowAddWebComponent = (web = null) => {
     onShowModal({
       title: "Web",
-      width: `${isTablet ? "90%" : "50%"}`,
+      width: `${isMobile ? "100%" : "50%"}`,
       onRenderBody: () => (
-        <WebComponentIntegration key={web?.id} onCloseModal={onCloseModal} />
+        <AddWebsitesIntegration key={web?.id} onCloseModal={onCloseModal} />
       ),
+    });
+  };
+
+  const onShowAddEmailsComponent = () => {
+    onShowModal({
+      title: "Emails",
+      width: `${isMobile ? "100%" : "50%"}`,
+      onRenderBody: () => <AddEmailsIntegration onCloseModal={onCloseModal} />,
     });
   };
 
@@ -182,13 +196,22 @@ const ReviewWebsites = ({
       <Row gutter={[16, 24]}>
         <Col span={24}>
           <Flex justify="space-between" wrap="wrap" gap={16}>
-            <Button
-              type="primary"
-              icon={<FontAwesomeIcon icon={faPlus} />}
-              onClick={() => onShowWebComponent()}
-            >
-              Agregar web
-            </Button>
+            <Space>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faPlus} />}
+                onClick={() => onShowAddWebComponent()}
+              >
+                Agregar web
+              </Button>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faPlus} />}
+                onClick={() => onShowAddEmailsComponent()}
+              >
+                Emails
+              </Button>
+            </Space>
             <Flex vertical gap={3}>
               <Button
                 type="primary"

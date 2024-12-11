@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import { validateURL } from "../../utils";
 
-export const WebComponentIntegration = ({ onCloseModal }) => {
+export const AddWebsitesIntegration = ({ onCloseModal }) => {
   const [saveLoading, setSaveLoading] = useState(false);
 
   const { assignCreateProps } = useDefaultFirestoreProps();
@@ -25,12 +25,14 @@ export const WebComponentIntegration = ({ onCloseModal }) => {
     try {
       setSaveLoading(true);
 
-      const arrayUrls = formData.url.split(",").map((url) => url.toLowerCase());
+      const arrayUrls = formData.url
+        .split(",")
+        .map((url) => url.trim().toLowerCase());
 
       const isValidatedUrls = arrayUrls.every((url) => validateURL(url));
       if (!isValidatedUrls)
         return notification({
-          type: "error",
+          type: "warning",
           title: "Parece que hay una URL o más con el formato incorrecto.",
         });
 
@@ -58,7 +60,7 @@ export const WebComponentIntegration = ({ onCloseModal }) => {
   };
 
   return (
-    <WebComponent
+    <AddWebsites
       onSaveWeb={onSaveWeb}
       isSavingWeb={saveLoading}
       onCloseModal={onCloseModal}
@@ -66,7 +68,7 @@ export const WebComponentIntegration = ({ onCloseModal }) => {
   );
 };
 
-const WebComponent = ({ onSaveWeb, isSavingWeb, onCloseModal }) => {
+const AddWebsites = ({ onSaveWeb, isSavingWeb, onCloseModal }) => {
   const schema = yup.object({
     url: yup.string().url().required(),
   });

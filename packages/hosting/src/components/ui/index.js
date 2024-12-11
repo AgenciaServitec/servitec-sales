@@ -9,9 +9,22 @@ import {
   Flex,
   Spin,
   Alert,
+  Space,
 } from "antd";
 
-export { Row, Col, List, Typography, Button, Modal, Tag, Flex, Spin, Alert };
+export {
+  Row,
+  Col,
+  List,
+  Typography,
+  Button,
+  Modal,
+  Tag,
+  Flex,
+  Spin,
+  Alert,
+  Space,
+};
 
 export * from "./component-container";
 export * from "./calendar";
