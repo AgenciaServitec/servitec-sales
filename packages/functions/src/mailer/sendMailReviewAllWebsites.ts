@@ -1,42 +1,44 @@
 import { sendMail } from "./sendMail";
 import assert from "assert";
-import { mapTemplateClaimMailMustache } from "./utils";
-import { createSubject } from "./themes/common/subjects";
 import { createBody } from "./themes";
 import { Templates } from "./themes/common";
-import { fetchCollection } from "../firebase/firestore";
-import { firestore } from "../firebase";
+import { common } from "../config";
+import { orderBy } from "lodash";
+import moment from "moment";
 
 interface Props {
-  claim: EmailClaim;
+  websites: Web[];
+}
+
+interface Mail {
+  lastDateReviewWebsites: string;
+  totalReviewWebsites: number;
+  down: string[];
 }
 
 export const sendMailReviewAllWebsites = async ({
-  claim,
+  websites,
 }: Props): Promise<void> => {
-  assert(claim, "Missing claim");
+  assert(websites, "Missing websites");
 
-  const client: Client | undefined = await fetchClientByHostname(
-    claim.hostname,
-  );
-  assert(client, "Missing client by hostname:" + claim.hostname);
-
-  const view = mapTemplateClaimMailMustache(claim, client);
-
-  await sendMail(client, {
-    to: client.receptorEmail,
-    bcc: client.receptorEmailsCopy,
+  await sendMail(common.operatorDefault, {
+    to: common.operatorDefault.receptorEmail,
+    bcc: common.operatorDefault.receptorEmailsCopy,
     subject: "[Servitec Sales] Reporte diario de websites",
-    html: createBody(Templates.EMAIL_CLAIM, "common", view),
+    html: createBody(
+      Templates.EMAIL_WEBSITE_REPORTS,
+      "common",
+      mapMail(websites),
+    ),
   });
 };
 
-const fetchClientByHostname = async (
-  hostname: string,
-): Promise<Client | undefined> => {
-  const clients = await fetchCollection<Client>(
-    firestore.collection("clients").where("hostname", "==", hostname),
-  );
-
-  return clients[0];
-};
+const mapMail = (websites: Web[]): Mail => ({
+  lastDateReviewWebsites: moment(
+    orderBy(websites, "updateAt", "desc")[0].updateAt.toDate(),
+  ).format("dddd DD MMMM YYYY HH:mm A"),
+  totalReviewWebsites: websites.length,
+  down: websites
+    .filter((website) => website.status === "down")
+    .map((_website) => _website.url),
+});

@@ -28,6 +28,6 @@ const scheduleOptions = (
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
 exports.onScheduleReviewAllWebsites = functionScheduler.onSchedule(
-  scheduleOptions("0 8 * * *"),
+  scheduleOptions("/1 * * * *"),
   onScheduleReviewAllWebsites,
 );
