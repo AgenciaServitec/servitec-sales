@@ -16,7 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
 import { validateURL } from "../../utils";
 
-export const WebComponentIntegration = ({ web = null, webs, onCloseModal }) => {
+export const WebComponentIntegration = ({ onCloseModal }) => {
   const [saveLoading, setSaveLoading] = useState(false);
 
   const { assignCreateProps } = useDefaultFirestoreProps();

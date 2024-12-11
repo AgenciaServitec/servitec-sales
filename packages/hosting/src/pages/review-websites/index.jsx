@@ -7,15 +7,15 @@ import {
 } from "react-firebase-hooks/firestore";
 import {
   Button,
+  Col,
   Flex,
   IconAction,
+  List,
   modalConfirm,
   notification,
-  Tag,
-  Spin,
-  Col,
-  List,
   Row,
+  Spin,
+  Tag,
   Typography,
 } from "../../components/ui";
 import VirtualList from "rc-virtual-list";
@@ -162,12 +162,7 @@ const ReviewWebsites = ({
       title: "Web",
       width: `${isTablet ? "90%" : "50%"}`,
       onRenderBody: () => (
-        <WebComponentIntegration
-          key={web?.id}
-          web={web}
-          webs={webs}
-          onCloseModal={onCloseModal}
-        />
+        <WebComponentIntegration key={web?.id} onCloseModal={onCloseModal} />
       ),
     });
   };
