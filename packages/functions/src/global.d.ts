@@ -32,7 +32,9 @@ interface Image {
 interface Setting {
   version: string;
   reviewAllWebsites: {
+    bccEmails?: string;
     count: number;
+    toEmails: string;
   };
 }
 

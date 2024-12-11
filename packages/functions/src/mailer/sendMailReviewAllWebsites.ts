@@ -10,24 +10,33 @@ import { createSubject } from "./themes/common/subjects";
 
 interface Props {
   websites: Web[];
+  settings: Setting;
 }
 
 interface Mail {
   lastDateReviewWebsites: string;
   totalReviewWebsites: number;
   down: string[];
+  withProblems: string[];
+  rateLimited: string[];
+  up: string[];
 }
 
 export const sendMailReviewAllWebsites = async ({
   websites,
+  settings,
 }: Props): Promise<void> => {
   moment.locale("es");
 
   const view = mapMail(websites);
 
   await sendMail(common.operatorDefault, {
-    to: common.operatorDefault.receptorEmail,
-    bcc: common.operatorDefault.receptorEmailsCopy,
+    to:
+      settings.reviewAllWebsites.toEmails ||
+      common.operatorDefault.receptorEmail,
+    bcc:
+      settings.reviewAllWebsites.bccEmails ||
+      common.operatorDefault.receptorEmailsCopy,
     subject: createSubject(Templates.EMAIL_WEBSITES_REVIEW_REPORT, view),
     html: createBody(Templates.EMAIL_WEBSITES_REVIEW_REPORT, "common", view),
   });
@@ -38,9 +47,19 @@ const mapMail = (websites: Web[]): Mail => ({
     orderBy(websites, "updateAt", "desc")[0].updateAt.toDate(),
   )
     .tz("America/Lima")
+    .locale("es")
     .format("dddd DD MMMM YYYY HH:mm A"),
   totalReviewWebsites: websites.length,
   down: websites
     .filter((website) => website.status === "down")
+    .map((_website) => _website.url),
+  withProblems: websites
+    .filter((website) => website.status === "with_problems")
+    .map((_website) => _website.url),
+  rateLimited: websites
+    .filter((website) => website.status === "rate_limited")
+    .map((_website) => _website.url),
+  up: websites
+    .filter((website) => website.status === "up")
     .map((_website) => _website.url),
 });

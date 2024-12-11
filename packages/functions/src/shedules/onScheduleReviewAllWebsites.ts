@@ -1,6 +1,11 @@
 import { logger } from "../utils/logger";
 import { sendMailReviewAllWebsites } from "../mailer";
-import { fetchWebs, updateWeb, updateSetting } from "../collections";
+import {
+  fetchSetting,
+  fetchWebs,
+  updateSetting,
+  updateWeb,
+} from "../collections";
 import { checkWebsite } from "../api/review-website/checkWebsites";
 import assert from "assert";
 import type { OnSchedule } from "./interface";
@@ -32,8 +37,12 @@ const onReviewAllWebsites = async (): Promise<void> => {
     );
   }
 
+  const settings = await fetchSetting("default");
+  assert(settings, "settings missing!");
+
   await updateSetting("default", {
     reviewAllWebsites: {
+      ...settings?.reviewAllWebsites,
       count: 0,
     },
   });
@@ -41,5 +50,5 @@ const onReviewAllWebsites = async (): Promise<void> => {
   const _websites = await fetchWebs();
   assert(_websites, "_websites missing!");
 
-  await sendMailReviewAllWebsites({ websites: _websites });
+  await sendMailReviewAllWebsites({ websites: _websites, settings });
 };
