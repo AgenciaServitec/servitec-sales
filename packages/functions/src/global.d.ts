@@ -29,6 +29,15 @@ interface Image {
   url: string;
 }
 
+interface Setting {
+  version: string;
+  reviewAllWebsites: {
+    bccEmails?: string;
+    count: number;
+    toEmails: string;
+  };
+}
+
 interface User extends DefaultFirestoreProps {
   readonly id: string;
   clientsIds: string[];

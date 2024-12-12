@@ -1,20 +1,21 @@
 import { createTransport } from "nodemailer";
-import { currentConfig } from "../config";
+import { common } from "../config";
 import Mail from "nodemailer/lib/mailer";
 import { capitalize } from "lodash";
 
 export const sendMail = async (
-  operator: Client,
+  operator: Partial<Client>,
   mailOptions: Mail.Options,
 ): Promise<void> => {
-  await createTransport(
-    operator.smtpConfig || currentConfig["node-mailer"],
-  ).sendMail({
-    ...mailOptions,
-    from: `${capitalize(operator.name)} <no-reply@${
-      operator?.smtpConfig?.auth?.user ||
-      currentConfig["node-mailer"].auth?.user
-    }>`,
-    replyTo: `${capitalize(operator.name)} <no-reply@${operator.hostname}>`,
-  });
+  const _operator = operator || common.operatorDefault;
+
+  await createTransport(operator?.smtpConfig || common["node-mailer"]).sendMail(
+    {
+      ...mailOptions,
+      from: `${capitalize(_operator.name)} <no-reply@${
+        operator?.smtpConfig?.auth?.user || common["node-mailer"].auth?.user
+      }>`,
+      replyTo: `${capitalize(_operator.name)} <no-reply@${_operator.hostname}>`,
+    },
+  );
 };

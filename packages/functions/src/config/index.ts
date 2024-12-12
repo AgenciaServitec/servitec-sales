@@ -9,4 +9,6 @@ const isProduction = currentEnvironment === "production";
 
 const currentConfig = config[currentEnvironment];
 
-export { currentEnvironment, isProduction, currentConfig, config };
+const common = config.common;
+
+export { currentEnvironment, isProduction, currentConfig, config, common };
