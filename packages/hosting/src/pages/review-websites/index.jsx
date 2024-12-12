@@ -25,6 +25,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowsSpin,
+  faEnvelope,
   faPaperPlane,
   faPlus,
   faTerminal,
@@ -232,25 +233,11 @@ const ReviewWebsites = ({
             <Space>
               <Button
                 type="primary"
+                size="large"
                 icon={<FontAwesomeIcon icon={faPlus} />}
                 onClick={() => onShowAddWebComponent()}
               >
                 Agregar web
-              </Button>
-              <Button
-                type="primary"
-                icon={<FontAwesomeIcon icon={faPlus} />}
-                onClick={() => onShowAddEmailsComponent()}
-              >
-                Emails
-              </Button>
-              <Button
-                type="primary"
-                icon={<FontAwesomeIcon icon={faPaperPlane} />}
-                onClick={() => onConfirmResendMailReviewAllWebsites()}
-                loading={postResendMailReviewAllWebsitesLoading}
-              >
-                Renviar mail
               </Button>
             </Space>
             <Flex vertical gap={3}>
@@ -273,9 +260,23 @@ const ReviewWebsites = ({
         </Col>
         <Col span={24}>
           <Flex justify="space-between" wrap="wrap" gap={10}>
-            <Text>
-              <strong>{websView.length}</strong> Resultados
-            </Text>
+            <Flex gap={7} wrap="wrap">
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faEnvelope} />}
+                onClick={() => onShowAddEmailsComponent()}
+              >
+                Emails
+              </Button>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faPaperPlane} />}
+                onClick={() => onConfirmResendMailReviewAllWebsites()}
+                loading={postResendMailReviewAllWebsitesLoading}
+              >
+                Renviar reporte por correo
+              </Button>
+            </Flex>
             <Flex
               justify="space-between"
               wrap="wrap"
@@ -298,6 +299,11 @@ const ReviewWebsites = ({
               ))}
             </Flex>
           </Flex>
+        </Col>
+        <Col span={24}>
+          <Text>
+            <strong>{websView.length}</strong> Resultados
+          </Text>
         </Col>
         <Col span={24}>
           <List itemLayout={isMobile ? "vertical" : "horizontal"}>

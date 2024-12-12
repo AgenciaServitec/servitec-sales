@@ -117,6 +117,9 @@ const AddEmails = ({ setting, onSaveEmails, isSavingWeb, onCloseModal }) => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
             <Col span={24}>
+              El reporte diario de websites, se enviaran a los siguientes emails
+            </Col>
+            <Col span={24}>
               <Alert
                 type="info"
                 showIcon
