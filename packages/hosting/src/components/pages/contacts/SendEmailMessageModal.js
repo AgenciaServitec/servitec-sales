@@ -93,6 +93,7 @@ export const SendEmailMessageModal = ({
       open={isVisibleSendEmailModal}
       closable={onCLickIsVisibleSendEmailModal}
       onCancel={onCLickIsVisibleSendEmailModal}
+      footer={null}
     >
       <Form layout="vertical" onSubmit={handleSubmit(onSubmitSendEmail)}>
         <Row gutter={[16, 16]}>

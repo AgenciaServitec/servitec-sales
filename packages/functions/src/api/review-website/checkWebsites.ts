@@ -28,27 +28,31 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
 
     // @ts-ignore
   } catch (error: never) {
-    const isError429 = error.response?.status === 429;
-    const isError403 = error.response?.status === 403;
+    if (error.response) {
+      const status = error.response.status;
 
-    if (isError429) {
-      logger.warn(`Error 429: Too many requests for ${url}`);
-      return "rate_limited";
+      if (status === 429) {
+        logger.warn(`Error 429: Too many requests for ${url}`);
+        return "rate_limited";
+      }
+
+      if (status === 403) {
+        logger.warn(`Error 403: Access denied for ${url}`);
+        return "with_problems";
+      }
+
+      if (status >= 500) {
+        logger.warn(`Error 500: Server issue at ${url}`);
+        return "down";
+      }
     }
 
-    if (isError403) {
-      logger.warn(`Error 403: Denied access for ${url}`);
+    if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND") {
+      logger.warn(`Network error (${error.code}) for ${url}`);
       return "with_problems";
     }
 
-    if (!isError429 || !isError403) {
-      logger.warn(`checkWebsite: ${url} => ${error.message}`);
-    }
-
-    if (error.code === "ECONNREFUSED") {
-      return "with_problems";
-    }
-
+    logger.error(`Unhandled error for ${url}: ${error.message}`);
     throw new Error(error);
   }
 };

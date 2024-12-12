@@ -3,7 +3,6 @@ import assert from "assert";
 import { fetchWeb, updateWeb } from "../../collections";
 import { defaultFirestoreProps } from "../../utils";
 import { checkWebsite } from "./checkWebsites";
-import { logger } from "../../utils/logger";
 
 interface Params {
   webId: string;
@@ -27,8 +26,6 @@ export const postReviewWebsite = async (
     assert(web, "web missing!");
 
     const resultCheckWebsite = await checkWebsite(web.url);
-
-    logger.log("RESULT-CHECK-WEBSITE: ", resultCheckWebsite);
 
     await updateFirestoreWeb({ ...web, status: resultCheckWebsite });
 
