@@ -13,7 +13,11 @@ import { postVisitor } from "./visitors";
 import { patchUser, postUser, putUser } from "./users";
 import { getChat } from "./chats/getChat";
 import { postMessage } from "./chats";
-import { postReviewAllWebsites, postReviewWebsite } from "./review-website";
+import {
+  postResendMailReviewAllWebsites,
+  postReviewAllWebsites,
+  postReviewWebsite,
+} from "./review-website";
 
 const app: express.Application = express();
 
@@ -120,6 +124,11 @@ app.post("/chats/message", [], postMessage);
 
 app.post("/webs/review/all", [], postReviewAllWebsites);
 app.post("/webs/review/:webId", [], postReviewWebsite);
+app.post(
+  "/webs/resend/review-all-websites",
+  [],
+  postResendMailReviewAllWebsites,
+);
 
 app.use(errorHandler);
 

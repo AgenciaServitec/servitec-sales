@@ -4,3 +4,4 @@ export * from "./useApiUserPut";
 export * from "./useApiUserPatch";
 export * from "./useApiReviewAllWebsitesPost";
 export * from "./useApiReviewWebsitePost";
+export * from "./useApiResendMailReviewAllWebsitesPost";

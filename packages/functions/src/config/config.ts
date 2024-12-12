@@ -14,9 +14,6 @@ interface ConfigCommon {
     phone: Phone;
     receptorEmail: string;
     receptorEmailsCopy: string;
-    textColor: string;
-    hostname: string;
-    theme: string;
   };
 }
 
@@ -45,18 +42,16 @@ export const config: Config = {
         name: "logotipo.webp",
         thumbUrl: "",
         uid: "rc-upload-1713388010461-5",
-        url: "https://storage.googleapis.com/sendingemails-348505.appspot.com/clients/valUnIFIxl1uPWDR0OKq/logotipo/thumbs/logotipo_350x167.png",
+        url: "https://storage.googleapis.com/sendingemails-348505.appspot.com/resources/logo.webp",
       },
       name: "Servitec Sales",
       phone: {
         countryCode: "+51",
         number: 987654321,
       },
-      receptorEmail: "galafloresangelemilio@gmail.com",
-      receptorEmailsCopy: "nmoriano26@gmail.com",
-      textColor: "#000",
-      hostname: "agenciaservitec.com",
-      theme: "",
+      receptorEmail: "beto1perk@gmail.com",
+      receptorEmailsCopy:
+        "nmoriano26@gmail.com,galafloresangelemilio@gmail.com",
     },
   },
   development: {

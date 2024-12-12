@@ -42,7 +42,7 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
     }
 
     if (!isError429 || !isError403) {
-      logger.error(`checkWebsite: ${url} => ${error.message}`);
+      logger.warn(`checkWebsite: ${url} => ${error.message}`);
     }
 
     if (error.code === "ECONNREFUSED") {

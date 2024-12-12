@@ -14,10 +14,10 @@ import {
   modalConfirm,
   notification,
   Row,
+  Space,
   Spin,
   Tag,
   Typography,
-  Space,
 } from "../../components/ui";
 import VirtualList from "rc-virtual-list";
 import { orderBy } from "lodash";
@@ -25,6 +25,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowsSpin,
+  faPaperPlane,
   faPlus,
   faTerminal,
   faTrash,
@@ -38,6 +39,7 @@ import {
   websRef,
 } from "../../firebase/collections";
 import {
+  useApiResendMailReviewAllWebsitesPost,
   useApiReviewAllWebsitesPost,
   useApiReviewWebsitePost,
 } from "../../api";
@@ -59,6 +61,11 @@ export const ReviewWebsitesIntegration = () => {
     postReviewWebsiteLoading,
     postReviewWebsiteResponse,
   } = useApiReviewWebsitePost();
+  const {
+    postResendMailReviewAllWebsites,
+    postResendMailReviewAllWebsitesLoading,
+    postResendMailReviewAllWebsitesResponse,
+  } = useApiResendMailReviewAllWebsitesPost();
 
   const [settings, settingsLoading, settingsError] = useDocumentData(
     authUser ? settingsRef.doc("default") : null
@@ -126,21 +133,45 @@ export const ReviewWebsitesIntegration = () => {
       onOk: async () => await onRunReviewAllWebsites(webId),
     });
 
+  const onConfirmResendMailReviewAllWebsites = async () =>
+    modalConfirm({
+      title: "¿Estás seguro de que quieres reenviar el correo?",
+      onOk: async () => {
+        try {
+          await postResendMailReviewAllWebsites();
+
+          if (!postResendMailReviewAllWebsitesResponse.ok)
+            throw new Error("error_in_server");
+
+          notification({ type: "success" });
+        } catch (e) {
+          console.error("errorResendReviewAllWebsites: ", e);
+          notification({ type: "error" });
+        }
+      },
+    });
+
   const loading = settingsLoading || websLoading;
 
   return (
     <ModalProvider>
       <Spin spinning={loading}>
         <ReviewWebsites
-          websLoading={websLoading}
           isMobile={isMobile}
           webs={webs}
+          websLoading={websLoading}
+          settings={settings}
           onConfirmRemoveWeb={onConfirmRemoveWeb}
           onRunReviewAllWebsites={onConfirmRunReviewWebsite}
           webVerifiedLoading={postReviewAllWebsitesLoading}
           onRunReviewWebsite={onRunReviewWebsite}
           postReviewWebsiteLoading={postReviewWebsiteLoading}
-          settings={settings}
+          onConfirmResendMailReviewAllWebsites={
+            onConfirmResendMailReviewAllWebsites
+          }
+          postResendMailReviewAllWebsitesLoading={
+            postResendMailReviewAllWebsitesLoading
+          }
         />
       </Spin>
     </ModalProvider>
@@ -148,15 +179,17 @@ export const ReviewWebsitesIntegration = () => {
 };
 
 const ReviewWebsites = ({
-  websLoading,
   isMobile,
   webs,
+  websLoading,
+  settings,
   onConfirmRemoveWeb,
   onRunReviewAllWebsites,
   webVerifiedLoading,
   onRunReviewWebsite,
   postReviewWebsiteLoading,
-  settings,
+  onConfirmResendMailReviewAllWebsites,
+  postResendMailReviewAllWebsitesLoading,
 }) => {
   const [websiteSelected, setWebsiteSelected] = useState(null);
   const { onShowModal, onCloseModal } = useModal();
@@ -210,6 +243,14 @@ const ReviewWebsites = ({
                 onClick={() => onShowAddEmailsComponent()}
               >
                 Emails
+              </Button>
+              <Button
+                type="primary"
+                icon={<FontAwesomeIcon icon={faPaperPlane} />}
+                onClick={() => onConfirmResendMailReviewAllWebsites()}
+                loading={postResendMailReviewAllWebsitesLoading}
+              >
+                Renviar mail
               </Button>
             </Space>
             <Flex vertical gap={3}>
