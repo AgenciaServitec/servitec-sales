@@ -22,12 +22,7 @@ import { firestore } from "../../../firebase";
 import { useAuthentication, useGlobalData } from "../../../providers";
 import { phoneCodes } from "../../../data-list";
 import { assign } from "lodash";
-import {
-  addOnlyNotExists,
-  addWeb,
-  getWebId,
-  websRef,
-} from "../../../firebase/collections";
+import { addOnlyNotExists } from "../../../firebase/collections";
 
 export const ClientIntegration = () => {
   const { clientId } = useParams();

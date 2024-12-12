@@ -20,12 +20,7 @@ import { capitalize, isEmpty } from "lodash";
 import { Link } from "react-router-dom";
 import { fetchCollectionOnce, firestore } from "../../firebase";
 import { findColor, newUrl } from "../../utils";
-import {
-  deleteWeb,
-  fetchWeb,
-  fetchWebs,
-  websRef,
-} from "../../firebase/collections";
+import { deleteWeb, websRef } from "../../firebase/collections";
 
 const { Title, Text } = Typography;
 

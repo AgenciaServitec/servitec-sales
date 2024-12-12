@@ -34,10 +34,8 @@ import { AddWebsitesIntegration } from "./AddWebsites";
 import dayjs from "dayjs";
 import {
   deleteWeb,
-  fetchWebs,
   settingsRef,
   updateSetting,
-  updateWeb,
   websRef,
 } from "../../firebase/collections";
 import {
@@ -47,7 +45,6 @@ import {
 } from "../../api";
 import { webStatus } from "../../data-list";
 import { AddEmailsIntegration } from "./AddEmails";
-import { newUrl } from "../../utils";
 
 const { Text } = Typography;
 
