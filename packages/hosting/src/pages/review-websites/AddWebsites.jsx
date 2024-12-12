@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { addWeb, getWebId } from "../../firebase/collections";
+import { addWeb, getWebId, websRef } from "../../firebase/collections";
 import {
   Alert,
   Button,
@@ -36,17 +36,19 @@ export const AddWebsitesIntegration = ({ onCloseModal }) => {
           title: "Parece que hay una URL o más con el formato incorrecto.",
         });
 
-      const promises = arrayUrls.map((url) =>
-        addWeb(
-          assignCreateProps({
-            id: getWebId(),
-            url,
-            status: "not_reviewed",
-          })
-        )
-      );
+      for (const url of arrayUrls) {
+        const querySnapshot = await websRef.where("url", "==", url).get();
 
-      await Promise.all(promises);
+        if (querySnapshot.empty) {
+          await addWeb(
+            assignCreateProps({
+              id: getWebId(),
+              url,
+              status: "not_reviewed",
+            })
+          );
+        }
+      }
 
       notification({ type: "success" });
 
