@@ -19,13 +19,21 @@ import * as yup from "yup";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { Upload } from "../../../components";
 import { firestore } from "../../../firebase";
-import { useGlobalData } from "../../../providers";
+import { useAuthentication, useGlobalData } from "../../../providers";
 import { phoneCodes } from "../../../data-list";
 import { assign } from "lodash";
+import {
+  addOnlyNotExists,
+  addWeb,
+  getWebId,
+  websRef,
+} from "../../../firebase/collections";
 
 export const ClientIntegration = () => {
-  const navigate = useNavigate();
   const { clientId } = useParams();
+  const navigate = useNavigate();
+  const { authUser } = useAuthentication();
+
   const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const { clients } = useGlobalData();
@@ -57,6 +65,11 @@ export const ClientIntegration = () => {
             : assignUpdateProps(mapClient(client, formData)),
           { merge: true }
         );
+
+      await addOnlyNotExists(
+        [`https://${formData.hostname.toLowerCase()}`],
+        authUser
+      );
 
       notification({ type: "success" });
 

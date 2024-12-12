@@ -16,10 +16,16 @@ import { useDevice } from "../../hooks";
 import { useAuthentication, useGlobalData } from "../../providers";
 import { useNavigate } from "react-router";
 import styled, { css } from "styled-components";
-import { capitalize } from "lodash";
+import { capitalize, isEmpty } from "lodash";
 import { Link } from "react-router-dom";
-import { firestore } from "../../firebase";
-import { findColor } from "../../utils";
+import { fetchCollectionOnce, firestore } from "../../firebase";
+import { findColor, newUrl } from "../../utils";
+import {
+  deleteWeb,
+  fetchWeb,
+  fetchWebs,
+  websRef,
+} from "../../firebase/collections";
 
 const { Title, Text } = Typography;
 
@@ -43,12 +49,25 @@ export const ClientsIntegration = () => {
   const onAddClient = () => navigateTo("new");
 
   const onEditClient = (client) => navigateTo(client.id);
+  const onDeletedWeb = async (client) => {
+    const webs = await fetchCollectionOnce(
+      websRef
+        .where("url", "==", newUrl(`https://${client.hostname}`).origin)
+        .limit(1)
+    );
+
+    if (!isEmpty(webs)) {
+      await deleteWeb(webs[0].id);
+    }
+  };
 
   const onRemoveClient = async (client) => {
     await firestore
       .collection("clients")
       .doc(client.id)
       .set({ isDeleted: true }, { merge: true });
+
+    await onDeletedWeb(client);
   };
 
   const onConfirmRemoveClient = (client) =>

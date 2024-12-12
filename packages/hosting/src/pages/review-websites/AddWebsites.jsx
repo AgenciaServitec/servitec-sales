@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { addWeb, getWebId, websRef } from "../../firebase/collections";
+import { addOnlyNotExists } from "../../firebase/collections";
 import {
   Alert,
   Button,
@@ -13,13 +13,13 @@ import {
 import { Controller, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useDefaultFirestoreProps, useFormUtils } from "../../hooks";
+import { useFormUtils } from "../../hooks";
 import { validateURL } from "../../utils";
+import { useAuthentication } from "../../providers";
 
 export const AddWebsitesIntegration = ({ onCloseModal }) => {
+  const { authUser } = useAuthentication();
   const [saveLoading, setSaveLoading] = useState(false);
-
-  const { assignCreateProps } = useDefaultFirestoreProps();
 
   const onSaveWeb = async (formData) => {
     try {
@@ -36,19 +36,7 @@ export const AddWebsitesIntegration = ({ onCloseModal }) => {
           title: "Parece que hay una URL o más con el formato incorrecto.",
         });
 
-      for (const url of arrayUrls) {
-        const querySnapshot = await websRef.where("url", "==", url).get();
-
-        if (querySnapshot.empty) {
-          await addWeb(
-            assignCreateProps({
-              id: getWebId(),
-              url,
-              status: "not_reviewed",
-            })
-          );
-        }
-      }
+      await addOnlyNotExists(arrayUrls, authUser);
 
       notification({ type: "success" });
 
@@ -72,7 +60,7 @@ export const AddWebsitesIntegration = ({ onCloseModal }) => {
 
 const AddWebsites = ({ onSaveWeb, isSavingWeb, onCloseModal }) => {
   const schema = yup.object({
-    url: yup.string().url().required(),
+    url: yup.string().required(),
   });
 
   const {

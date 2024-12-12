@@ -35,3 +35,5 @@ export const validateEmail = (email) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return regex.test(email);
 };
+
+export const newUrl = (url) => new URL(url.trim());
