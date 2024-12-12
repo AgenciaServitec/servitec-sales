@@ -13,7 +13,7 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
     }
 
     const response = await axios.get(url, {
-      timeout: 6000,
+      timeout: 7000,
       headers: {
         "User-Agent":
           "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
@@ -31,9 +31,6 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
     const isError429 = error.response?.status === 429;
     const isError403 = error.response?.status === 403;
 
-    (!isError429 || !isError403) &&
-      logger.error(`checkWebsite: ${url} => ${error.message}`);
-
     if (isError429) {
       logger.warn(`Error 429: Too many requests for ${url}`);
       return "rate_limited";
@@ -41,6 +38,14 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
 
     if (isError403) {
       logger.warn(`Error 403: Denied access for ${url}`);
+      return "with_problems";
+    }
+
+    if (!isError429 || !isError403) {
+      logger.error(`checkWebsite: ${url} => ${error.message}`);
+    }
+
+    if (error.code === "ECONNREFUSED") {
       return "with_problems";
     }
 
