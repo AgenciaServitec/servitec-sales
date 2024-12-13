@@ -18,6 +18,7 @@ import {
   Spin,
   Tag,
   Typography,
+  Tooltip,
 } from "../../components/ui";
 import VirtualList from "rc-virtual-list";
 import { orderBy } from "lodash";
@@ -287,15 +288,21 @@ const ReviewWebsites = ({
                 [(web) => statusPriority[web.status]],
                 ["asc"]
               ).map((web) => (
-                <div className="item" key={web.status}>
-                  <div className="item-count">
-                    <strong>{web?.quantity || 0}</strong>{" "}
-                    <ItemCheck status={web.status} size="1.3em">
-                      <FontAwesomeIcon icon={web.icon} size="sm" />
-                    </ItemCheck>
+                <Tooltip
+                  title={web.description}
+                  color={web.color}
+                  key={web.status}
+                >
+                  <div className="item" key={web.status}>
+                    <div className="item-count">
+                      <strong>{web?.quantity || 0}</strong>{" "}
+                      <ItemCheck status={web.status} size="1.3em">
+                        <FontAwesomeIcon icon={web.icon} size="sm" />
+                      </ItemCheck>
+                    </div>
+                    <span className="item-label">{web?.label}</span>
                   </div>
-                  <span className="item-label">{web?.label}</span>
-                </div>
+                </Tooltip>
               ))}
             </Flex>
           </Flex>

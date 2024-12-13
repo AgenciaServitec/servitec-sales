@@ -9,11 +9,11 @@ import {
   faHome,
   faLayerGroup,
   faSignOutAlt,
+  faTriangleExclamation,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
-import { faSpaceAwesome } from "@fortawesome/free-brands-svg-icons";
 
 export const DrawerLayout = ({
   isVisibleDrawer,
@@ -77,7 +77,7 @@ export const DrawerLayout = ({
     {
       label: "Spams",
       key: "spams",
-      icon: <FontAwesomeIcon icon={faSpaceAwesome} size="lg" />,
+      icon: <FontAwesomeIcon icon={faTriangleExclamation} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/spams");

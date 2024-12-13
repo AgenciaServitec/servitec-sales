@@ -10,6 +10,7 @@ import {
   Spin,
   Alert,
   Space,
+  Tooltip,
 } from "antd";
 
 export {
@@ -24,6 +25,7 @@ export {
   Spin,
   Alert,
   Space,
+  Tooltip,
 };
 
 export * from "./component-container";

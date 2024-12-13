@@ -16,6 +16,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { SpamIntegration } from "./spamForms/SpamForm";
 import { addSpam, updateSpam } from "../../firebase/collections";
 import { useDefaultFirestoreProps } from "../../hooks";
+import { Alert } from "antd";
 
 const { Title, Text } = Typography;
 
@@ -53,6 +54,13 @@ export const Spams = () => {
         <Button type="primary" onClick={() => setIsModalVisible(true)}>
           Agregar Spam
         </Button>
+      </Col>
+      <Col span={24}>
+        <Alert
+          type="info"
+          showIcon
+          message="Agregar los correos o numeros que quieres bloquear para que no puedan enviar correos."
+        />
       </Col>
       <Col span={24}>
         <List

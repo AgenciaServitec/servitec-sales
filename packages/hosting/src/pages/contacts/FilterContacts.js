@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Select } from "../../components/ui";
-import { Col, Row } from "antd";
+import { Alert, Col, Row } from "antd";
 import { concat } from "lodash";
 import Title from "antd/es/typography/Title";
 
@@ -29,9 +29,18 @@ export const FilterContacts = ({
 
   return (
     <Container>
-      <Row gutter={16}>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={2}>Contactos</Title>
+          <Title level={2} style={{ margin: "0" }}>
+            Contactos
+          </Title>
+        </Col>
+        <Col span={24}>
+          <Alert
+            type="info"
+            showIcon
+            message="Estos son los datos de contacto de todos los usuarios que enviaron correos."
+          />
         </Col>
         <Col span={24} md={5}>
           <p>Hostname:</p>
