@@ -64,6 +64,7 @@ const Spams = ({ spams, onConfirmRemoveSpam }) => {
         <Title level={3}>Correos y teléfonos spam</Title>
         <Button
           type="primary"
+          size="large"
           onClick={() => onShowModalAddSpam()}
           icon={<FontAwesomeIcon icon={faPlus} />}
         >
