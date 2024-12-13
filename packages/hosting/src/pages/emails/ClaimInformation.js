@@ -3,11 +3,13 @@ import { Col } from "antd";
 import { capitalize } from "lodash";
 import { ShowFullName } from "../../components/pages";
 import { EnvelopeByEmailColor } from "../../components/ui";
+import { EmailAndPhoneComponent } from "./EmailAndPhoneComponent";
 
 export const ClaimInformation = ({
   claim,
   onSetContact,
   onOpenDrawerContact,
+  onConfirmAddAsSpam,
 }) => (
   <>
     <ShowFullName
@@ -57,15 +59,11 @@ export const ClaimInformation = ({
         content={capitalize(claim?.district) || ""}
       />
     </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor
-        title="Teléfono"
-        content={claim?.phone?.countryCode || "" + claim?.phone?.number || ""}
-      />
-    </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor title="Email" content={claim?.email || ""} />
-    </Col>
+    <EmailAndPhoneComponent
+      phone={claim?.phone}
+      email={claim?.email}
+      onConfirmAddAsSpam={onConfirmAddAsSpam}
+    />
     <Col xs={24} sm={12}>
       <EnvelopeByEmailColor
         title="Sugerencia/Reclamo"

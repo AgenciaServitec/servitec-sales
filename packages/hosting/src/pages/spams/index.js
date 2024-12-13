@@ -13,8 +13,8 @@ import {
 } from "../../components/ui";
 import { useGlobalData } from "../../providers";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { SpamIntegration } from "./spamForms/SpamForm";
-import { addSpam, updateSpam } from "../../firebase/collections";
+import { AddSpamsIntegration } from "./AddSpams";
+import { addSpam, deleteSpam } from "../../firebase/collections";
 import { useDefaultFirestoreProps } from "../../hooks";
 import { Alert } from "antd";
 
@@ -22,7 +22,7 @@ const { Title, Text } = Typography;
 
 export const Spams = () => {
   const { spams } = useGlobalData();
-  const { assignCreateProps, assignDeleteProps } = useDefaultFirestoreProps();
+  const { assignCreateProps } = useDefaultFirestoreProps();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -31,20 +31,27 @@ export const Spams = () => {
 
   const onDeleteSpam = async (spamId) => {
     try {
-      await updateSpam(spamId, assignDeleteProps({ isDeleted: true }));
+      await deleteSpam(spamId);
       notification({ type: "success" });
     } catch (error) {
+      console.error("errorDeleteSpam: ", error);
       notification({ type: "error" });
     }
   };
 
   const onConfirmRemoveSpam = (spamId) =>
     modalConfirm({
-      onOk: () => onDeleteSpam(spamId),
+      onOk: async () => await onDeleteSpam(spamId),
     });
 
   const onAddSpam = async (spamData) => {
-    await addSpam(assignCreateProps(spamData));
+    try {
+      await addSpam(assignCreateProps(spamData));
+      notification({ type: "success" });
+    } catch (error) {
+      console.error("onAddSpam: ", error);
+      notification({ type: "error" });
+    }
   };
 
   return (
@@ -90,14 +97,13 @@ export const Spams = () => {
           )}
         />
       </Col>
-
       <Modal
         title="Agregar Spam"
         open={isModalVisible}
         onCancel={() => onIsModalVisible(false)}
         footer={null}
       >
-        <SpamIntegration
+        <AddSpamsIntegration
           onAddSpam={onAddSpam}
           onIsModalVisible={onIsModalVisible}
         />

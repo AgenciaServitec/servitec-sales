@@ -9,14 +9,14 @@ import {
   Select,
   TextArea,
   Typography,
-} from "../../../components/ui";
+} from "../../components/ui";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useFormUtils } from "../../../hooks";
-import { getSpamId } from "../../../firebase/collections";
+import { useFormUtils } from "../../hooks";
+import { getSpamId } from "../../firebase/collections";
 
-export const SpamIntegration = ({ onAddSpam, onIsModalVisible }) => {
+export const AddSpamsIntegration = ({ onAddSpam, onIsModalVisible }) => {
   const navigate = useNavigate();
   const [spam, setSpam] = useState(null);
 

@@ -4,11 +4,13 @@ import { ShowFullName } from "../../components/pages";
 import moment from "moment";
 import { EnvelopeByEmailColor } from "../../components/ui";
 import Tag from "antd/lib/tag";
+import { EmailAndPhoneComponent } from "./EmailAndPhoneComponent";
 
 export const RequestInformation = ({
   request,
   onSetContact,
   onOpenDrawerContact,
+  onConfirmAddAsSpam,
 }) => (
   <>
     <ShowFullName
@@ -49,15 +51,11 @@ export const RequestInformation = ({
         }
       />
     </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor
-        title="Teléfono"
-        content={`${request?.phone?.countryCode} ${request?.phone?.number}`}
-      />
-    </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor title="Email" content={request?.email || ""} />
-    </Col>
+    <EmailAndPhoneComponent
+      phone={request?.phone}
+      email={request?.email}
+      onSetContact={onConfirmAddAsSpam}
+    />
     {request?.dateToMeet && (
       <Col xs={24} sm={12}>
         <EnvelopeByEmailColor

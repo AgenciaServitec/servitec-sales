@@ -16,7 +16,7 @@ import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import moment from "moment";
-import { firestore } from "../../../firebase";
+import { fetchCollectionOnce, firestore } from "../../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -35,8 +35,10 @@ import { RequestInformation } from "../../../pages/emails/RequestInformation";
 import { ContactInformation } from "../../../pages/emails/ContactInformation";
 import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
-import { useFormUtils } from "../../../hooks";
+import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { QuotationInformation } from "../../../pages/emails/QuotationInformation";
+import { addSpam, getSpamId, spamsRef } from "../../../firebase/collections";
+import { isEmpty } from "lodash";
 
 export const DrawerUserInformation = ({
   contact,
@@ -47,6 +49,7 @@ export const DrawerUserInformation = ({
   onNavigateTo,
 }) => {
   if (!contact) return null;
+  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
 
   const [isVisibleSendEmailModal, setIsVisibleSendEmailModal] = useState(false);
   const [isVisibleQuotationEmailModal, setIsVisibleQuotationEmailModal] =
@@ -99,7 +102,7 @@ export const DrawerUserInformation = ({
     await firestore
       .collection("contacts")
       .doc(contact.id)
-      .update({ ...contact, status: formData.status });
+      .update(assignUpdateProps({ ...contact, status: formData.status }));
 
     notification({
       type: "success",
@@ -107,6 +110,32 @@ export const DrawerUserInformation = ({
 
     onCloseDrawerContact();
   };
+
+  const onAddAsSpam = async (spamType, spamValue) => {
+    const spams = await fetchCollectionOnce(
+      spamsRef
+        .where("type", "==", spamType)
+        .where("value", "==", spamValue)
+        .where("isDeleted", "==", false)
+        .limit(1)
+    );
+
+    if (!isEmpty(spams)) return;
+
+    await addSpam(
+      assignCreateProps({ id: getSpamId(), type: spamType, value: spamValue })
+    );
+  };
+
+  const onConfirmAddAsSpam = async (spamType, spamValue) =>
+    modalConfirm({
+      title: `Estás seguro de que quieres reportar como spam el ${
+        spamType === "phone" ? "teléfono" : "email"
+      }`,
+      onOk: async () => {
+        await onAddAsSpam(spamType, spamValue);
+      },
+    });
 
   const onCLickIsVisibleSendEmailModal = () =>
     setIsVisibleSendEmailModal(!isVisibleSendEmailModal);
@@ -117,15 +146,40 @@ export const DrawerUserInformation = ({
   const showContact = (contact) => {
     switch (contact.type) {
       case "contact":
-        return <ContactInformation contact={contact} />;
+        return (
+          <ContactInformation
+            contact={contact}
+            onConfirmAddAsSpam={onConfirmAddAsSpam}
+          />
+        );
       case "request":
-        return <RequestInformation request={contact} />;
+        return (
+          <RequestInformation
+            request={contact}
+            onConfirmAddAsSpam={onConfirmAddAsSpam}
+          />
+        );
       case "claim":
-        return <ClaimInformation claim={contact} />;
+        return (
+          <ClaimInformation
+            claim={contact}
+            onConfirmAddAsSpam={onConfirmAddAsSpam}
+          />
+        );
       case "quotation":
-        return <QuotationInformation quotation={contact} />;
+        return (
+          <QuotationInformation
+            quotation={contact}
+            onConfirmAddAsSpam={onConfirmAddAsSpam}
+          />
+        );
       default:
-        return <ContactInformation contact={contact} />;
+        return (
+          <ContactInformation
+            contact={contact}
+            onConfirmAddAsSpam={onConfirmAddAsSpam}
+          />
+        );
     }
   };
 

@@ -1,12 +1,13 @@
 import React from "react";
-import { Col } from "antd";
 import { ShowFullName } from "../../components/pages";
-import { EnvelopeByEmailColor } from "../../components/ui";
+import { Col, EnvelopeByEmailColor } from "../../components/ui";
+import { EmailAndPhoneComponent } from "./EmailAndPhoneComponent";
 
 export const ContactInformation = ({
   contact,
   onSetContact,
   onOpenDrawerContact,
+  onConfirmAddAsSpam,
 }) => (
   <>
     <ShowFullName
@@ -14,17 +15,11 @@ export const ContactInformation = ({
       onSetContact={onSetContact}
       onOpenDrawerContact={onOpenDrawerContact}
     />
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor
-        title="Teléfono"
-        content={`${contact?.phone?.countryCode || ""} ${
-          contact?.phone?.number || ""
-        }`}
-      />
-    </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor title="Email" content={contact?.email || ""} />
-    </Col>
+    <EmailAndPhoneComponent
+      phone={contact?.phone}
+      email={contact?.email}
+      onConfirmAddAsSpam={onConfirmAddAsSpam}
+    />
     {contact?.issue && (
       <Col span={24}>
         <EnvelopeByEmailColor title="Asunto" content={contact?.issue || ""} />

@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../firebase";
 import { useAuthentication } from "./AuthenticationProvider";
 import { notification, Spinner } from "../components/ui";
 import { orderBy } from "lodash";
+import { spamsRef } from "../firebase/collections";
 
 const GlobalDataContext = createContext({
   clients: [],
@@ -27,9 +28,7 @@ export const GlobalDataProvider = ({ children }) => {
   );
 
   const [spams = [], spamsLoading, spamsError] = useCollectionData(
-    authUser
-      ? firestore.collection("spams").where("isDeleted", "==", false)
-      : null
+    authUser ? spamsRef.where("isDeleted", "==", false) : null
   );
 
   const error = clientsError || usersError || spamsError;
@@ -44,7 +43,7 @@ export const GlobalDataProvider = ({ children }) => {
   return (
     <GlobalDataContext.Provider
       value={{
-        clients: orderBy(clients, (client) => [client.createAt], ["asc"]),
+        clients: orderBy(clients, (client) => [client.createAt], ["desc"]),
         users: orderBy(users, (user) => [user.createAt], ["asc"]),
         spams: orderBy(spams, (spam) => [spam.createAt], ["desc"]),
       }}

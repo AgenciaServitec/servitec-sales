@@ -2,11 +2,13 @@ import React from "react";
 import { Col } from "antd";
 import { ShowFullName } from "../../components/pages";
 import { EnvelopeByEmailColor } from "../../components/ui";
+import { EmailAndPhoneComponent } from "./EmailAndPhoneComponent";
 
 export const QuotationInformation = ({
   quotation,
   onSetContact,
   onOpenDrawerContact,
+  onConfirmAddAsSpam,
 }) => (
   <>
     <ShowFullName
@@ -14,15 +16,11 @@ export const QuotationInformation = ({
       onSetContact={onSetContact}
       onOpenDrawerContact={onOpenDrawerContact}
     />
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor
-        title="Teléfono"
-        content={`${quotation?.phone?.countryCode} ${quotation?.phone?.number}`}
-      />
-    </Col>
-    <Col xs={24} sm={12}>
-      <EnvelopeByEmailColor title="Email" content={quotation?.email || ""} />
-    </Col>
+    <EmailAndPhoneComponent
+      phone={quotation?.phone}
+      email={quotation?.email}
+      onSetContact={onConfirmAddAsSpam}
+    />
     <Col xs={24} sm={12}>
       <EnvelopeByEmailColor
         title="Tipo de Plan"
