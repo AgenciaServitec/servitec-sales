@@ -53,7 +53,7 @@ export const checkWebsite = async (url: string): Promise<Web["status"]> => {
     }
 
     logger.error(`Unhandled error for ${url}: ${error.message}`);
-    throw new Error(error);
+    return "with_problems";
   }
 };
 
