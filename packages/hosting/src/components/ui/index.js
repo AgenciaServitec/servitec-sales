@@ -11,6 +11,7 @@ import {
   Alert,
   Space,
   Tooltip,
+  Tabs,
 } from "antd";
 
 export {
@@ -26,6 +27,7 @@ export {
   Alert,
   Space,
   Tooltip,
+  Tabs,
 };
 
 export * from "./component-container";

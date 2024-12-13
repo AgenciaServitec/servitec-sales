@@ -22,7 +22,7 @@ import { firestore } from "../../../firebase";
 import { useAuthentication, useGlobalData } from "../../../providers";
 import { phoneCodes } from "../../../data-list";
 import { assign } from "lodash";
-import { addOnlyNotExists } from "../../../firebase/collections";
+import { addOnlyNonExistingWebsites } from "../../../firebase/collections";
 
 export const ClientIntegration = () => {
   const { clientId } = useParams();
@@ -61,7 +61,7 @@ export const ClientIntegration = () => {
           { merge: true }
         );
 
-      await addOnlyNotExists(
+      await addOnlyNonExistingWebsites(
         [`https://${formData.hostname.toLowerCase()}`],
         authUser
       );

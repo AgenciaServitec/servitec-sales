@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { addOnlyNotExists } from "../../firebase/collections";
+import { addOnlyNonExistingWebsites } from "../../firebase/collections";
 import {
   Alert,
   Button,
@@ -33,10 +33,10 @@ export const AddWebsitesIntegration = ({ onCloseModal }) => {
       if (!isValidatedUrls)
         return notification({
           type: "warning",
-          title: "Parece que hay una URL o más con el formato incorrecto.",
+          title: "Hay una URL o más con el formato incorrecto.",
         });
 
-      await addOnlyNotExists(arrayUrls, authUser);
+      await addOnlyNonExistingWebsites(arrayUrls, authUser);
 
       notification({ type: "success" });
 

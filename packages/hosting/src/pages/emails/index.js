@@ -1,10 +1,4 @@
 import React, { useState } from "react";
-import Title from "antd/es/typography/Title";
-import Row from "antd/lib/row";
-import Col from "antd/lib/col";
-import Button from "antd/lib/button";
-import Tabs from "antd/lib/tabs";
-import Spin from "antd/lib/spin";
 import { includes, orderBy } from "lodash";
 import { useDevice } from "../../hooks";
 import { useNavigate } from "react-router";
@@ -17,7 +11,18 @@ import {
 import { useQueryString } from "../../hooks/useQueryString";
 import { useAuthentication, useContacts, useGlobalData } from "../../providers";
 import { firestore } from "../../firebase";
-import { modalConfirm, RadioGroup } from "../../components/ui";
+import {
+  modalConfirm,
+  RadioGroup,
+  Row,
+  Col,
+  Button,
+  Tabs,
+  Spin,
+  Typography,
+} from "../../components/ui";
+
+const { Title } = Typography;
 
 export const Emails = () => {
   const navigate = useNavigate();
@@ -201,6 +206,7 @@ export const Emails = () => {
       </Spin>
       <DrawerUserInformation
         contact={contact}
+        user={authUser}
         clients={clients}
         onCloseDrawerContact={onCloseDrawerContact}
         isVisibleDrawerRight={isVisibleDrawerContact}

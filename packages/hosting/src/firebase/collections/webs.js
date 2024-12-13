@@ -14,7 +14,7 @@ export const addWeb = (web) => websRef.doc(web.id).set(web);
 export const updateWeb = (id, web) => websRef.doc(id).update(web);
 export const deleteWeb = (id) => websRef.doc(id).delete();
 
-export const addOnlyNotExists = async (urls = [], user) => {
+export const addOnlyNonExistingWebsites = async (urls = [], user) => {
   for (const url of urls) {
     const _url = newUrl(url).origin;
 

@@ -8,7 +8,7 @@ import {
   Login,
   Page403,
   Page404,
-  Spams,
+  SpamsIntegration,
   UserIntegration,
   Users,
   ReviewWebsitesIntegration,
@@ -103,7 +103,7 @@ export const Router = () => (
       element={
         <PrivateRoute>
           <BaseLayout>
-            <Spams />
+            <SpamsIntegration />
           </BaseLayout>
         </PrivateRoute>
       }

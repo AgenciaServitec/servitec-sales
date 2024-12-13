@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import React, { useState } from "react";
 import {
   Button,
   Col,
@@ -8,78 +7,61 @@ import {
   Row,
   Select,
   TextArea,
-  Typography,
 } from "../../components/ui";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useFormUtils } from "../../hooks";
-import { getSpamId } from "../../firebase/collections";
+import { addNonExistingSpamsOnly } from "../../firebase/collections";
+import { validateEmail } from "../../utils";
+import { useAuthentication } from "../../providers";
 
-export const AddSpamsIntegration = ({ onAddSpam, onIsModalVisible }) => {
-  const navigate = useNavigate();
-  const [spam, setSpam] = useState(null);
-
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const _spam = { id: getSpamId() };
-
-    if (!_spam) return navigate(-1);
-
-    setSpam(_spam);
-  }, []);
-
-  const onGoBack = () => navigate(-1);
+export const AddSpamsIntegration = ({ onCloseModal }) => {
+  const { authUser } = useAuthentication();
+  const [saveLoading, setSaveLoading] = useState(false);
 
   const onSaveSpam = async (formData) => {
     try {
-      setLoading(true);
+      setSaveLoading(true);
+      const isEmail = formData.type === "email";
+      const arrayValues = formData.value
+        .split(",")
+        .map((url) => url.trim().toLowerCase());
 
-      const values = formData.value.split(",");
+      const isValidatedValue = arrayValues.every((value) =>
+        isEmail ? validateEmail(value) : value
+      );
 
-      if (values.length > 1) {
-        const spamsToFirestore = values.map((value) => ({
-          id: getSpamId(),
-          type: formData.type,
-          value,
-        }));
+      if (!isValidatedValue)
+        return notification({
+          type: "warning",
+          title: `Hay un ${
+            isEmail ? "email" : "telefono"
+          } o más con el formato incorrecto.`,
+        });
 
-        spamsToFirestore.map((spam) => onAddSpam(spam));
-
-        notification({ type: "success" });
-        onIsModalVisible(false);
-        return;
-      }
-
-      await onAddSpam(mapSpam(formData));
+      await addNonExistingSpamsOnly(arrayValues, formData.type, authUser);
 
       notification({ type: "success" });
-      onIsModalVisible(false);
+      onCloseModal();
     } catch (e) {
-      console.log("ErrorSaveSpam: ", e);
+      console.error("errorSaveSpam:", e);
       notification({ type: "error" });
     } finally {
-      setLoading(false);
+      setSaveLoading(false);
     }
   };
-
-  const mapSpam = (formData) => ({
-    ...spam,
-    type: formData.type,
-    value: formData.value,
-  });
 
   return (
     <Spam
       onSaveSpam={onSaveSpam}
-      loading={loading}
-      onIsModalVisible={onIsModalVisible}
+      loading={saveLoading}
+      onCloseModal={onCloseModal}
     />
   );
 };
 
-const Spam = ({ onSaveSpam, loading, onIsModalVisible }) => {
+const Spam = ({ onSaveSpam, loading, onCloseModal }) => {
   const schema = yup.object({
     type: yup.string().required(),
     value: yup.string().required(),
@@ -89,32 +71,20 @@ const Spam = ({ onSaveSpam, loading, onIsModalVisible }) => {
     formState: { errors },
     handleSubmit,
     control,
-    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       type: "email",
+      value: null,
     },
   });
 
   const { required, error } = useFormUtils({ errors, schema });
 
-  const onSubmit = (formData) => {
-    onSaveSpam(formData);
-    resetData();
-  };
-
-  const resetData = () =>
-    reset({
-      type: "",
-      value: "",
-    });
+  const onSubmit = (formData) => onSaveSpam(formData);
 
   return (
     <Row>
-      <Col span={24}>
-        <Typography.Title level={3}> Spam </Typography.Title>
-      </Col>
       <Col span={24}>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row gutter={[16, 16]}>
@@ -135,7 +105,7 @@ const Spam = ({ onSaveSpam, loading, onIsModalVisible }) => {
                         value: "email",
                       },
                       {
-                        label: "Telefono",
+                        label: "Teléfono",
                         value: "phone",
                       },
                     ]}
@@ -167,7 +137,7 @@ const Spam = ({ onSaveSpam, loading, onIsModalVisible }) => {
                 type="default"
                 size="large"
                 block
-                onClick={() => onIsModalVisible(false)}
+                onClick={() => onCloseModal(false)}
                 disabled={loading}
               >
                 Cancelar

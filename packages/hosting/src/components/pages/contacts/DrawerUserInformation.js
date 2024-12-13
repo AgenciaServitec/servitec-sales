@@ -16,7 +16,7 @@ import { mediaQuery } from "../../../styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import moment from "moment";
-import { fetchCollectionOnce, firestore } from "../../../firebase";
+import { firestore } from "../../../firebase";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -37,11 +37,11 @@ import { InformationWrapper } from "./InformationWrapper";
 import { emailsType } from "../../../data-list";
 import { useDefaultFirestoreProps, useFormUtils } from "../../../hooks";
 import { QuotationInformation } from "../../../pages/emails/QuotationInformation";
-import { addSpam, getSpamId, spamsRef } from "../../../firebase/collections";
-import { isEmpty } from "lodash";
+import { addNonExistingSpamsOnly } from "../../../firebase/collections";
 
 export const DrawerUserInformation = ({
   contact,
+  user,
   clients,
   onCloseDrawerContact,
   isVisibleDrawerRight,
@@ -49,7 +49,7 @@ export const DrawerUserInformation = ({
   onNavigateTo,
 }) => {
   if (!contact) return null;
-  const { assignCreateProps, assignUpdateProps } = useDefaultFirestoreProps();
+  const { assignUpdateProps } = useDefaultFirestoreProps();
 
   const [isVisibleSendEmailModal, setIsVisibleSendEmailModal] = useState(false);
   const [isVisibleQuotationEmailModal, setIsVisibleQuotationEmailModal] =
@@ -112,19 +112,13 @@ export const DrawerUserInformation = ({
   };
 
   const onAddAsSpam = async (spamType, spamValue) => {
-    const spams = await fetchCollectionOnce(
-      spamsRef
-        .where("type", "==", spamType)
-        .where("value", "==", spamValue)
-        .where("isDeleted", "==", false)
-        .limit(1)
-    );
-
-    if (!isEmpty(spams)) return;
-
-    await addSpam(
-      assignCreateProps({ id: getSpamId(), type: spamType, value: spamValue })
-    );
+    try {
+      await addNonExistingSpamsOnly([spamValue], spamType, user);
+      notification({ type: "success" });
+    } catch (e) {
+      console.error("onAddAsSpam: ", e);
+      notification({ type: "error" });
+    }
   };
 
   const onConfirmAddAsSpam = async (spamType, spamValue) =>

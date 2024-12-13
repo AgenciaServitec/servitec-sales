@@ -1,33 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Button,
   Col,
   IconAction,
   List,
-  Modal,
   modalConfirm,
   notification,
   Row,
   Tag,
   Typography,
 } from "../../components/ui";
-import { useGlobalData } from "../../providers";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { ModalProvider, useGlobalData, useModal } from "../../providers";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { AddSpamsIntegration } from "./AddSpams";
-import { addSpam, deleteSpam } from "../../firebase/collections";
-import { useDefaultFirestoreProps } from "../../hooks";
+import { deleteSpam } from "../../firebase/collections";
+import { useDevice } from "../../hooks";
 import { Alert } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import dayjs from "dayjs";
 
 const { Title, Text } = Typography;
 
-export const Spams = () => {
+export const SpamsIntegration = () => {
   const { spams } = useGlobalData();
-  const { assignCreateProps } = useDefaultFirestoreProps();
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const onIsModalVisible = (isModalVisible = false) =>
-    setIsModalVisible(isModalVisible);
 
   const onDeleteSpam = async (spamId) => {
     try {
@@ -44,29 +39,42 @@ export const Spams = () => {
       onOk: async () => await onDeleteSpam(spamId),
     });
 
-  const onAddSpam = async (spamData) => {
-    try {
-      await addSpam(assignCreateProps(spamData));
-      notification({ type: "success" });
-    } catch (error) {
-      console.error("onAddSpam: ", error);
-      notification({ type: "error" });
-    }
+  return (
+    <ModalProvider>
+      <Spams spams={spams} onConfirmRemoveSpam={onConfirmRemoveSpam} />
+    </ModalProvider>
+  );
+};
+
+const Spams = ({ spams, onConfirmRemoveSpam }) => {
+  const { isMobile } = useDevice();
+  const { onShowModal, onCloseModal } = useModal();
+
+  const onShowModalAddSpam = () => {
+    return onShowModal({
+      title: "Add spam",
+      width: `${isMobile ? "100%" : "50%"}`,
+      onRenderBody: () => <AddSpamsIntegration onCloseModal={onCloseModal} />,
+    });
   };
 
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Title level={3}>Correos Spam</Title>
-        <Button type="primary" onClick={() => setIsModalVisible(true)}>
-          Agregar Spam
+        <Title level={3}>Correos y teléfonos spam</Title>
+        <Button
+          type="primary"
+          onClick={() => onShowModalAddSpam()}
+          icon={<FontAwesomeIcon icon={faPlus} />}
+        >
+          Agregar spam
         </Button>
       </Col>
       <Col span={24}>
         <Alert
           type="info"
           showIcon
-          message="Agregar los correos o numeros que quieres bloquear para que no puedan enviar correos."
+          message="Agregar los correos o teléfonos que quieres bloquear para que no puedan enviar correos."
         />
       </Col>
       <Col span={24}>
@@ -91,23 +99,26 @@ export const Spams = () => {
                     {spam?.type === "phone" ? "Teléfono" : "Email"}
                   </Tag>
                 }
-                description={<Text>{spam?.value}</Text>}
+                description={
+                  <div>
+                    <div>
+                      <Text>{spam?.value}</Text>
+                    </div>
+                    <Text ellipsis suffix="...">
+                      <span style={{ fontSize: 11 }}>
+                        F. creación:{" "}
+                        {dayjs(spam.createAt.toDate()).format(
+                          "dddd DD MMMM YYYY HH:mm A"
+                        )}
+                      </span>
+                    </Text>
+                  </div>
+                }
               />
             </List.Item>
           )}
         />
       </Col>
-      <Modal
-        title="Agregar Spam"
-        open={isModalVisible}
-        onCancel={() => onIsModalVisible(false)}
-        footer={null}
-      >
-        <AddSpamsIntegration
-          onAddSpam={onAddSpam}
-          onIsModalVisible={onIsModalVisible}
-        />
-      </Modal>
     </Row>
   );
 };
