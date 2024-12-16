@@ -29,6 +29,6 @@ const scheduleOptions = (
 exports.api = functionsHttps.onRequest(httpsOptions(), app);
 
 exports.onScheduleReviewAllWebsites = functionScheduler.onSchedule(
-  scheduleOptions("*/3 * * * *"),
+  scheduleOptions("0 3 * * *"),
   onScheduleReviewAllWebsites,
 );
