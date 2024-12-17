@@ -174,3 +174,36 @@ interface Web extends DefaultFirestoreProps {
   url: string;
   status: "not_reviewed" | "up" | "down" | "rate_limited" | "with_problems";
 }
+
+interface Payment extends DefaultFirestoreProps {
+  id: string;
+  clientId: string;
+  billing: {
+    method: string;
+    service: "izipay" | "culqi";
+    totalPrice: string;
+  };
+  contact: {
+    documentNumber: string;
+    email: string;
+    firstName: string;
+    maternalSurname: string;
+    paternalSurname: string;
+    phone: {
+      prefix: string;
+      number: string;
+    };
+  };
+  product: {
+    type: "product" | "service";
+    name: string;
+    price: string;
+  };
+  service: {
+    id: "izipay";
+    events: {
+      formTokenCreationDate: FirebaseFirestore.Timestamp;
+      paymentNotification: any;
+    };
+  };
+}

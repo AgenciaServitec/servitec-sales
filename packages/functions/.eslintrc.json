@@ -29,6 +29,7 @@
     "new-cap": "off",
     "require-jsdoc": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-floating-promises": [
       "error",
       {

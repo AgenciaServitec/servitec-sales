@@ -18,6 +18,11 @@ import {
   postReviewAllWebsites,
   postReviewWebsite,
 } from "./review-website";
+import {
+  getFormToken,
+  paymentNotification,
+  paymentValidation,
+} from "./payments/izipay";
 
 const app: express.Application = express();
 
@@ -129,6 +134,11 @@ app.post(
   [],
   postResendMailReviewAllWebsites,
 );
+
+// PAYMENTS
+app.post("/payments/izipay/token", getFormToken);
+app.post("/payments/izipay/payment-validate", paymentValidation);
+app.post("/payments/izipay/payment-notification", paymentNotification);
 
 app.use(errorHandler);
 

@@ -9,3 +9,4 @@ export * from "./users/_userId";
 export * from "./contacts";
 export * from "./spams";
 export * from "./review-websites";
+export * from "./payments";

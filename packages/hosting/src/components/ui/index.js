@@ -12,6 +12,7 @@ import {
   Space,
   Tooltip,
   Tabs,
+  Affix,
 } from "antd";
 
 export {
@@ -28,6 +29,7 @@ export {
   Space,
   Tooltip,
   Tabs,
+  Affix,
 };
 
 export * from "./component-container";
@@ -52,4 +54,5 @@ export * from "./TimePicker";
 export * from "./Audio";
 export * from "./TagHostname";
 export * from "./EnvelopeByEmailColor";
+export * from "./TableVirtualized";
 // export { default as Upload } from "./Upload";

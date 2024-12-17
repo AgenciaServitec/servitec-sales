@@ -20,6 +20,15 @@ interface ConfigCommon {
 interface ConfigEnvironment {
   hosting: ConfigHosting;
   storageBucket: Record<"photos", string>;
+  izipay: {
+    apiUrl: string;
+    credential: {
+      user: string;
+      password: string;
+    };
+    publicKey: string;
+    "HMAC-SHA-256": string;
+  };
 }
 
 interface ConfigHosting {
@@ -62,6 +71,15 @@ export const config: Config = {
       domain: "https://sendingemails-348505.web.app",
       apiUrl: "https://api-servitecsales.web.app",
     },
+    izipay: {
+      apiUrl: "https://api.micuentaweb.pe/api-payment/V4",
+      credential: {
+        user: "66586027",
+        password: "testpasZMRSkt5P5etfooOEz6Z",
+      },
+      publicKey: "665860ndyYePw52QD",
+      "HMAC-SHA-256": "VF4Y8BtBTrWbAIhQ4ZQ",
+    },
   },
   production: {
     storageBucket: {
@@ -70,6 +88,15 @@ export const config: Config = {
     hosting: {
       domain: "https://sendingemails-348505.web.app",
       apiUrl: "https://api-servitecsales.web.app",
+    },
+    izipay: {
+      apiUrl: "https://api.micuentaweb.pe/api-payment/V4",
+      credential: {
+        user: "66586027",
+        password: "testpasZMRSkt5P5etfooOEz6Z",
+      },
+      publicKey: "665860ndyYePw52QD",
+      "HMAC-SHA-256": "VF4Y8BtBTrWbAIhQ4ZQ",
     },
   },
 };

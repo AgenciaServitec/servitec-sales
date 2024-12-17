@@ -12,6 +12,7 @@ import {
   UserIntegration,
   Users,
   ReviewWebsitesIntegration,
+  PaymentsIntegration,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -29,6 +30,24 @@ export const Router = () => (
             <Emails />
           </BaseLayout>
         </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="/403"
+      element={
+        <BaseLayout>
+          <Page403 />
+        </BaseLayout>
+      }
+    />
+    <Route
+      exact
+      path="*"
+      element={
+        <BaseLayout>
+          <Page404 />
+        </BaseLayout>
       }
     />
     <Route
@@ -121,11 +140,13 @@ export const Router = () => (
     />
     <Route
       exact
-      path="/403"
+      path="/payments"
       element={
-        <BaseLayout>
-          <Page403 />
-        </BaseLayout>
+        <PrivateRoute>
+          <BaseLayout>
+            <PaymentsIntegration />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     {/*    <Route
@@ -137,14 +158,5 @@ export const Router = () => (
         </BaseLayout>
       }
     />*/}
-    <Route
-      exact
-      path="*"
-      element={
-        <BaseLayout>
-          <Page404 />
-        </BaseLayout>
-      }
-    />
   </Routes>
 );

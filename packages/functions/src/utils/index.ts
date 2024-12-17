@@ -4,3 +4,7 @@ export * from "./abstract";
 export * from "./defaultFirestoreProps";
 export * from "./dateToTimestamp";
 export * from "./spamsDetectedAndFormatPhone";
+export * from "./convertCurrencyStringToNumber";
+export * from "./logger";
+export * from "./payments";
+export * from "./encryption";

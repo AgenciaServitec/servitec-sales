@@ -8,6 +8,7 @@ import {
   faCheckCircle,
   faHome,
   faLayerGroup,
+  faMoneyBills,
   faSignOutAlt,
   faTriangleExclamation,
   faUsers,
@@ -41,6 +42,16 @@ export const DrawerLayout = ({
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
         onNavigateTo("/clients");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Pagos",
+      key: "payments",
+      icon: <FontAwesomeIcon icon={faMoneyBills} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/payments");
         setIsVisibleDrawer(false);
       },
     },
