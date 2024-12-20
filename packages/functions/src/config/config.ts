@@ -75,10 +75,11 @@ export const config: Config = {
       apiUrl: "https://api.micuentaweb.pe/api-payment/V4",
       credential: {
         user: "66586027",
-        password: "testpasZMRSkt5P5etfooOEz6Z",
+        password: "testpassword_C7fF4XHfL2AGx4OBO7LVTrjs62ZMRSkt5P5etfooOEz6Z",
       },
-      publicKey: "665860ndyYePw52QD",
-      "HMAC-SHA-256": "VF4Y8BtBTrWbAIhQ4ZQ",
+      publicKey:
+        "66586027:testpublickey_VUes4PRDtp5Srt1knLH0RndyPJ15I1fxGiruDYePw52QD",
+      "HMAC-SHA-256": "VF4Y8Btrr5UXVxLUNkYE4jO2MpWeC1cP3BTrWbAIhQ4ZQ",
     },
   },
   production: {
