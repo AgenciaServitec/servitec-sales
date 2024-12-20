@@ -2,24 +2,21 @@ import { NextFunction, Request, Response } from "express";
 import {
   convertCurrencyStringToNumber,
   defaultFirestoreProps,
+  logger,
 } from "../../../utils";
 import { isEmpty } from "lodash";
 import { fetchFormToken } from "../../../client-api/izipay";
 import { addPayment, getPaymentId } from "../../../collections";
 import { now } from "../../../firebase/firestore";
 
-interface Body {
-  payment: Payment;
-}
-
 export const getFormToken = async (
-  req: Request<unknown, unknown, Body, unknown>,
+  req: Request<unknown, unknown, Payment, unknown>,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
-  const { payment } = req.body;
+  const { body: payment } = req;
 
-  console.log("「Payment: Form token」Initialize", {
+  logger.log("「Payment: Form token」Initialize", {
     payment,
   });
 
@@ -55,7 +52,7 @@ export const getFormToken = async (
 
     res.send(formTokenIzipay).end();
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     next(error);
   }
 };

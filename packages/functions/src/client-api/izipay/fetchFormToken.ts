@@ -16,15 +16,14 @@ interface Props {
 }
 
 export const fetchFormToken = async (body: Props): Promise<FormTokenIzipay> => {
-  console.log("toISO8601Lima: ", toISO8601Lima());
-
   const { data } = await post<Response>(
-    "/Charge/CreateSubscription",
+    "/Charge/CreatePayment",
     {
-      ...body,
       amount: +body.amount,
+      orderId: body.orderId,
       currency: "PEN",
       effectDate: toISO8601Lima(),
+      customer: body.customer,
     },
     {
       headers: {
