@@ -50,16 +50,32 @@ const mapMail = (websites: Web[]): Mail => ({
     .locale("es")
     .format("dddd DD MMMM YYYY HH:mm A"),
   totalReviewWebsites: websites.length,
-  down: websites
-    .filter((website) => website.status === "down")
-    .map((_website) => _website.url),
-  withProblems: websites
-    .filter((website) => website.status === "with_problems")
-    .map((_website) => _website.url),
-  rateLimited: websites
-    .filter((website) => website.status === "rate_limited")
-    .map((_website) => _website.url),
-  up: websites
-    .filter((website) => website.status === "up")
-    .map((_website) => _website.url),
+  down: orderBy(
+    websites
+      .filter((website) => website.status === "down")
+      .map((_website) => _website.url),
+    "url",
+    "asc",
+  ),
+  withProblems: orderBy(
+    websites
+      .filter((website) => website.status === "with_problems")
+      .map((_website) => _website.url),
+    "url",
+    "asc",
+  ),
+  rateLimited: orderBy(
+    websites
+      .filter((website) => website.status === "rate_limited")
+      .map((_website) => _website.url),
+    "url",
+    "asc",
+  ),
+  up: orderBy(
+    websites
+      .filter((website) => website.status === "up")
+      .map((_website) => _website.url),
+    "url",
+    "asc",
+  ),
 });
