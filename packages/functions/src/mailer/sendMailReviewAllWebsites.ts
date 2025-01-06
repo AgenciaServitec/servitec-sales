@@ -54,28 +54,28 @@ const mapMail = (websites: Web[]): Mail => ({
     websites
       .filter((website) => website.status === "down")
       .map((_website) => _website.url),
-    "url",
+    (value) => value.split("://")[1],
     "asc",
   ),
   withProblems: orderBy(
     websites
       .filter((website) => website.status === "with_problems")
       .map((_website) => _website.url),
-    "url",
+    (value) => value.split("://")[1],
     "asc",
   ),
   rateLimited: orderBy(
     websites
       .filter((website) => website.status === "rate_limited")
       .map((_website) => _website.url),
-    "url",
+    (value) => value.split("://")[1],
     "asc",
   ),
   up: orderBy(
     websites
       .filter((website) => website.status === "up")
       .map((_website) => _website.url),
-    "url",
+    (value) => value.split("://")[1],
     "asc",
   ),
 });
