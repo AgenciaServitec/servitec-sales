@@ -7,6 +7,7 @@ import moment from "moment";
 import "moment/locale/es";
 
 import { createSubject } from "./themes/common/subjects";
+import { orderByUrl } from "../utils";
 
 interface Props {
   websites: Web[];
@@ -50,32 +51,8 @@ const mapMail = (websites: Web[]): Mail => ({
     .locale("es")
     .format("dddd DD MMMM YYYY HH:mm A"),
   totalReviewWebsites: websites.length,
-  down: orderBy(
-    websites
-      .filter((website) => website.status === "down")
-      .map((_website) => _website.url),
-    (value) => value.split("://")[1],
-    "asc",
-  ),
-  withProblems: orderBy(
-    websites
-      .filter((website) => website.status === "with_problems")
-      .map((_website) => _website.url),
-    (value) => value.split("://")[1],
-    "asc",
-  ),
-  rateLimited: orderBy(
-    websites
-      .filter((website) => website.status === "rate_limited")
-      .map((_website) => _website.url),
-    (value) => value.split("://")[1],
-    "asc",
-  ),
-  up: orderBy(
-    websites
-      .filter((website) => website.status === "up")
-      .map((_website) => _website.url),
-    (value) => value.split("://")[1],
-    "asc",
-  ),
+  down: orderByUrl(websites, "down"),
+  withProblems: orderByUrl(websites, "with_problems"),
+  rateLimited: orderByUrl(websites, "rate_limited"),
+  up: orderByUrl(websites, "up"),
 });
