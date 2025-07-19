@@ -5,13 +5,13 @@ import { version } from "../../firebase";
 import { useAuthentication } from "../../providers";
 import {
   faAddressBook,
-  faCheckCircle,
+  faCheckCircle, faDoorOpen,
   faHome,
   faLayerGroup,
   faMoneyBills,
   faSignOutAlt,
   faTriangleExclamation,
-  faUsers,
+  faUsers
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
@@ -36,6 +36,15 @@ export const DrawerLayout = ({
       },
     },
     {
+      label: "Asistencia de Empleados",
+      key: "assistance",
+      icon: <FontAwesomeIcon icon={faDoorOpen} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/assistance");
+        setIsVisibleDrawer(false);
+      },
+    },{
       label: "Clientes API",
       key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,

@@ -12,7 +12,7 @@ import {
   UserIntegration,
   Users,
   ReviewWebsitesIntegration,
-  PaymentsIntegration,
+  PaymentsIntegration, AssistanceIntegration
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -48,6 +48,17 @@ export const Router = () => (
         <BaseLayout>
           <Page404 />
         </BaseLayout>
+      }
+    />
+    <Route
+      exact
+      path="/assistance"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <AssistanceIntegration />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     <Route

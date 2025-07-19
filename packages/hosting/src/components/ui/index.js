@@ -55,4 +55,5 @@ export * from "./Audio";
 export * from "./TagHostname";
 export * from "./EnvelopeByEmailColor";
 export * from "./TableVirtualized";
+export * from "./UserLocationMap";
 // export { default as Upload } from "./Upload";
