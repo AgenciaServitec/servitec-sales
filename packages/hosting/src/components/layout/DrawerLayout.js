@@ -37,14 +37,15 @@ export const DrawerLayout = ({
     },
     {
       label: "Asistencia de Empleados",
-      key: "assistance",
+      key: "assistances",
       icon: <FontAwesomeIcon icon={faDoorOpen} size="lg" />,
       isVisible: user?.roleCode === "super_admin",
       onClick: () => {
-        onNavigateTo("/assistance");
+        onNavigateTo("/assistances");
         setIsVisibleDrawer(false);
       },
-    },{
+    },
+    {
       label: "Clientes API",
       key: "clients",
       icon: <FontAwesomeIcon icon={faLayerGroup} size="lg" />,
