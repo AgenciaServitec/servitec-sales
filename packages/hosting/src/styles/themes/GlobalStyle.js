@@ -1,5 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 import "@fontsource-variable/montserrat";
+import "leaflet/dist/leaflet.css";
 
 const global = css`
   * {

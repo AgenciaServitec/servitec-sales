@@ -6,6 +6,7 @@ import { useAuthentication } from "../../providers";
 import {
   faAddressBook,
   faCheckCircle,
+  faDoorOpen,
   faHome,
   faLayerGroup,
   faMoneyBills,
@@ -32,6 +33,16 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Asistencia de Empleados",
+      key: "assistances",
+      icon: <FontAwesomeIcon icon={faDoorOpen} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/assistances");
         setIsVisibleDrawer(false);
       },
     },

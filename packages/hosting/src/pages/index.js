@@ -10,3 +10,4 @@ export * from "./contacts";
 export * from "./spams";
 export * from "./review-websites";
 export * from "./payments";
+export * from "./assistance";
