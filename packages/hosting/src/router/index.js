@@ -12,12 +12,14 @@ import {
   UserIntegration,
   Users,
   ReviewWebsitesIntegration,
-  PaymentsIntegration, AssistancesIntegration
+  PaymentsIntegration,
+  AssistancesIntegration,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
 import { HistoryIntegration } from "../pages/contacts/history";
 import { AssistanceIntegration } from "../pages/assistance/_assistanceId";
+import { FaceRegistration } from "../pages/assistance/addFacialBiometrics";
 
 export const Router = () => (
   <Routes>
@@ -69,6 +71,17 @@ export const Router = () => (
         <PrivateRoute>
           <BaseLayout>
             <AssistanceIntegration />
+          </BaseLayout>
+        </PrivateRoute>
+      }
+    />
+    <Route
+      exact
+      path="assistances/register"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <FaceRegistration />
           </BaseLayout>
         </PrivateRoute>
       }

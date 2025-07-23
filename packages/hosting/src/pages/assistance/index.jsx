@@ -13,6 +13,7 @@ import { useNavigate } from "react-router";
 import { useAuthentication } from "../../providers";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
+import { AssistancesTable } from "./Assistances.Table";
 
 export const AssistancesIntegration = () => {
   const navigate = useNavigate();
@@ -25,8 +26,6 @@ export const AssistancesIntegration = () => {
   useEffect(() => {
     assistancesError && notification({ type: "error" });
   }, [assistancesError]);
-
-  if (assistancesLoading) return <Spinner height="40svh" size="4x" />;
 
   const onNavigateGoTo = (pathname = "/") => navigate(pathname);
 
@@ -46,30 +45,37 @@ const Assistances = ({
   assistancesLoading,
   onNavigateGoTo,
 }) => {
+  if (assistancesLoading) return <Spinner height="40svh" size="4x" />;
   return (
-    <Spinner spinning={assistancesLoading}>
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Button
-            onClick={() => onNavigateGoTo("/assistances/assistance")}
-            type="primary"
-            className="btn-assistance"
-            size="large"
-          >
-            <FontAwesomeIcon icon={faSignInAlt} />
-            Marcar mi asistencia
-          </Button>
-        </Col>
-        <Col span={24}>
-          <Title level={2}>Lista de asistencias</Title>
-        </Col>
-        {/*<Col span={24}>*/}
-        {/*  <AssistancesTable*/}
-        {/*    user={user}*/}
-        {/*    loading={assistancesLoading}*/}
-        {/*  />*/}
-        {/*</Col>*/}
-      </Row>
-    </Spinner>
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Button
+          onClick={() => onNavigateGoTo("/assistances/assistance")}
+          type="primary"
+          size="large"
+        >
+          <FontAwesomeIcon icon={faSignInAlt} />
+          Marcar mi asistencia
+        </Button>
+        <Button
+          onClick={() => onNavigateGoTo("/assistances/register")}
+          type="primary"
+          size="large"
+        >
+          <FontAwesomeIcon icon={faSignInAlt} />
+          Registrar mi rostro
+        </Button>
+      </Col>
+      <Col span={24}>
+        <Title level={2}>Lista de asistencias</Title>
+      </Col>
+      <Col span={24}>
+        <AssistancesTable
+          assistances={assistances}
+          user={user}
+          loading={assistancesLoading}
+        />
+      </Col>
+    </Row>
   );
 };
