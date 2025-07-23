@@ -5,13 +5,14 @@ import { version } from "../../firebase";
 import { useAuthentication } from "../../providers";
 import {
   faAddressBook,
-  faCheckCircle, faDoorOpen,
+  faCheckCircle,
+  faDoorOpen,
   faHome,
   faLayerGroup,
   faMoneyBills,
   faSignOutAlt,
   faTriangleExclamation,
-  faUsers
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { mediaQuery } from "../../styles";
