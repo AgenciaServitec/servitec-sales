@@ -7,10 +7,14 @@ import {
   notification,
   Col,
   Button,
+  Form,
+  Row,
+  InputNumber,
 } from "../../../components";
 import {
   addAssistance,
   fetchTodayAssistancesByUserId,
+  fetchUsersByDni,
   getAssistancesId,
   updateAssistance,
 } from "../../../firebase/collections";
@@ -26,19 +30,46 @@ import {
   faFaceSmile,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
 
 export const AssistanceIntegration = () => {
   const { assignCreateProps } = useDefaultFirestoreProps();
-  const { authUser } = useAuthentication();
-
   const [showCardMessage, setShowCardMessage] = useState(false);
   const [messageType, setMessageType] = useState("");
   const [entryButtonActive, setEntryButtonActive] = useState(false);
   const [outletButtonActive, setOutletButtonActive] = useState(false);
   const [isGeofenceValidate, setIsGeofenceValidate] = useState(false);
   const [assistanceSaved, setAssistanceSaved] = useState(false);
+  const [dni, setDni] = useState(null);
+  const [user, setUser] = useState(null);
 
   const navigate = useNavigate();
+
+  const searchUserByDni = async () => {
+    if (!dni) {
+      notification({ type: "warning", description: "Digite su DNI" });
+      return;
+    }
+
+    try {
+      const detectedUserByDni = await fetchUsersByDni(dni.toString());
+      if (detectedUserByDni.length > 0) return setUser(detectedUserByDni[0]);
+
+      setUser(null);
+
+      notification({ type: "warning", description: "usuario no encontrado" });
+    } catch (error) {
+      console.error("ErrorSearchUserByDni:", error);
+      notification({
+        type: "error",
+      });
+    }
+  };
+
+  const onResetUserData = () => {
+    setDni("");
+    setUser(null);
+  };
 
   const isTodayAssistance = (dateStr) => {
     const date = dayjs(dateStr, "DD-MM-YYYY HH:mm");
@@ -46,8 +77,8 @@ export const AssistanceIntegration = () => {
   };
 
   const hasMarkedAssistance = async (type) => {
-    if (!authUser) return false;
-    const assistances = await fetchTodayAssistancesByUserId(authUser.id);
+    if (!user) return false;
+    const assistances = await fetchTodayAssistancesByUserId(user.id);
     return assistances?.some(
       (a) => a?.[type] && isTodayAssistance(a[type]?.date)
     );
@@ -67,7 +98,7 @@ export const AssistanceIntegration = () => {
     if (assistanceSaved || isGeofenceValidate) {
       updateButtonStates();
     }
-  }, [assistanceSaved, isGeofenceValidate, authUser]);
+  }, [assistanceSaved, isGeofenceValidate, user]);
 
   const buildAssistanceData = (existing, type, date, user) => ({
     ...existing,
@@ -92,7 +123,7 @@ export const AssistanceIntegration = () => {
 
       const [alreadyMarked, assistances = []] = await Promise.all([
         hasMarkedAssistance(type),
-        fetchTodayAssistancesByUserId(authUser.id),
+        fetchTodayAssistancesByUserId(user.id),
       ]);
 
       const existing = assistances.find((a) =>
@@ -117,7 +148,7 @@ export const AssistanceIntegration = () => {
         return;
       }
 
-      const data = buildAssistanceData(existing, type, date, authUser);
+      const data = buildAssistanceData(existing, type, date, user);
 
       if (type === "entry") {
         await addAssistance(assignCreateProps(data));
@@ -156,8 +187,12 @@ export const AssistanceIntegration = () => {
         isGeofenceValidate={isGeofenceValidate}
         showCardMessage={showCardMessage}
         messageType={messageType}
-        user={authUser}
+        user={user}
         onNavigateGoTo={onNavigateGoTo}
+        setDni={setDni}
+        dni={dni}
+        searchUserByDni={searchUserByDni}
+        onResetUserData={onResetUserData}
       />
     </ModalProvider>
   );
@@ -171,10 +206,22 @@ const Assistance = ({
   showCardMessage,
   messageType,
   onNavigateGoTo,
+  user,
+  dni,
+  setDni,
+  searchUserByDni,
+  onResetUserData,
 }) => {
   const { location, method, loading, error, refreshLocation } = useUserLocation(
     onSetIsGeofenceValidate
   );
+
+  const existsUser = !!user;
+
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   return (
     <Container>
@@ -203,47 +250,113 @@ const Assistance = ({
         <FontAwesomeIcon icon={faMapMarkerAlt} /> Registro de Asistencia
       </div>
 
-      <div className="content">
-        <div className="left-panel">
-          <div className="btn-group">
-            <button
-              onClick={() => onSaveAssistance("entry")}
-              disabled={!entryButtonActive}
-              className="entry-btn"
-            >
-              <FontAwesomeIcon icon={faSignInAlt} className="btn-icon" />
-              Marcar Entrada
-            </button>
+      {!existsUser && (
+        <div className="form-wrapper">
+          <Form
+            onSubmit={handleSubmit(searchUserByDni)}
+            style={{ width: "100%" }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <h3>Número DNI</h3>
+                <InputNumber
+                  placeholder="Ingrese número de DNI"
+                  value={dni}
+                  onChange={(value) => setDni(value)}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={24}>
+                <Button
+                  type="primary"
+                  onClick={searchUserByDni}
+                  size="large"
+                  style={{ width: "100%" }}
+                >
+                  Buscar
+                </Button>
+              </Col>
+              <Col span={24}>
+                <Button
+                  type="default"
+                  onClick={onResetUserData}
+                  size="large"
+                  style={{ width: "100%" }}
+                >
+                  Limpiar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      )}
 
-            <button
-              onClick={() => onSaveAssistance("outlet")}
-              disabled={!outletButtonActive}
-              className="outlet-btn"
-            >
-              <FontAwesomeIcon icon={faSignOutAlt} className="btn-icon" />
-              Marcar Salida
-            </button>
-          </div>
-
-          {showCardMessage && (
-            <div className={`alert ${messageType}`}>
-              ✅ Asistencia marcada:
-              {messageType === "entry" ? " Entrada" : " Salida"}
+      {existsUser && (
+        <>
+          <Col span={24}>
+            <div className="user-name" style={{ padding: "1em 0" }}>
+              <h2>
+                👋 Bienvenido/a, <span>{user.firstName}!</span>
+              </h2>
+              <p>¡Esperamos que tengas un buen día! 😊</p>
             </div>
-          )}
+          </Col>
+          <Col span={24}>
+            <div className="btn-cancel">
+              <Button
+                type="primary"
+                danger
+                onClick={onResetUserData}
+                size="large"
+                block
+              >
+                Cancelar
+              </Button>
+            </div>
+          </Col>
+          <div className="content">
+            <div className="left-panel">
+              <div className="btn-group">
+                <button
+                  onClick={() => onSaveAssistance("entry")}
+                  disabled={!entryButtonActive}
+                  className="entry-btn"
+                >
+                  <FontAwesomeIcon icon={faSignInAlt} className="btn-icon" />
+                  Marcar Entrada
+                </button>
 
-          <div className="icon-animation">
-            <FontAwesomeIcon icon={faFaceSmile} />
+                <button
+                  onClick={() => onSaveAssistance("outlet")}
+                  disabled={!outletButtonActive}
+                  className="outlet-btn"
+                >
+                  <FontAwesomeIcon icon={faSignOutAlt} className="btn-icon" />
+                  Marcar Salida
+                </button>
+              </div>
+
+              {showCardMessage && (
+                <div className={`alert ${messageType}`}>
+                  ✅ Asistencia marcada:
+                  {messageType === "entry" ? " Entrada" : " Salida"}
+                </div>
+              )}
+
+              <div className="icon-animation">
+                <FontAwesomeIcon icon={faFaceSmile} />
+              </div>
+            </div>
+
+            <div className="right-panel">
+              <UserLocationMap
+                location={location}
+                onValidateGeofence={onSetIsGeofenceValidate}
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="right-panel">
-          <UserLocationMap
-            location={location}
-            onValidateGeofence={onSetIsGeofenceValidate}
-          />
-        </div>
-      </div>
+        </>
+      )}
     </Container>
   );
 };

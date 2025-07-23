@@ -13,3 +13,8 @@ export const fetchUsers = async () =>
 
 export const updateUser = async (userId, user) =>
   updateDocument(usersRef.doc(userId), user);
+
+export const fetchUsersByDni = async (dni) =>
+  fetchCollectionOnce(
+    usersRef.where("dni", "==", dni).where("isDeleted", "==", false).limit(1)
+  );
