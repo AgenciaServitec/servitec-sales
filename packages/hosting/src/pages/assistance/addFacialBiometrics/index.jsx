@@ -105,7 +105,7 @@ export const FaceRegistration = () => {
 
   return (
     <Container className="face-registration-container">
-      <h3 className="title">Registro del Poto</h3>
+      <h3 className="title">Registro Facial</h3>
 
       <p
         className={classNames("status", {
