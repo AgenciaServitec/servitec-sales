@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import classNames from "classnames";
 import * as faceapi from "face-api.js";
-import { getAuth } from "firebase/auth";
 import { fetchUser, updateUser } from "../../../firebase/collections";
 import {
   useAssistance,
