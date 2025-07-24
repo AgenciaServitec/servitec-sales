@@ -26,6 +26,7 @@ import {
 import {
   putBiometricAssistanceByDni,
   putUserFingerprintTemplate,
+  getUsersWithFingerprintTemplate,
 } from "./fingerprint";
 
 const app: express.Application = express();
@@ -142,6 +143,7 @@ app.post(
 // ASSISTANCE
 app.put("/users/:dni/fingerprint", putUserFingerprintTemplate);
 app.put("/fingerprint/assistances/:dni", putBiometricAssistanceByDni);
+app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
 
 // PAYMENTS
 app.post("/payments/izipay/token", getFormToken);
