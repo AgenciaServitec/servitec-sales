@@ -43,7 +43,6 @@ export const addAssistance = async (
     outlet: null;
     userId: string;
     user: User;
-    workPlace: string | null;
   } & DocumentCreate,
 ) => assistancesRef.doc(assistance.id).set(assistance);
 

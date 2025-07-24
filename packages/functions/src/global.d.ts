@@ -47,7 +47,6 @@ interface Assistance extends DefaultFirestoreProps {
   updateBy: string;
   userId: string;
   user: User;
-  workPlace: string | null;
 }
 
 interface User extends DefaultFirestoreProps {
