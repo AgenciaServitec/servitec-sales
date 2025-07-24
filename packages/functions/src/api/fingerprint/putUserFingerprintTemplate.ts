@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { firestore } from "../../firebase";
-import { defaultFirestoreProps } from "../../utils";
+import { defaultFirestoreProps, logger } from "../../utils";
 import { fetchCollection } from "../../firebase/firestore";
 
 interface Params {
@@ -16,6 +16,7 @@ export const putUserFingerprintTemplate = async (
   const { dni } = req.params;
   const { fingerprintTemplate } = req.body;
 
+  logger.debug("putUserFingerprintTemplate:",fingerprintTemplate);
   try {
     const user = await fetchUserByDni(dni);
 
