@@ -1,6 +1,5 @@
 import { firestore, firestoreTimestamp } from "../index";
 import { fetchCollection, fetchDocument } from "../firestore";
-import { DocumentCreate } from "../../globalTypes";
 import moment from "moment";
 
 export const assistancesRef = firestore.collection("assistances");
@@ -35,16 +34,8 @@ export const fetchTodayAssistancesByUserId = async (
   );
 };
 
-export const addAssistance = async (
-  assistance: {
-    entry: { date: FirebaseFirestore.Timestamp };
-    id: string;
-    createAtString: string;
-    outlet: null;
-    userId: string;
-    user: User;
-  } & DocumentCreate,
-) => assistancesRef.doc(assistance.id).set(assistance);
+export const addAssistance = async (assistance: Assistance) =>
+  assistancesRef.doc(assistance.id).set(assistance);
 
 export const updateAssistance = async (
   assistanceId: string,
