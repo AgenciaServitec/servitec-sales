@@ -16,7 +16,7 @@ export const putUserFingerprintTemplate = async (
   const { dni } = req.params;
   const { fingerprintTemplate } = req.body;
 
-  logger.debug("putUserFingerprintTemplate:",fingerprintTemplate);
+  logger.debug("putUserFingerprintTemplate:", fingerprintTemplate);
   try {
     const user = await fetchUserByDni(dni);
 
