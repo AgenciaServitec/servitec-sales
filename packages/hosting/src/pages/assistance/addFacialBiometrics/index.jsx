@@ -4,14 +4,30 @@ import classNames from "classnames";
 import * as faceapi from "face-api.js";
 import { getAuth } from "firebase/auth";
 import { fetchUser, updateUser } from "../../../firebase/collections";
-import { useFaceApiModels, useVideoStream } from "../../../hooks";
+import {
+  useAssistance,
+  useDefaultFirestoreProps,
+  useFaceApiModels,
+  useVideoStream,
+} from "../../../hooks";
+import { Form, InputNumber } from "../../../components";
+import { Button, Col, Row } from "../../../components/ui";
 
 export const FaceRegistration = () => {
+  const { assignCreateProps } = useDefaultFirestoreProps();
+  const assistance = useAssistance(assignCreateProps);
+
+  return <View {...assistance} />;
+};
+
+const View = ({ user, searchUser, dni, setDni, resetUser }) => {
   const videoRef = useRef(null);
   const [status, setStatus] = useState({
     message: "Esperando acción...",
     type: "info",
   });
+
+  const exists = !!user;
 
   const updateStatus = (message, type = "info") => setStatus({ message, type });
 
@@ -47,7 +63,7 @@ export const FaceRegistration = () => {
 
   const saveDescriptorToFirestore = async (descriptorArray) => {
     try {
-      const userId = getAuth().currentUser?.uid;
+      const userId = user.id;
       if (!userId) throw new Error("Usuario no autenticado");
 
       const userData = await fetchUser(userId);
@@ -66,30 +82,78 @@ export const FaceRegistration = () => {
 
   return (
     <Container>
-      <h3 className="title">Registro Facial</h3>
+      {!exists ? (
+        <div className="form-wrapper">
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchUser();
+            }}
+            style={{ width: "100%" }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <h3>DNI</h3>
+                <InputNumber
+                  placeholder="Ingrese DNI"
+                  value={dni}
+                  onChange={setDni}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={12}>
+                <Button type="primary" onClick={searchUser} block size="large">
+                  Buscar
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button type="default" onClick={resetUser} block size="large">
+                  Limpiar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      ) : (
+        <>
+          <Col span={24}>
+            <div className="user-name">
+              <h2>
+                👋 Bienvenido/a, <span>{user.firstName}</span>!
+              </h2>
+              <p>¡Esperamos que tengas un buen día! 😊</p>
+            </div>
+            <Button danger onClick={resetUser} block>
+              Cancelar
+            </Button>
+          </Col>
 
-      <p className={classNames("status", status.type)}>{status.message}</p>
+          <h3 className="title">Registro Facial</h3>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        width="480"
-        height="360"
-        className="video"
-      />
+          <p className={classNames("status", status.type)}>{status.message}</p>
 
-      <div className="controls">
-        <button onClick={startVideo} disabled={!!stream}>
-          Encender cámara
-        </button>
-        <button onClick={stopVideo} disabled={!stream}>
-          Apagar cámara
-        </button>
-        <button onClick={captureFace} disabled={loading || !stream}>
-          Registrar rostro
-        </button>
-      </div>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            width="480"
+            height="360"
+            className="video"
+          />
+
+          <div className="controls">
+            <button onClick={startVideo} disabled={!!stream}>
+              Encender cámara
+            </button>
+            <button onClick={stopVideo} disabled={!stream}>
+              Apagar cámara
+            </button>
+            <button onClick={captureFace} disabled={loading || !stream}>
+              Registrar rostro
+            </button>
+          </div>
+        </>
+      )}
     </Container>
   );
 };
@@ -123,6 +187,9 @@ const Container = styled.div`
     &.error {
       color: red;
     }
+  }
+  .user-name {
+    text-align: center;
   }
 
   .video {
