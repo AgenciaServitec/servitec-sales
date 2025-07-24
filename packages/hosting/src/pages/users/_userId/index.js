@@ -115,7 +115,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     roleCode: yup.string().required(),
     firstName: yup.string().required(),
     lastName: yup.string().required(),
-    dni: yup.string().required(),
+    dni: yup.string().notRequired(),
     email: yup.string().email().required(),
     password: yup.string().required(),
     countryCode: yup.string().required(),
