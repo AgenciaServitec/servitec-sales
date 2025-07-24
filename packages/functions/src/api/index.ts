@@ -23,6 +23,10 @@ import {
   paymentNotification,
   paymentValidation,
 } from "./payments/izipay";
+import {
+  putBiometricAssistanceByDni,
+  putUserFingerprintTemplate,
+} from "./fingerprint";
 
 const app: express.Application = express();
 
@@ -134,6 +138,10 @@ app.post(
   [],
   postResendMailReviewAllWebsites,
 );
+
+// ASSISTANCE
+app.put("/users/:dni/fingerprint", putUserFingerprintTemplate);
+app.put("/fingerprint/assistances/:dni", putBiometricAssistanceByDni);
 
 // PAYMENTS
 app.post("/payments/izipay/token", getFormToken);

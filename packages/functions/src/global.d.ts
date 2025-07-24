@@ -38,6 +38,17 @@ interface Setting {
   };
 }
 
+interface Assistance extends DefaultFirestoreProps {
+  id: string;
+  createAtString: string;
+  createBy: string;
+  entry: { date: string; dateTimestamp: FirebaseFirestore.Timestamp } | null;
+  outlet: { date: string } | null;
+  updateBy: string;
+  userId: string;
+  user: User;
+}
+
 interface User extends DefaultFirestoreProps {
   readonly id: string;
   clientsIds: string[];
@@ -45,6 +56,8 @@ interface User extends DefaultFirestoreProps {
   firstName: string;
   updateBy: string;
   lastName: string;
+  dni?: string;
+  fingerprintTemplate: string | null;
   password: string;
   roleCode: RoleCode;
 }

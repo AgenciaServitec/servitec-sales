@@ -1,5 +1,11 @@
 import * as admin from "firebase-admin";
 
+export interface DocumentCreate {
+  createAt: admin.firestore.Timestamp;
+  updateBy: string;
+  isDeleted?: boolean;
+}
+
 export interface _Image {
   createAt: admin.firestore.Timestamp;
   name: string;
