@@ -82,6 +82,7 @@ export const UserIntegration = () => {
         roleCode: formData.roleCode,
         firstName: formData.firstName,
         lastName: formData.lastName,
+        dni: formData.dni,
         email: formData.email.toLowerCase(),
         password: formData.password,
         phone: {
@@ -114,6 +115,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
     roleCode: yup.string().required(),
     firstName: yup.string().required(),
     lastName: yup.string().required(),
+    dni: yup.string().notRequired(),
     email: yup.string().email().required(),
     password: yup.string().required(),
     countryCode: yup.string().required(),
@@ -142,6 +144,7 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
       roleCode: user?.roleCode || "",
       firstName: user?.firstName || "",
       lastName: user?.lastName || "",
+      dni: user?.dni || "",
       email: user?.email || "",
       password: user?.password || "",
       countryCode: user?.phone?.countryCode || "+51",
@@ -250,6 +253,23 @@ const User = ({ user, clients, onSubmitSaveUser, onGoBack, isSavingUser }) => {
                 render={({ field: { onChange, value, name } }) => (
                   <Input
                     label="Apellidos"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    error={error(name)}
+                    required={required(name)}
+                  />
+                )}
+              />
+            </Col>
+            <Col span={24}>
+              <Controller
+                name="dni"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value, name } }) => (
+                  <Input
+                    label="DNI"
                     name={name}
                     value={value}
                     onChange={onChange}

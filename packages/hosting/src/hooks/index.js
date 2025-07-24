@@ -7,3 +7,6 @@ export * from "./useCoordinates";
 export * from "./useUserIpInfo";
 export * from "./useAsync";
 export * from "./useUserLocation";
+export * from "./useFaceApiModels";
+export * from "./useVideoStream";
+export * from "./useAssistances";

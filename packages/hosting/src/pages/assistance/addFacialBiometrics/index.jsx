@@ -1,141 +1,158 @@
-import React, { useRef, useEffect, useState } from "react";
-import * as faceapi from "face-api.js";
-import { getAuth } from "firebase/auth";
-import { fetchUser, updateUser } from "../../../firebase/collections";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import classNames from "classnames";
+import * as faceapi from "face-api.js";
+import { fetchUser, updateUser } from "../../../firebase/collections";
+import {
+  useAssistance,
+  useDefaultFirestoreProps,
+  useFaceApiModels,
+  useVideoStream,
+} from "../../../hooks";
+import { Form, InputNumber } from "../../../components";
+import { Button, Col, Row } from "../../../components/ui";
 
 export const FaceRegistration = () => {
+  const { assignCreateProps } = useDefaultFirestoreProps();
+  const assistance = useAssistance(assignCreateProps);
+
+  return <View {...assistance} />;
+};
+
+const View = ({ user, searchUser, dni, setDni, resetUser }) => {
   const videoRef = useRef(null);
-  const [stream, setStream] = useState(null);
-  const [status, setStatus] = useState("Esperando acción...");
-  const [statusType, setStatusType] = useState("info");
-  const [loadingModels, setLoadingModels] = useState(true);
+  const [status, setStatus] = useState({
+    message: "Esperando acción...",
+    type: "info",
+  });
 
-  useEffect(() => {
-    const loadModels = async () => {
-      try {
-        await Promise.all([
-          faceapi.nets.tinyFaceDetector.loadFromUri(
-            "/models/tiny_face_detector"
-          ),
-          faceapi.nets.faceLandmark68Net.loadFromUri(
-            "/models/face_landmark_68"
-          ),
-          faceapi.nets.faceRecognitionNet.loadFromUri(
-            "/models/face_recognition"
-          ),
-        ]);
-        setLoadingModels(false);
-      } catch (err) {
-        setStatus("Error al cargar modelos");
-        setStatusType("error");
-        console.error(err);
-      }
-    };
-    loadModels();
-  }, []);
+  const exists = !!user;
 
-  const startVideo = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then((stream) => {
-        setStream(stream);
-        videoRef.current.srcObject = stream;
-        setStatus("Cámara encendida");
-        setStatusType("info");
-      })
-      .catch((err) => {
-        setStatus("No se pudo acceder a la cámara");
-        setStatusType("error");
-        console.error(err);
-      });
-  };
+  const updateStatus = (message, type = "info") => setStatus({ message, type });
 
-  const stopVideo = () => {
-    if (stream) {
-      stream.getTracks().forEach((track) => track.stop());
-      videoRef.current.srcObject = null;
-      setStream(null);
-      setStatus("Cámara apagada");
-      setStatusType("info");
-    }
-  };
+  const { loading, error } = useFaceApiModels();
+  const { stream, startVideo, stopVideo } = useVideoStream(
+    videoRef,
+    updateStatus
+  );
 
   const captureFace = async () => {
-    setStatus("Capturando rostro...");
-    setStatusType("info");
+    updateStatus("Capturando rostro...", "info");
+    try {
+      const detection = await faceapi
+        .detectSingleFace(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions()
+        )
+        .withFaceLandmarks()
+        .withFaceDescriptor();
 
-    const detection = await faceapi
-      .detectSingleFace(videoRef.current, new faceapi.TinyFaceDetectorOptions())
-      .withFaceLandmarks()
-      .withFaceDescriptor();
+      if (!detection) {
+        updateStatus("No se detectó rostro, intenta de nuevo.", "error");
+        return;
+      }
 
-    if (detection) {
       const descriptorArray = Array.from(detection.descriptor);
       await saveDescriptorToFirestore(descriptorArray);
-    } else {
-      setStatus("No se detectó rostro, intenta de nuevo.");
-      setStatusType("error");
+    } catch (err) {
+      updateStatus("Error durante la captura facial", "error");
+      console.error(err);
     }
   };
 
   const saveDescriptorToFirestore = async (descriptorArray) => {
     try {
-      const auth = getAuth();
-      const userId = auth.currentUser.uid;
+      const userId = user.id;
+      if (!userId) throw new Error("Usuario no autenticado");
 
       const userData = await fetchUser(userId);
       if (!userData) {
-        setStatus("Usuario no encontrado.");
-        setStatusType("error");
+        updateStatus("Usuario no encontrado", "error");
         return;
       }
 
       await updateUser(userId, { faceDescriptor: descriptorArray });
-
-      setStatus("✅ Descriptor facial guardado con éxito.");
-      setStatusType("success");
+      updateStatus("✅ Descriptor facial guardado con éxito", "success");
     } catch (err) {
-      setStatus("❌ Error al guardar el descriptor.");
-      setStatusType("error");
+      updateStatus("❌ Error al guardar el descriptor", "error");
       console.error(err);
     }
   };
 
   return (
-    <Container className="face-registration-container">
-      <h3 className="title">Registro Facial</h3>
+    <Container>
+      {!exists ? (
+        <div className="form-wrapper">
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchUser();
+            }}
+            style={{ width: "100%" }}
+          >
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <h3>DNI</h3>
+                <InputNumber
+                  placeholder="Ingrese DNI"
+                  value={dni}
+                  onChange={setDni}
+                  style={{ width: "100%" }}
+                />
+              </Col>
+              <Col span={12}>
+                <Button type="primary" onClick={searchUser} block size="large">
+                  Buscar
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button type="default" onClick={resetUser} block size="large">
+                  Limpiar
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </div>
+      ) : (
+        <>
+          <Col span={24}>
+            <div className="user-name">
+              <h2>
+                👋 Bienvenido/a, <span>{user.firstName}</span>!
+              </h2>
+              <p>¡Esperamos que tengas un buen día! 😊</p>
+            </div>
+            <Button danger onClick={resetUser} block>
+              Cancelar
+            </Button>
+          </Col>
 
-      <p
-        className={classNames("status", {
-          success: statusType === "success",
-          error: statusType === "error",
-        })}
-      >
-        {status}
-      </p>
+          <h3 className="title">Registro Facial</h3>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        muted
-        width="480"
-        height="360"
-        className="video"
-      />
+          <p className={classNames("status", status.type)}>{status.message}</p>
 
-      <div className="controls">
-        <button onClick={startVideo} disabled={!!stream}>
-          Encender cámara
-        </button>
-        <button onClick={stopVideo} disabled={!stream}>
-          Apagar cámara
-        </button>
-        <button onClick={captureFace} disabled={loadingModels || !stream}>
-          Registrar rostro
-        </button>
-      </div>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            width="480"
+            height="360"
+            className="video"
+          />
+
+          <div className="controls">
+            <button onClick={startVideo} disabled={!!stream}>
+              Encender cámara
+            </button>
+            <button onClick={stopVideo} disabled={!stream}>
+              Apagar cámara
+            </button>
+            <button onClick={captureFace} disabled={loading || !stream}>
+              Registrar rostro
+            </button>
+          </div>
+        </>
+      )}
     </Container>
   );
 };
@@ -170,6 +187,9 @@ const Container = styled.div`
       color: red;
     }
   }
+  .user-name {
+    text-align: center;
+  }
 
   .video {
     border-radius: 0.75rem;
@@ -199,7 +219,6 @@ const Container = styled.div`
       &:hover {
         background-color: #005fd1;
       }
-
       &:disabled {
         background-color: #cccccc;
         cursor: not-allowed;
