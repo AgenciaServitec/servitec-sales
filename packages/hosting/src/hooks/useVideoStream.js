@@ -4,6 +4,12 @@ export const useVideoStream = (videoRef, onStatusUpdate) => {
   const [stream, setStream] = useState(null);
 
   const startVideo = useCallback(async () => {
+    if (!videoRef.current) {
+      console.error("El elemento video aún no está montado.");
+      onStatusUpdate("El video aún no está listo.", "warning");
+      return;
+    }
+
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: true,
@@ -18,6 +24,12 @@ export const useVideoStream = (videoRef, onStatusUpdate) => {
   }, [videoRef, onStatusUpdate]);
 
   const stopVideo = useCallback(() => {
+    if (!videoRef.current) {
+      console.error("El elemento video aún no está montado.");
+      onStatusUpdate("El video aún no está listo.", "warning");
+      return;
+    }
+
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       videoRef.current.srcObject = null;
