@@ -14,6 +14,7 @@ import {
   ReviewWebsitesIntegration,
   PaymentsIntegration,
   AssistancesIntegration,
+  Profile,
 } from "../pages";
 import { BaseLayout } from "../components/layout";
 import { PrivateRoute } from "./PrivateRoute";
@@ -51,6 +52,17 @@ export const Router = () => (
         <BaseLayout>
           <Page404 />
         </BaseLayout>
+      }
+    />
+    <Route
+      exact
+      path="profile"
+      element={
+        <PrivateRoute>
+          <BaseLayout>
+            <Profile />
+          </BaseLayout>
+        </PrivateRoute>
       }
     />
     <Route

@@ -13,6 +13,7 @@ import {
   Tooltip,
   Tabs,
   Affix,
+  Image,
 } from "antd";
 
 export {
@@ -30,6 +31,7 @@ export {
   Tooltip,
   Tabs,
   Affix,
+  Image,
 };
 
 export * from "./component-container";
