@@ -10,6 +10,7 @@ import {
   faHome,
   faLayerGroup,
   faMoneyBills,
+  faPerson,
   faSignOutAlt,
   faTriangleExclamation,
   faUsers,
@@ -33,6 +34,16 @@ export const DrawerLayout = ({
       isVisible: true,
       onClick: () => {
         onNavigateTo("/");
+        setIsVisibleDrawer(false);
+      },
+    },
+    {
+      label: "Perfil",
+      key: "profile",
+      icon: <FontAwesomeIcon icon={faPerson} size="lg" />,
+      isVisible: user?.roleCode === "super_admin",
+      onClick: () => {
+        onNavigateTo("/profile");
         setIsVisibleDrawer(false);
       },
     },
