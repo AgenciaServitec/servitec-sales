@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,8 @@ import {
   Spinner,
   UserLocationMap,
 } from "../ui";
+import { useFaceApiModels, useVideoStream } from "../../hooks";
+import * as faceapi from "face-api.js";
 
 const pulse = keyframes`
   0% { transform: scale(1); opacity: 0.8; }
@@ -41,6 +43,101 @@ export const AssistanceView = ({
   setIsGeofenceValid,
 }) => {
   const exists = !!user;
+  const videoRef = useRef(null);
+  const [status, setStatus] = useState({
+    message: "Esperando acción...",
+    type: "info",
+  });
+  const [videoLoading, setVideoLoading] = useState(false);
+  const [successAnimation, setSuccessAnimation] = useState(false);
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "info",
+  });
+
+  const { loading } = useFaceApiModels();
+  const { stream, startVideo, stopVideo } = useVideoStream(
+    videoRef,
+    (msg, type) => setStatus({ message: msg, type })
+  );
+
+  useEffect(() => {
+    exists ? startCamera() : stopVideo();
+  }, [exists]);
+
+  const startCamera = async () => {
+    setVideoLoading(true);
+    await startVideo();
+    setVideoLoading(false);
+  };
+
+  const showToast = (message, type = "info", duration = 3000) => {
+    setToast({ show: true, message, type });
+    setTimeout(
+      () => setToast({ show: false, message: "", type: "info" }),
+      duration
+    );
+  };
+
+  const captureFace = async () => {
+    setStatus({ message: "Capturando rostro...", type: "info" });
+    try {
+      const detection = await faceapi
+        .detectSingleFace(
+          videoRef.current,
+          new faceapi.TinyFaceDetectorOptions()
+        )
+        .withFaceLandmarks()
+        .withFaceDescriptor();
+      if (!detection)
+        return (
+          setStatus({
+            message: "No se detectó rostro, intenta de nuevo.",
+            type: "error",
+          }),
+          null
+        );
+      return detection.descriptor;
+    } catch (err) {
+      console.error(err);
+      return (
+        setStatus({
+          message: "Error durante la captura facial",
+          type: "error",
+        }),
+        null
+      );
+    }
+  };
+
+  const calculateEuclideanDistance = (desc1, desc2) => {
+    return Math.sqrt(
+      desc1.reduce((sum, val, i) => sum + (val - desc2[i]) ** 2, 0)
+    );
+  };
+
+  const handleSaveAssistance = async (type) => {
+    showToast("Capturando rostro...");
+    const currentDescriptor = await captureFace();
+    if (!currentDescriptor)
+      return showToast("No se detectó rostro, intenta de nuevo.", "error");
+
+    const distance = calculateEuclideanDistance(
+      currentDescriptor,
+      new Float32Array(user.faceDescriptor)
+    );
+    console.log("Distancia Euclidiana:", distance);
+
+    if (distance < 0.6) {
+      showToast("Rostro verificado correctamente.", "success");
+      setSuccessAnimation(true);
+      setTimeout(() => setSuccessAnimation(false), 1500);
+      saveAssistance(type);
+    } else {
+      showToast("Rostro no coincide. Intenta nuevamente.", "error");
+    }
+  };
 
   return (
     <Container>
@@ -60,10 +157,7 @@ export const AssistanceView = ({
       {!exists ? (
         <div className="form-wrapper">
           <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              searchUser();
-            }}
+            onSubmit={(e) => (e.preventDefault(), searchUser())}
             style={{ width: "100%" }}
           >
             <Row gutter={[16, 16]}>
@@ -102,19 +196,35 @@ export const AssistanceView = ({
               Cancelar
             </Button>
           </Col>
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            width="480"
+            height="360"
+            className="video"
+          />
+          <div className="controls">
+            <button onClick={startVideo} disabled={!!stream}>
+              Encender cámara
+            </button>
+            <button onClick={stopVideo} disabled={!stream}>
+              Apagar cámara
+            </button>
+          </div>
           <div className="content">
             <div className="left-panel">
               <div className="btn-group">
                 <button
                   className="entry-btn"
-                  onClick={() => saveAssistance("entry")}
+                  onClick={() => handleSaveAssistance("entry")}
                   disabled={!buttons.entry}
                 >
                   <FontAwesomeIcon icon={faSignInAlt} /> Marcar Entrada
                 </button>
                 <button
                   className="outlet-btn"
-                  onClick={() => saveAssistance("outlet")}
+                  onClick={() => handleSaveAssistance("outlet")}
                   disabled={!buttons.outlet}
                 >
                   <FontAwesomeIcon icon={faSignOutAlt} /> Marcar Salida
@@ -146,6 +256,15 @@ export const AssistanceView = ({
           <p>{locationError}</p>
           <button onClick={refreshLocation}>🔄 Reintentar ubicación</button>
         </div>
+      )}
+
+      {toast.show && <Toast type={toast.type}>{toast.message}</Toast>}
+      {successAnimation && <SuccessOverlay>✅</SuccessOverlay>}
+      {videoLoading && (
+        <LoadingOverlay>
+          <Spinner size="3x" />
+          <p>Encendiendo cámara...</p>
+        </LoadingOverlay>
       )}
     </Container>
   );
@@ -182,6 +301,41 @@ const Container = styled.div`
     gap: 32px;
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .video {
+    border-radius: 0.75rem;
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    max-width: 100%;
+    margin: auto;
+  }
+  .controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+
+    button {
+      background-color: #0077ff;
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #005fd1;
+      }
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    }
   }
 
   .user-name {
@@ -356,4 +510,58 @@ const Container = styled.div`
       max-width: 100%;
     }
   }
+`;
+
+const Toast = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${({ type }) =>
+    type === "success" ? "#16a34a" : type === "error" ? "#dc2626" : "#334155"};
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out, fadeOut 0.3s ease-in-out 2.7s;
+`;
+
+const SuccessOverlay = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6rem;
+  color: #16a34a;
+  animation: zoomIn 0.4s ease-out;
+  z-index: 1000;
+
+  @keyframes zoomIn {
+    0% {
+      transform: scale(0.5) translate(-50%, -50%);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1) translate(-50%, -50%);
+      opacity: 1;
+    }
+  }
+`;
+
+const LoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #ffffff;
+  z-index: 999;
 `;

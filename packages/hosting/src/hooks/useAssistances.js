@@ -100,7 +100,7 @@ export const useAssistance = (assignCreateProps) => {
       if (await hasMarked(type))
         return notification({
           type: "warning",
-          message: `Ya ha marcado su ${
+          description: `Ya ha marcado su ${
             type === "entry" ? "ingreso" : "salida"
           } hoy`,
         });
