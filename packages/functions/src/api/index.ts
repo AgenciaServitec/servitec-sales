@@ -28,6 +28,7 @@ import {
   putUserFingerprintTemplate,
   getUsersWithFingerprintTemplate,
 } from "./fingerprint";
+import { getIp } from "./consult";
 
 const app: express.Application = express();
 
@@ -149,6 +150,8 @@ app.get("/fingerprint/verify", getUsersWithFingerprintTemplate);
 app.post("/payments/izipay/token", getFormToken);
 app.post("/payments/izipay/payment-validate", paymentValidation);
 app.post("/payments/izipay/payment-notification", paymentNotification);
+
+app.get("/get-ip", getIp);
 
 app.use(errorHandler);
 
